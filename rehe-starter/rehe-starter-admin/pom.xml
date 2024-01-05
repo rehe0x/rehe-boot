@@ -27,6 +27,16 @@
             <artifactId>rehe-database-app</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.rehe.modules</groupId>
+            <artifactId>rehe-admin</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+        </dependency>
     </dependencies>
 
     <build>

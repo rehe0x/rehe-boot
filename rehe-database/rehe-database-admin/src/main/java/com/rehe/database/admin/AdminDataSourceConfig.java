@@ -32,7 +32,7 @@ import java.util.Objects;
  * @date 2024/1/4
  */
 @Configuration
-@MapperScan(basePackages = {"com.rehe.auth.admin.mapper","com.rehe.database.admin.mapper.**"}, sqlSessionTemplateRef  = "adminSqlTemplate")
+@MapperScan(basePackages = {"com.rehe.auth.admin.mapper","com.rehe.modules.admin.**.mapper"}, sqlSessionTemplateRef  = "adminSqlTemplate")
 @PropertySource(value = "classpath:config/database-admin-${spring.profiles.active}.yaml",factory = YamlPropertySourceFactory.class)
 public class AdminDataSourceConfig {
 
@@ -114,7 +114,7 @@ public class AdminDataSourceConfig {
     public SqlSessionFactory sessionFactory(@Qualifier("adminDynamicDb") DataSource dynamicDataSource) throws Exception {
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setMapperLocations(
-                new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/**/*Mapper.xml"));
+                new PathMatchingResourcePatternResolver().getResources("classpath*:admin_mapper/**/*Mapper.xml"));
         bean.setDataSource(dynamicDataSource);
         Objects.requireNonNull(bean.getObject()).getConfiguration().setMapUnderscoreToCamelCase(true);
         return bean.getObject();

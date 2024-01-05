@@ -17,9 +17,7 @@
     <description>rehe-project</description>
 
     <modules>
-        <module>rehe-controller</module>
-        <module>rehe-business</module>
-        <module>rehe-log</module>
+        <module>rehe-modules</module>
         <module>rehe-common</module>
         <module>rehe-auth</module>
         <module>rehe-starter</module>
@@ -49,6 +47,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.5.5</version>
         </dependency>
 
         <dependency>

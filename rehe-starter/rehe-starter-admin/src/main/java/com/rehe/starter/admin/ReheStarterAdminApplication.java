@@ -1,6 +1,6 @@
 package com.rehe.starter.admin;
 
-import com.rehe.database.admin.mapper.order.UserTestMapper33;
+import com.rehe.modules.admin.system.mapper.AdminUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 //@MapperScan(value = "com.rehe")
 @RequiredArgsConstructor
 public class ReheStarterAdminApplication {
-    private final UserTestMapper33 userTestMapper33;
     public static void main(String[] args) {
         SpringApplication.run(ReheStarterAdminApplication.class, args);
     }
