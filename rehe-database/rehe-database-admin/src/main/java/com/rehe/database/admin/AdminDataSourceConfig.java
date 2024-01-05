@@ -112,7 +112,7 @@ public class AdminDataSourceConfig {
     public SqlSessionFactory sessionFactory(@Qualifier("adminDynamicDb") DataSource dynamicDataSource) throws Exception {
         MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
         bean.setMapperLocations(
-                new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*Mapper.xml"));
+                new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/**/*Mapper.xml"));
         bean.setDataSource(dynamicDataSource);
         Objects.requireNonNull(bean.getObject()).getConfiguration().setMapUnderscoreToCamelCase(true);
         return bean.getObject();
