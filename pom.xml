@@ -20,6 +20,10 @@
         <module>rehe-controller</module>
         <module>rehe-business</module>
         <module>rehe-log</module>
+        <module>rehe-common</module>
+        <module>rehe-auth</module>
+        <module>rehe-starter</module>
+        <module>rehe-database</module>
     </modules>
 
     <properties>
@@ -29,8 +33,28 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rehe.common</groupId>
+            <artifactId>rehe-common</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

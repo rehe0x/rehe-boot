@@ -1,0 +1,57 @@
+database:
+  app:
+    master:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://10.211.55.7:3306/rehe_app_master?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      username: root
+      password: Xiehong123
+      initialization-mode: always
+      hikari:
+        minimum-idle: 25
+        maximum-pool-size: 25
+        connection-test-query: SELECT 1
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        pool-name: masterdb-connection-pool
+        auto-commit: false
+        data-source-properties:
+          prepStmtCacheSize: 500
+          prepStmtCacheSqlLimit: 20480
+          cachePrepStmts: true
+          useServerPrepStmts: false
+          rewriteBatchedStatements: true
+          cacheServerConfiguration: true
+          cacheResultSetMetaData: true
+          metadataCacheSize: 20480
+          maintainTimeStats: false
+          # ???????????false,??????
+          # useCursorFetch: true
+          # defaultFetchSize: 50
+          # ????
+          useCompression: true
+    slave:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://10.211.55.7:3306/rehe_app_slave?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      username: root
+      password: Xiehong123
+      initialization-mode: always
+      hikari:
+        minimum-idle: 5
+        maximum-pool-size: 5
+        connection-test-query: SELECT 1
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        pool-name: slavedb-connection-pool
+        auto-commit: false
+        data-source-properties:
+          prepStmtCacheSize: 500
+          prepStmtCacheSqlLimit: 20480
+          cachePrepStmts: true
+          useServerPrepStmts: false
+          rewriteBatchedStatements: true
+          cacheServerConfiguration: true
+          cacheResultSetMetaData: true
+          metadataCacheSize: 20480
+          maintainTimeStats: false
+
+          useCompression: true
