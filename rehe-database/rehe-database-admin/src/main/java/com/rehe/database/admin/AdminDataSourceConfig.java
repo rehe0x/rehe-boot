@@ -12,6 +12,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +49,7 @@ public class AdminDataSourceConfig {
      * 从配置类
      */
     @Bean("adminSlaveDataSourceProperties")
-    @ConditionalOnProperty(prefix = "spring.datasource", name = "slave", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "database.admin", name = "slave.jdbc-url")
     @ConfigurationProperties(prefix = "database.admin.slave")
     public DataSourceProperties slaveDataSourceProperties(){
         return new DataSourceProperties();
@@ -66,6 +67,7 @@ public class AdminDataSourceConfig {
      * 从数据源
      */
     @Bean("adminSlaveDataSource")
+    @ConditionalOnBean(name = "adminSlaveDataSourceProperties")
     public DataSource slaveDataSource(@Qualifier("adminSlaveDataSourceProperties") DataSourceProperties dataSourceProperties){
         return createHikariDataSource(dataSourceProperties);
     }
