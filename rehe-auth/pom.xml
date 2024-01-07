@@ -45,5 +45,11 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.rehe.common</groupId>
+            <artifactId>rehe-common</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>
