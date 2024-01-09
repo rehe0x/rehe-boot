@@ -1,10 +1,13 @@
 package com.rehe.auth.admin.provider.openid;
 
-import com.rehe.auth.admin.user.User;
+import com.rehe.auth.admin.entity.AuthUser;
+import com.rehe.auth.admin.service.AuthUserService;
+import com.rehe.auth.admin.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Optional;
@@ -17,21 +20,13 @@ import java.util.Optional;
 @Configuration
 @RequiredArgsConstructor
 public class OpenIdAuthenticationProviderConfig {
-//    @Bean
-    public UserDetailsService userDetailsService() {
-//        return (UserDetailsService) new User();
-        return sdf -> sg(sdf).orElseThrow();
-    }
 
-
-    public Optional<User> sg(String sdf){
-        return Optional.of(new User(1,"test","$2a$10$9VZMQJyzcN0NI.j/eOsWZeg0Fke/iPvuewYEqhCHxqeeg2v16Jqs2"));
-    }
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public AuthenticationProvider openIdAuthenticationProvider() {
         OpenIdAuthenticationProvider authProvider = new OpenIdAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setCustomUserDetailsService(customUserDetailsService);
         return authProvider;
     }
 }

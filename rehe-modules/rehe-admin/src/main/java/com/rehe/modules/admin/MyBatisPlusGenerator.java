@@ -19,23 +19,25 @@ public class MyBatisPlusGenerator {
     // 生成作者
     private final static String author = "xiech";
     // 输出路径 当前模块src/java
-    private final static String outputDir = "/Users/rehe/git/rehe-project/rehe-modules/rehe-admin/src/main/java/";
+    private final static String outputDir = "/rehe-modules/rehe-admin/src/main/java/";
 
     // 设置父包名 主包
     private final static String parent = "com.rehe.modules.admin";
     // 设置父包模块名 模块名
-    private final static String moduleName = "system2s4";
+    private final static String moduleName = "system";
     // xml路径
-    private final static String xmlFileDir = "/Users/rehe/git/rehe-project/rehe-modules/rehe-admin/src/main/resources/admin_mapper/";
+    private final static String xmlFileDir = "/rehe-modules/rehe-admin/src/main/resources/admin_mapper/";
 
     private final static String tableName = "admin_user";
 
     public static void main(String[] args) {
+        String projectPath = System.getProperty("user.dir");
+
         FastAutoGenerator.create(url,"root", "Xiehong123")
                 .globalConfig(builder -> {
                     builder.author(author) // 设置作者
 //                            .enableSwagger() // 开启 swagger 模式
-                            .outputDir(outputDir); // 指定输出目录
+                            .outputDir(projectPath+outputDir); // 指定输出目录
                 })
                 .dataSourceConfig(builder -> builder.typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
                     int typeCode = metaInfo.getJdbcType().TYPE_CODE;
@@ -49,11 +51,15 @@ public class MyBatisPlusGenerator {
                 .packageConfig(builder -> {
                     builder.parent(parent) // 设置父包名
                             .moduleName(moduleName) // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, xmlFileDir+moduleName)); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath+xmlFileDir+moduleName)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude(tableName); // 设置需要生成的表名
-//                            .addTablePrefix("t_", "c_"); // 设置过滤表前缀
+                    builder.addInclude(tableName) // 设置需要生成的表名
+                     .controllerBuilder()
+                     .enableRestStyle()
+                     .enableHyphenStyle()
+                     .entityBuilder()
+                     .enableLombok().build();
                 })
                 .templateEngine(new FreemarkerTemplateEngine()) // 使用Freemarker引擎模板，默认的是Velocity引擎模板
                 .execute();

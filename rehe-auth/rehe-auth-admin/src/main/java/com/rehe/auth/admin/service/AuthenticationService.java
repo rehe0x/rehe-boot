@@ -1,78 +1,59 @@
-package com.rehe.auth.admin.auth;
+package com.rehe.auth.admin.service;
 
-import com.rehe.auth.admin.config.JwtService;
-import com.rehe.auth.admin.mapper.UserTestMapper;
+import com.alibaba.fastjson2.JSON;
+import com.rehe.auth.admin.dto.AdminLoginDto;
+import com.rehe.auth.admin.mapper.AuthUserMapper;
 import com.rehe.auth.admin.provider.mobile.MobileAuthenticationToken;
 import com.rehe.auth.admin.provider.openid.OpenIdAuthenticationToken;
-import com.rehe.auth.admin.test.mapper.AppUserMapper;
-import com.rehe.auth.admin.user.User;
-import com.rehe.common.db.DBSource;
-import com.rehe.common.db.DynamicDataSourceEnum;
+import com.rehe.auth.admin.entity.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthUserService authUserService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
-    private final UserTestMapper userTestMapper;
-    private final AppUserMapper appUserMapper;
-    private final AuthenticationServiceTest authenticationServiceTest;
 
-//    public AuthenticationResponse register(RegisterRequest request) {
-//        var user = User.builder()
-//                .firstname(request.getFirstname())
-//                .lastname(request.getLastname())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(request.getRole())
-//                .build();
-//        var savedUser = repository.save(user);
-//        var jwtToken = jwtService.generateToken(user);
-//        var refreshToken = jwtService.generateRefreshToken(user);
-//        saveUserToken(savedUser, jwtToken);
-//        return AuthenticationResponse.builder()
-//                .accessToken(jwtToken)
-//                .refreshToken(refreshToken)
-//                .build();
-//    }
-
-    public String authenticate() {
+    public String authPasswd(AdminLoginDto adminLoginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        "test",
-                        "1231233"
+                        adminLoginDto.getUsername(),
+                        adminLoginDto.getPassword()
                 )
         );
-//        var user = repository.findByEmail(request.getEmail())
-//                .orElseThrow();
-        String jwtToken = jwtService.generateToken(new User());
-//        var refreshToken = jwtService.generateRefreshToken(user);
-//        revokeAllUserTokens(user);
-//        saveUserToken(user, jwtToken);
-        return jwtToken;
+        AuthUser authUser = authUserService.findByUsername(adminLoginDto.getUsername());
+        authUser.setPassword(null);
+        // 用户基本信息存入token
+        Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
+        return jwtService.generateToken(extraClaims, authUser);
     }
-    public String authenticate1() {
+
+    /**
+     *
+     * @param openId openid和code二选一
+     * @param code
+     * @return
+     */
+    public String authOpenId(String openId,String code) {
         authenticationManager.authenticate(
-                new OpenIdAuthenticationToken(
-                        "test"
-                )
+                new OpenIdAuthenticationToken(openId)
         );
-//        var user = repository.findByEmail(request.getEmail())
-//                .orElseThrow();
-        String jwtToken = jwtService.generateToken(new User());
-//        var refreshToken = jwtService.generateRefreshToken(user);
-//        revokeAllUserTokens(user);
-//        saveUserToken(user, jwtToken);
-        return jwtToken;
+
+
+        AuthUser authUser = (AuthUser) authUserService.findByOpenId(openId);
+        authUser.setPassword(null);
+        // 用户基本信息存入token
+        Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
+        return jwtService.generateToken(extraClaims, authUser);
     }
 
     public String authenticate2() {
@@ -83,7 +64,7 @@ public class AuthenticationService {
         );
 //        var user = repository.findByEmail(request.getEmail())
 //                .orElseThrow();
-        String jwtToken = jwtService.generateToken(new User());
+        String jwtToken = jwtService.generateToken(new AuthUser());
 //        var refreshToken = jwtService.generateRefreshToken(user);
 //        revokeAllUserTokens(user);
 //        saveUserToken(user, jwtToken);
@@ -140,16 +121,16 @@ public class AuthenticationService {
 //        }
 //    }
 
-    @DBSource(value = DynamicDataSourceEnum.SLAVE)
-    public void test1(){
-        System.out.println("========");
-        List s1 = userTestMapper.test();
-        System.out.println(s1.get(0).toString());
-
-        List s2 = appUserMapper.test();
-        System.out.println(s2.get(0).toString());
-        authenticationServiceTest.test2();
-    }
+//    @DBSource(value = DynamicDataSourceEnum.SLAVE)
+//    public void test1(){
+//        System.out.println("========");
+//        List s1 = adminUserMapper.test();
+//        System.out.println(s1.get(0).toString());
+//
+//        List s2 = appUserMapper.test();
+//        System.out.println(s2.get(0).toString());
+//        authenticationServiceTest.test2();
+//    }
 //    @DBSource(value = DynamicDataSourceEnum.SLAVE)
 //    public void test2(){
 //        System.out.println("3333333");

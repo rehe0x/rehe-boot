@@ -19,9 +19,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.rehe.auth.admin.user.Permission.*;
-import static com.rehe.auth.admin.user.Role.ADMIN;
-import static com.rehe.auth.admin.user.Role.MANAGER;
+import static com.rehe.auth.admin.entity.Permission.*;
+import static com.rehe.auth.admin.entity.Role.ADMIN;
+import static com.rehe.auth.admin.entity.Role.MANAGER;
 import static org.springframework.http.HttpMethod.*;
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -33,6 +33,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**",
+            "/doc.html",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -44,7 +45,7 @@ public class SecurityConfiguration {
             "/webjars/**",
             "/swagger-ui.html"};
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider passwdAuthenticationProvider;
     private final AuthenticationProvider openIdAuthenticationProvider;
     private final AuthenticationProvider mobileAuthenticationProvider;

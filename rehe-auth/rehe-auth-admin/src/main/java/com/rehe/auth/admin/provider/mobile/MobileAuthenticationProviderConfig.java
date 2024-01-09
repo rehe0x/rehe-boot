@@ -1,7 +1,6 @@
 package com.rehe.auth.admin.provider.mobile;
 
-import com.rehe.auth.admin.mapper.UserTestMapper;
-import com.rehe.auth.admin.user.User;
+import com.rehe.auth.admin.entity.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +27,8 @@ public class MobileAuthenticationProviderConfig {
     }
 
 
-    public Optional<User> sg(String sdf){
-        return Optional.of(new User(1,"test","$2a$10$9VZMQJyzcN0NI.j/eOsWZeg0Fke/iPvuewYEqhCHxqeeg2v16Jqs2"));
+    public Optional<AuthUser> sg(String sdf){
+        return Optional.of(new AuthUser());
     }
 
     @Bean

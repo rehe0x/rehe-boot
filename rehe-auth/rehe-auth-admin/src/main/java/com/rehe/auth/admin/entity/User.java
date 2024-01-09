@@ -1,16 +1,12 @@
-package com.rehe.modules.admin.system.entity;
+package com.rehe.auth.admin.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * <p>
@@ -21,13 +17,13 @@ import lombok.Setter;
  * @since 2024-01-07
  */
 @Data
-@TableName("admin_user")
-public class AdminUser implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class User implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8297955758024753512L;
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private String avatar;
@@ -47,4 +43,6 @@ public class AdminUser implements Serializable {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
+
+    private String openId;
 }

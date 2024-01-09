@@ -1,4 +1,4 @@
-package com.rehe.auth.admin.user;
+package com.rehe.auth.admin.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

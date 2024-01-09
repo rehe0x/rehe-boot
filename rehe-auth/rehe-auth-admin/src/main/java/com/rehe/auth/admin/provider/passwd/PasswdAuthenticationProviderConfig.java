@@ -1,6 +1,7 @@
 package com.rehe.auth.admin.provider.passwd;
 
-import com.rehe.auth.admin.user.User;
+import com.rehe.auth.admin.entity.AuthUser;
+import com.rehe.auth.admin.service.AuthUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,17 +21,12 @@ import java.util.Optional;
 @Configuration
 @RequiredArgsConstructor
 public class PasswdAuthenticationProviderConfig {
+
+    private final AuthUserService authUserService;
     @Bean
     public UserDetailsService userDetailsService() {
-//        return (UserDetailsService) new User();
-        return sdf -> sg(sdf).orElseThrow();
+        return authUserService::findByUsername;
     }
-
-
-    public Optional<User> sg(String sdf){
-        return Optional.of(new User(1,"test","$2a$10$9VZMQJyzcN0NI.j/eOsWZeg0Fke/iPvuewYEqhCHxqeeg2v16Jqs2"));
-    }
-
     @Bean
     public AuthenticationProvider passwdAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

@@ -9,4 +9,13 @@ application:
       refresh-token:
         expiration: 604800000 # 7 days
 
-
+#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    tags-sorter: alpha
+#    operations-sorter: order
+#  api-docs:
+#    path: /v3/api-docs
+knife4j:
+  enable: true

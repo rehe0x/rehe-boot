@@ -1,4 +1,4 @@
-package com.rehe.auth.admin.config;
+package com.rehe.auth.admin.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +13,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+/**
+ * @author xiech
+ * @description
+ * @date 2024/1/8
+ */
 @Service
 public class JwtService {
 
@@ -54,6 +60,7 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
+        System.out.println();
         return Jwts
                 .builder()
                 .claims(extraClaims)

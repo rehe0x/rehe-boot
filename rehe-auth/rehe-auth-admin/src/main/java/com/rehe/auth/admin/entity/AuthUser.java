@@ -1,22 +1,17 @@
-package com.rehe.auth.admin.user;
+package com.rehe.auth.admin.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.alibaba.fastjson2.annotation.JSONField;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class User implements UserDetails {
 
-    private Integer id;
-    private String username;
-    private String password;
+public class AuthUser extends User implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = 6676357003482048951L;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -25,25 +20,28 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return super.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return super.getUsername();
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JSONField(serialize = false)
     public boolean isCredentialsNonExpired() {
         return true;
     }
