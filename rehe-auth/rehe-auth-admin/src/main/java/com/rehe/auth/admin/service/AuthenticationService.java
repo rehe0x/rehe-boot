@@ -9,6 +9,7 @@ import com.rehe.auth.admin.entity.AuthUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +25,11 @@ public class AuthenticationService {
 
 
     public String authPasswd(AdminLoginDto adminLoginDto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        adminLoginDto.getUsername(),
-                        adminLoginDto.getPassword()
-                )
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                adminLoginDto.getUsername(),
+                adminLoginDto.getPassword()
         );
+        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         AuthUser authUser = authUserService.findByUsername(adminLoginDto.getUsername());
         authUser.setPassword(null);
         // 用户基本信息存入token
@@ -47,9 +47,7 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new OpenIdAuthenticationToken(openId)
         );
-
-
-        AuthUser authUser = (AuthUser) authUserService.findByOpenId(openId);
+        AuthUser authUser = authUserService.findByOpenId(openId);
         authUser.setPassword(null);
         // 用户基本信息存入token
         Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));

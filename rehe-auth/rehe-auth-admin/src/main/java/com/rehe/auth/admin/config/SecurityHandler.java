@@ -2,10 +2,13 @@ package com.rehe.auth.admin.config;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.rehe.common.result.HttpError;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -26,14 +29,11 @@ public class SecurityHandler {
     @Bean
     public AuthenticationEntryPoint authExceptionEntryPoint() {
         return (request, response, authException) -> {
-            JSONObject rest = new JSONObject();
-            rest.put("error", "401");
-            rest.put("message", authException.getMessage());
-            rest.put("path", request.getServletPath());
-            rest.put("timestamp", String.valueOf(new Date().getTime()));
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            // 无效token 401
+            HttpError httpError = new HttpError(HttpStatus.UNAUTHORIZED.value(),HttpStatus.UNAUTHORIZED.getReasonPhrase(),request.getServletPath());
+            response.setStatus(httpError.getError());
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(JSON.toJSONString(rest));
+            response.getWriter().write(JSON.toJSONString(httpError));
         };
     }
 
@@ -43,18 +43,11 @@ public class SecurityHandler {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         return ( request, response, accessDeniedException) -> {
-            JSONObject rest = new JSONObject();
-            rest.put("error", "401");
-            rest.put("message", accessDeniedException.getMessage());
-            rest.put("path", request.getServletPath());
-            rest.put("timestamp", String.valueOf(new Date().getTime()));
-            if("不允许访问".equals(accessDeniedException.getMessage())){
-                response.setStatus(HttpServletResponse.SC_PAYMENT_REQUIRED);
-            }else{
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            }
+            // 无权限 403
+            HttpError httpError = new HttpError(HttpStatus.FORBIDDEN.value(),HttpStatus.FORBIDDEN.getReasonPhrase(),request.getServletPath());
+            response.setStatus(httpError.getError());
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(JSON.toJSONString(rest));
+            response.getWriter().write(JSON.toJSONString(httpError));
         };
     }
 

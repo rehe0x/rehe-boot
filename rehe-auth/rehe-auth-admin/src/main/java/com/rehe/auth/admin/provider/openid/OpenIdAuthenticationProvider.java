@@ -4,6 +4,7 @@ import com.rehe.auth.admin.entity.AuthUser;
 import com.rehe.auth.admin.service.CustomUserDetailsService;
 import lombok.Setter;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,11 +21,13 @@ public class OpenIdAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        System.out.println("ooooopenid");
         OpenIdAuthenticationToken openIdAuthenticationToken = (OpenIdAuthenticationToken)authentication;
         AuthUser authUser = (AuthUser) customUserDetailsService.findByOpenId(openIdAuthenticationToken.getPrincipal().toString());
-        System.out.println(authUser.toString());
-        return OpenIdAuthenticationToken.unauthenticated("sdf");
+        // 不存在账号密码错误 或 创建账号
+        if (authUser == null) {
+            throw new BadCredentialsException("");
+        }
+        return OpenIdAuthenticationToken.unauthenticated(openIdAuthenticationToken.getPrincipal());
     }
 
     @Override

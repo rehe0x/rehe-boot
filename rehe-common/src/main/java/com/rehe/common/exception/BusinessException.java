@@ -7,7 +7,7 @@ import java.io.Serial;
 
 /**
  * @author xiech
- * @description
+ * @description 业务异常
  * @date 2024/1/10
  */
 @Getter

@@ -13,18 +13,11 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 /**
  * @author xiech
- * @description
+ * @description 统一异常处理
  * @date 2024/1/10
  */
 @RestControllerAdvice
 public class CustomExceptionHandler {
-//
-//    @ExceptionHandler(Throwable.class)
-//    public ResponseEntity handleException(Throwable e){
-//        // 打印堆栈信息
-//        HttpError httpError = new HttpError(BAD_REQUEST.value(),e.getMessage());
-//        return buildResponseEntity(apiError);
-//    }
 
     @ExceptionHandler(BusinessException.class)
     public Result<String> businessException(BusinessException e){
@@ -35,11 +28,5 @@ public class CustomExceptionHandler {
     public Result<String> badCredentialsException(BadCredentialsException e){
         return Result.fail("用户名或密码不正确");
     }
-//
-//    /**
-//     * 统一返回
-//     */
-//    private ResponseEntity<HttpError> responseEntity(Object httpError) {
-//        return new ResponseEntity<>(httpError, HttpStatus.valueOf(httpError.getError()));
-//    }
+
 }

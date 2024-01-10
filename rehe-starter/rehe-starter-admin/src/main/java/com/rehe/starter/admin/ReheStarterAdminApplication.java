@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ComponentScan({"com.rehe"})
 //@MapperScan(value = "com.rehe")
 @RequiredArgsConstructor
+@EnableAsync
 public class ReheStarterAdminApplication {
 
     public static void main(String[] args) {

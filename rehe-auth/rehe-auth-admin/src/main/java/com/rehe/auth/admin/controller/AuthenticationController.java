@@ -40,8 +40,8 @@ public class AuthenticationController {
 
     @Operation(summary = "微信登录",operationId = "1")
     @GetMapping("/login/wx")
-    public ResponseEntity<String> loginWx(AdminLoginDto adminLoginDto) {
-        return ResponseEntity.ok(service.authOpenId("asdf",null));
+    public Result<String> loginWx(AdminLoginDto adminLoginDto) {
+        return Result.ok(service.authOpenId("asdf",null));
     }
 
 //    @Operation(summary = "获取登录信息",operationId = "2")

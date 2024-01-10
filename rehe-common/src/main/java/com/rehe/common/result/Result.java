@@ -56,6 +56,14 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
+    public Result(boolean successful, int code, String msg, T data) {
+        this.successful = successful;
+        this.code = code;
+        this.msg = msg;
+        this.timestamp = System.currentTimeMillis();
+        this.data = data;
+    }
+
 
 
     public static <T> Result<T> ok(){
@@ -73,6 +81,14 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> fail(String msg){
         return new Result<>(false,ResultCodeEnum.FAIL,msg, null);
+    }
+
+    public static <T> Result<T> fail(int code,String msg){
+        return new Result<>(false,code,msg, null);
+    }
+
+    public static <T> Result<T> fail(ResultCodeEnum resultCodeEnum){
+        return new Result<>(false,resultCodeEnum, null);
     }
 
     public static <T> Result<T> error(){
