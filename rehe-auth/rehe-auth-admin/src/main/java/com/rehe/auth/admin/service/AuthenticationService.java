@@ -6,10 +6,16 @@ import com.rehe.auth.admin.mapper.AuthUserMapper;
 import com.rehe.auth.admin.provider.mobile.MobileAuthenticationToken;
 import com.rehe.auth.admin.provider.openid.OpenIdAuthenticationToken;
 import com.rehe.auth.admin.entity.AuthUser;
+import com.rehe.auth.admin.vo.AuthUserInfoVo;
+import com.rehe.common.exception.BusinessException;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,34 +36,17 @@ public class AuthenticationService {
                 adminLoginDto.getPassword()
         );
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        AuthUser authUser = authUserService.findByUsername(adminLoginDto.getUsername());
+        AuthUser authUser = authUserService.findByUsername(adminLoginDto.getUsername()).orElseThrow();
         authUser.setPassword(null);
         // 用户基本信息存入token
         Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
         return jwtService.generateToken(extraClaims, authUser);
     }
 
-    /**
-     *
-     * @param openId openid和code二选一
-     * @param code
-     * @return
-     */
-    public String authOpenId(String openId,String code) {
-        authenticationManager.authenticate(
-                new OpenIdAuthenticationToken(openId)
-        );
-        AuthUser authUser = authUserService.findByOpenId(openId);
-        authUser.setPassword(null);
-        // 用户基本信息存入token
-        Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
-        return jwtService.generateToken(extraClaims, authUser);
-    }
-
-    public String authenticate2() {
+    public String authMobile(String phone,String code) {
         authenticationManager.authenticate(
                 new MobileAuthenticationToken(
-                        "test","sd"
+                        phone,code
                 )
         );
 //        var user = repository.findByEmail(request.getEmail())
@@ -69,55 +58,40 @@ public class AuthenticationService {
         return jwtToken;
     }
 
-//    private void saveUserToken(User user, String jwtToken) {
-//        var token = Token.builder()
-//                .user(user)
-//                .token(jwtToken)
-//                .tokenType(TokenType.BEARER)
-//                .expired(false)
-//                .revoked(false)
-//                .build();
-//        tokenRepository.save(token);
-//    }
+    /**
+     *
+     * @param openId openid和code二选一
+     * @param code
+     * @return
+     */
+    public String authOpenId(String code,String openId) {
+        authenticationManager.authenticate(
+                new OpenIdAuthenticationToken(openId)
+        );
+        AuthUser authUser = authUserService.findByOpenId(openId);
+        authUser.setPassword(null);
+        // 用户基本信息存入token
+        Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
+        return jwtService.generateToken(extraClaims, authUser);
+    }
 
-//    private void revokeAllUserTokens(User user) {
-//        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-//        if (validUserTokens.isEmpty())
-//            return;
-//        validUserTokens.forEach(token -> {
-//            token.setExpired(true);
-//            token.setRevoked(true);
-//        });
-//        tokenRepository.saveAll(validUserTokens);
-//    }
 
-//    public void refreshToken(
-//            HttpServletRequest request,
-//            HttpServletResponse response
-//    ) throws IOException {
-//        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-//        final String refreshToken;
-//        final String userEmail;
-//        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-//            return;
-//        }
-//        refreshToken = authHeader.substring(7);
-//        userEmail = jwtService.extractUsername(refreshToken);
-//        if (userEmail != null) {
-//            var user = this.repository.findByEmail(userEmail)
-//                    .orElseThrow();
-//            if (jwtService.isTokenValid(refreshToken, user)) {
-//                var accessToken = jwtService.generateToken(user);
-//                revokeAllUserTokens(user);
-//                saveUserToken(user, accessToken);
-//                var authResponse = AuthenticationResponse.builder()
-//                        .accessToken(accessToken)
-//                        .refreshToken(refreshToken)
-//                        .build();
-//                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-//            }
-//        }
-//    }
+    /**
+     * 获取用户信息
+     */
+    public AuthUserInfoVo userInfo() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new BusinessException("当前登录状态过期");
+        }
+        if (authentication.getPrincipal() instanceof AuthUser) {
+            AuthUser userDetails = (AuthUser) authentication.getPrincipal();
+            AuthUserInfoVo authUser  = JSON.parseObject(JSON.toJSONString(userDetails), AuthUserInfoVo.class);
+            return authUser;
+        }{
+            return null;
+        }
+    }
 
 //    @DBSource(value = DynamicDataSourceEnum.SLAVE)
 //    public void test1(){

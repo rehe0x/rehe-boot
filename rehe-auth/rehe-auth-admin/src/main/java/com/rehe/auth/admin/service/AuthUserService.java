@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * @author xiech
  * @description
@@ -18,9 +20,9 @@ import org.springframework.stereotype.Service;
 public class AuthUserService {
     private final AuthUserMapper authUserMapper;
     private final AuthUserMapstruct authUserMapstruct;
-    public AuthUser findByUsername(String username){
+    public Optional<AuthUser> findByUsername(String username){
         User user = authUserMapper.findByUsername(username);
-        return authUserMapstruct.toTarget(user);
+        return Optional.ofNullable(authUserMapstruct.toTarget(user));
     }
 
     public AuthUser findByPhone(String phone){

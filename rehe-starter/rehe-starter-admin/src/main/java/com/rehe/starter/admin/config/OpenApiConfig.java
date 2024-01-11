@@ -7,10 +7,15 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.HeaderParameter;
 
+import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -45,27 +50,11 @@ public class OpenApiConfig {
                     operation.addExtension("x-order",operation.getOperationId());
                     // 增加全局header参数
                     return operation.addParametersItem(
-                            new HeaderParameter().name("auth_token").example("登录token").description("登录token")
-                                    .schema(new StringSchema()._default("jwt token").name("auth_token").description("登录token")));
+                            new HeaderParameter().name("Authorization").example("登录token").description("登录token")
+                                    .schema(new StringSchema()._default("Bearer ").name("Authorization").description("登录token")));
                 })
                 .packagesToScan(packagedToMatch).build();
     }
 
-    //    @Bean
-//    public GlobalOpenApiCustomizer orderGlobalOpenApiCustomizer() {
-//        return openApi -> {
-//            if (openApi.getTags()!=null){
-//                openApi.getTags().forEach(tag -> {
-//                    Map<String,Object> map=new HashMap<>();
-//                    map.put("x-order", RandomUtil.randomInt(0,100));
-//                    tag.setExtensions(map);
-//                });
-//            }
-//            if(openApi.getPaths()!=null){
-//                openApi.addExtension("record","1223456");
-//                openApi.getPaths().addExtension("x-record",RandomUtil.randomInt(1,100));
-//            }
-//
-//        };
-//    }
+
 }

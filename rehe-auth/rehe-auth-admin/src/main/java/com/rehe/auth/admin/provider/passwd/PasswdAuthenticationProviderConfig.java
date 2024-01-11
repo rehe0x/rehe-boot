@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,9 @@ public class PasswdAuthenticationProviderConfig {
     private final AuthUserService authUserService;
     @Bean
     public UserDetailsService userDetailsService() {
-        return authUserService::findByUsername;
+        return username -> authUserService.findByUsername(username).orElseThrow(
+                () -> new BadCredentialsException("")
+        );
     }
     @Bean
     public AuthenticationProvider passwdAuthenticationProvider() {
