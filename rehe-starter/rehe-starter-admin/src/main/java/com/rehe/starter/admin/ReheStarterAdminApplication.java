@@ -8,12 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-//@EnableAsync
 @SpringBootApplication
 @ComponentScan({"com.rehe"})
-//@MapperScan(value = "com.rehe")
-@RequiredArgsConstructor
-@EnableAsync
 public class ReheStarterAdminApplication {
 
     public static void main(String[] args) {

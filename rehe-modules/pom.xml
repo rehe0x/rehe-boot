@@ -20,13 +20,29 @@
 		<module>rehe-admin</module>
 		<module>rehe-app</module>
 		<module>rehe-log</module>
+		<module>common-base</module>
 	</modules>
 
 	<properties>
 	</properties>
 
-	<dependencies>
 
+
+	<dependencies>
+		<dependency>
+			<groupId>com.rehe.common</groupId>
+			<artifactId>rehe-common</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-generator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

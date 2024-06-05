@@ -28,7 +28,7 @@ public class MyBatisPlusGenerator {
     // xml路径
     private final static String xmlFileDir = "/rehe-modules/rehe-admin/src/main/resources/admin_mapper/";
 
-    private final static String tableName = "admin_user";
+    private final static String tableName = "system_user";
 
     public static void main(String[] args) {
         String projectPath = System.getProperty("user.dir");
@@ -54,7 +54,8 @@ public class MyBatisPlusGenerator {
                             .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath+xmlFileDir+moduleName)); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude(tableName) // 设置需要生成的表名
+                    builder.addInclude(tableName)
+                      .addTablePrefix("system_") // 设置需要生成的表名
                      .controllerBuilder()
                      .enableRestStyle()
                      .enableHyphenStyle()
