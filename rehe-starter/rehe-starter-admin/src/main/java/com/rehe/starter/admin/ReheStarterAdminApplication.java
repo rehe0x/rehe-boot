@@ -1,6 +1,5 @@
 package com.rehe.starter.admin;
 
-import com.rehe.modules.admin.system.mapper.AdminUserMapper;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

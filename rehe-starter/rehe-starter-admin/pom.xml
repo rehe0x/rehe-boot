@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.rehe.modules</groupId>
-            <artifactId>rehe-admin</artifactId>
+            <artifactId>rehe-module-admin</artifactId>
             <version>1.0</version>
         </dependency>
 

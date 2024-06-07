@@ -1,6 +1,5 @@
 package com.rehe.database.app;
 
-import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.rehe.common.YamlPropertySourceFactory;
 import com.rehe.common.db.DataSourceProperties;
 import com.rehe.common.db.DynamicDataSource;
@@ -8,6 +7,7 @@ import com.rehe.common.db.DynamicDataSourceEnum;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class AppDataSourceConfig {
 
     @Bean(name = "appSessionFactory")
     public SqlSessionFactory sessionFactory(@Qualifier("appDynamicDb") DataSource dynamicDataSource) throws Exception {
-        MybatisSqlSessionFactoryBean bean = new MybatisSqlSessionFactoryBean();
+        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setMapperLocations(
                 new PathMatchingResourcePatternResolver().getResources("classpath*:mapper/*Mapper.xml"));
         bean.setDataSource(dynamicDataSource);

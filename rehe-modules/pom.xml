@@ -17,10 +17,10 @@
 	<description>rehe-modules</description>
 
 	<modules>
-		<module>rehe-admin</module>
-		<module>rehe-app</module>
-		<module>rehe-log</module>
-		<module>common-base</module>
+		<module>rehe-module-admin</module>
+		<module>rehe-module-app</module>
+		<module>rehe-module-log</module>
+		<module>rehe-module-common</module>
 	</modules>
 
 	<properties>
@@ -34,15 +34,22 @@
 			<artifactId>rehe-common</artifactId>
 			<version>1.0</version>
 		</dependency>
+
 		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-generator</artifactId>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.4.2</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

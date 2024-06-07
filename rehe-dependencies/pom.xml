@@ -16,13 +16,15 @@
 		<mysql.connector.java.version>8.0.33</mysql.connector.java.version>
 		<org.postgresql.version>42.7.3</org.postgresql.version>
 		<org.mybatis.spring.boot.version>3.0.3</org.mybatis.spring.boot.version>
-		<com.baomidou.mybatis.version>3.5.5</com.baomidou.mybatis.version>
+		<org.mybatis.generator.version>1.4.2</org.mybatis.generator.version>
 		<fastjson2.version>2.0.44</fastjson2.version>
 		<freemarker.version>2.3.32</freemarker.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<lombok.version>1.18.32</lombok.version>
 		<com.github.xiaoymin.version>4.5.0</com.github.xiaoymin.version>
 		<io.jsonwebtoken.version>0.12.3</io.jsonwebtoken.version>
+		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
+
 	</properties>
 
 	<dependencyManagement>
@@ -46,15 +48,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-				<version>${com.baomidou.mybatis.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.baomidou</groupId>
-				<artifactId>mybatis-plus-generator</artifactId>
-				<version>${com.baomidou.mybatis.version}</version>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-core</artifactId>
+				<version>${org.mybatis.generator.version}</version>
 			</dependency>
 
 			<dependency>
@@ -108,6 +104,12 @@
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-jackson</artifactId>
 				<version>${io.jsonwebtoken.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jakarta.persistence</groupId>
+				<artifactId>jakarta.persistence-api</artifactId>
+				<version>${jakarta.persistence.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
