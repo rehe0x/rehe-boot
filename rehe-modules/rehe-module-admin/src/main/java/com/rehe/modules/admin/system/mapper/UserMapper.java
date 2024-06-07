@@ -1,9 +1,14 @@
 package com.rehe.modules.admin.system.mapper;
 
 import com.rehe.modules.admin.system.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * @author rehe
+ */
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 

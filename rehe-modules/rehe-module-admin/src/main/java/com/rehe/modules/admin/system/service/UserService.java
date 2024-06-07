@@ -1,11 +1,9 @@
 package com.rehe.modules.admin.system.service;
 
+import com.rehe.modules.admin.system.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.rehe.modules.admin.system.entity.User;
 import com.rehe.modules.admin.system.mapper.UserMapper;
 
 import java.util.List;

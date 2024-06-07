@@ -1,13 +1,11 @@
 package com.rehe.modules.admin.system.entity;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.Data;
 
 /**
  * 系统用户
- * @author rehe
  */
 @Data
 public class User implements Serializable {
@@ -64,18 +62,17 @@ public class User implements Serializable {
     /**
     * 创建日期
     */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
     * 更新时间
     */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
     * 软删除
     */
     private Boolean deleted;
 
-    @Serial
     private static final long serialVersionUID = 1L;
 }

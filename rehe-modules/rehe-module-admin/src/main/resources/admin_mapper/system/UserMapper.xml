@@ -49,25 +49,25 @@
       <if test="deptId != null">
         dept_id,
       </if>
-      <if test="username != null">
+      <if test="username != null and username != ''">
         username,
       </if>
-      <if test="password != null">
+      <if test="password != null and password != ''">
         `password`,
       </if>
-      <if test="nickname != null">
+      <if test="nickname != null and nickname != ''">
         nickname,
       </if>
-      <if test="gender != null">
+      <if test="gender != null and gender != ''">
         gender,
       </if>
-      <if test="phone != null">
+      <if test="phone != null and phone != ''">
         phone,
       </if>
-      <if test="email != null">
+      <if test="email != null and email != ''">
         email,
       </if>
-      <if test="avatarPath != null">
+      <if test="avatarPath != null and avatarPath != ''">
         avatar_path,
       </if>
       <if test="enabled != null">
@@ -87,25 +87,25 @@
       <if test="deptId != null">
         #{deptId},
       </if>
-      <if test="username != null">
+      <if test="username != null and username != ''">
         #{username},
       </if>
-      <if test="password != null">
+      <if test="password != null and password != ''">
         #{password},
       </if>
-      <if test="nickname != null">
+      <if test="nickname != null and nickname != ''">
         #{nickname},
       </if>
-      <if test="gender != null">
+      <if test="gender != null and gender != ''">
         #{gender},
       </if>
-      <if test="phone != null">
+      <if test="phone != null and phone != ''">
         #{phone},
       </if>
-      <if test="email != null">
+      <if test="email != null and email != ''">
         #{email},
       </if>
-      <if test="avatarPath != null">
+      <if test="avatarPath != null and avatarPath != ''">
         #{avatarPath},
       </if>
       <if test="enabled != null">
@@ -129,25 +129,25 @@
       <if test="deptId != null">
         dept_id = #{deptId},
       </if>
-      <if test="username != null">
+      <if test="username != null and username != ''">
         username = #{username},
       </if>
-      <if test="password != null">
+      <if test="password != null and password != ''">
         `password` = #{password},
       </if>
-      <if test="nickname != null">
+      <if test="nickname != null and nickname != ''">
         nickname = #{nickname},
       </if>
-      <if test="gender != null">
+      <if test="gender != null and gender != ''">
         gender = #{gender},
       </if>
-      <if test="phone != null">
+      <if test="phone != null and phone != ''">
         phone = #{phone},
       </if>
-      <if test="email != null">
+      <if test="email != null and email != ''">
         email = #{email},
       </if>
-      <if test="avatarPath != null">
+      <if test="avatarPath != null and avatarPath != ''">
         avatar_path = #{avatarPath},
       </if>
       <if test="enabled != null">
@@ -183,7 +183,7 @@
     where id = #{id}
   </update>
 
-  <select id="selectAll">
+  <select id="selectAll" resultType="com.rehe.modules.admin.system.entity.User">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
