@@ -18,19 +18,19 @@
     <description>rehe-project</description>
 
     <modules>
-        <module>rehe-dependencies</module>
-        <module>rehe-modules</module>
-        <module>rehe-common</module>
-        <module>rehe-auth</module>
-        <module>rehe-starter</module>
-        <module>rehe-database</module>
+        <module>dependencies</module>
+        <module>modules</module>
+        <module>common</module>
+        <module>auth</module>
+        <module>starter</module>
+        <module>database</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.rehe</groupId>
-                <artifactId>rehe-dependencies</artifactId>
+                <artifactId>dependencies</artifactId>
                 <version>1.0</version>
                 <type>pom</type>
                 <scope>import</scope>

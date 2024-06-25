@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.auth.admin.mapper.AuthUserMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.auth.admin.entity.User">
+    <!--@mbg.generated-->
+    <!--@Table "system_user"-->
+    <id column="id" property="id" />
+    <result column="dept_id" property="deptId" />
+    <result column="username" property="username" />
+    <result column="password" property="password" />
+    <result column="nickname" property="nickname" />
+    <result column="gender" property="gender" />
+    <result column="phone" property="phone" />
+    <result column="email" property="email" />
+    <result column="avatar_path" property="avatarPath" />
+    <result column="enabled" property="enabled" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+    <result column="open_id" property="openId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, dept_id, username, "password", nickname, gender, phone, email, avatar_path, enabled,
+    create_time, update_time, deleted, open_id
+  </sql>
+
+  <select id="findByUsername" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where deleted=false and username = #{username}
+  </select>
+
+  <select id="findByPhone" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where deleted=false and phone = #{phone}
+  </select>
+
+  <select id="findByOpenId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where deleted=false and open_id = #{openId}
+  </select>
+
+</mapper>

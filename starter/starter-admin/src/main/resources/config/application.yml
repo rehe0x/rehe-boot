@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: dev
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+##    tags-sorter: order
+#    operations-sorter: order
+#  api-docs:
+#    path: /v3/api-docs
+knife4j:
+  enable: true
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    com.rehe.auth.*: TRACE
+
+
+mybatis:
+  # 打印SQL
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
