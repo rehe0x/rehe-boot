@@ -1,11 +1,15 @@
 package com.rehe.common.result;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author xiech
@@ -25,14 +29,14 @@ public class Result<T> implements Serializable {
     private long timestamp;
     private T data;
 
-    public Result() {
+    protected Result() {
         this.successful = true;
         this.code = ResultCodeEnum.SUCCESSFUL.getCode();
         this.msg = ResultCodeEnum.SUCCESSFUL.getMsg();
         this.timestamp = System.currentTimeMillis();
     }
 
-    public Result(T data) {
+    protected Result(T data) {
         this.successful = true;
         this.code = ResultCodeEnum.SUCCESSFUL.getCode();
         this.msg = ResultCodeEnum.SUCCESSFUL.getMsg();
@@ -40,7 +44,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public Result(boolean successful, ResultCodeEnum resultCodeEnum , T data) {
+    private Result(boolean successful, ResultCodeEnum resultCodeEnum , T data) {
         this.successful = successful;
         this.code = resultCodeEnum.getCode();
         this.msg = resultCodeEnum.getMsg();
@@ -48,7 +52,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public Result(boolean successful, ResultCodeEnum resultCodeEnum, String msg, T data) {
+    private Result(boolean successful, ResultCodeEnum resultCodeEnum, String msg, T data) {
         this.successful = successful;
         this.code = resultCodeEnum.getCode();
         this.msg = msg;
@@ -56,7 +60,7 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public Result(boolean successful, int code, String msg, T data) {
+    private Result(boolean successful, int code, String msg, T data) {
         this.successful = successful;
         this.code = code;
         this.msg = msg;
@@ -73,7 +77,6 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> ok(T data){
         return new Result<>(data);
     }
-
 
     public static <T> Result<T> fail(){
         return new Result<>(false,ResultCodeEnum.FAIL, null);

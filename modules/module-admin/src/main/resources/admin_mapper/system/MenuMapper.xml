@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.modules.admin.system.mapper.MenuMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.modules.admin.system.entity.Menu">
+    <!--@mbg.generated-->
+    <!--@Table system_menu-->
+    <id column="id" property="id" />
+    <result column="parent_id" property="parentId" />
+    <result column="menu_type" property="menuType" />
+    <result column="title" property="title" />
+    <result column="name" property="name" />
+    <result column="component" property="component" />
+    <result column="route_path" property="routePath" />
+    <result column="sort" property="sort" />
+    <result column="icon" property="icon" />
+    <result column="link" property="link" />
+    <result column="cache" property="cache" />
+    <result column="hidden" property="hidden" />
+    <result column="permission" property="permission" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link, 
+    "cache", hidden, permission, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from system_menu
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from system_menu
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.rehe.modules.admin.system.entity.Menu">
+    <!--@mbg.generated-->
+    insert into system_menu (parent_id, menu_type, title, "name", component, route_path,
+      sort, icon, link, "cache", hidden, permission, create_time, update_time
+      )
+    values (#{parentId}, #{menuType}, #{title}, #{name}, #{component}, #{routePath},
+      #{sort}, #{icon}, #{link}, #{cache}, #{hidden}, #{permission}, #{createTime}, #{updateTime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rehe.modules.admin.system.entity.Menu">
+    <!--@mbg.generated-->
+    insert into system_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="menuType != null">
+        menu_type,
+      </if>
+      <if test="title != null and title != ''">
+        title,
+      </if>
+      <if test="name != null and name != ''">
+        "name",
+      </if>
+      <if test="component != null and component != ''">
+        component,
+      </if>
+      <if test="routePath != null and routePath != ''">
+        route_path,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="icon != null and icon != ''">
+        icon,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="cache != null">
+        "cache",
+      </if>
+      <if test="hidden != null">
+        hidden,
+      </if>
+      <if test="permission != null and permission != ''">
+        permission,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="parentId != null">
+        #{parentId},
+      </if>
+      <if test="menuType != null">
+        #{menuType},
+      </if>
+      <if test="title != null and title != ''">
+        #{title},
+      </if>
+      <if test="name != null and name != ''">
+        #{name},
+      </if>
+      <if test="component != null and component != ''">
+        #{component},
+      </if>
+      <if test="routePath != null and routePath != ''">
+        #{routePath},
+      </if>
+      <if test="sort != null">
+        #{sort},
+      </if>
+      <if test="icon != null and icon != ''">
+        #{icon},
+      </if>
+      <if test="link != null">
+        #{link},
+      </if>
+      <if test="cache != null">
+        #{cache},
+      </if>
+      <if test="hidden != null">
+        #{hidden},
+      </if>
+      <if test="permission != null and permission != ''">
+        #{permission},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rehe.modules.admin.system.entity.Menu">
+    <!--@mbg.generated-->
+    update system_menu
+    <set>
+      <if test="parentId != null">
+        parent_id = #{parentId},
+      </if>
+      <if test="menuType != null">
+        menu_type = #{menuType},
+      </if>
+      <if test="title != null and title != ''">
+        title = #{title},
+      </if>
+      <if test="name != null and name != ''">
+        "name" = #{name},
+      </if>
+      <if test="component != null and component != ''">
+        component = #{component},
+      </if>
+      <if test="routePath != null and routePath != ''">
+        route_path = #{routePath},
+      </if>
+      <if test="sort != null">
+        sort = #{sort},
+      </if>
+      <if test="icon != null and icon != ''">
+        icon = #{icon},
+      </if>
+      <if test="link != null">
+        link = #{link},
+      </if>
+      <if test="cache != null">
+        "cache" = #{cache},
+      </if>
+      <if test="hidden != null">
+        hidden = #{hidden},
+      </if>
+      <if test="permission != null and permission != ''">
+        permission = #{permission},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rehe.modules.admin.system.entity.Menu">
+    <!--@mbg.generated-->
+    update system_menu
+    set parent_id = #{parentId},
+      menu_type = #{menuType},
+      title = #{title},
+      "name" = #{name},
+      component = #{component},
+      route_path = #{routePath},
+      sort = #{sort},
+      icon = #{icon},
+      link = #{link},
+      "cache" = #{cache},
+      hidden = #{hidden},
+      permission = #{permission},
+      create_time = #{createTime},
+      update_time = #{updateTime}
+    where id = #{id}
+  </update>
+
+
+
+  <select id="selectAll"  resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_menu"
+  </select>
+
+  <select id="selectByPidRoute" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_menu where parent_id = #{parentId} and route_path = #{routePath}
+  </select>
+
+  <select id="selectByPermission" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_menu where  permission = #{permission}
+  </select>
+
+</mapper>

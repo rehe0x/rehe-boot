@@ -24,6 +24,7 @@
 		<com.github.xiaoymin.version>4.5.0</com.github.xiaoymin.version>
 		<io.jsonwebtoken.version>0.12.3</io.jsonwebtoken.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
+		<com.github.pagehelper.version>2.1.0</com.github.pagehelper.version>
 
 	</properties>
 
@@ -52,6 +53,13 @@
 				<artifactId>mybatis-generator-core</artifactId>
 				<version>${org.mybatis.generator.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>${com.github.pagehelper.version}</version>
+			</dependency>
+
 
 			<dependency>
 				<groupId>org.freemarker</groupId>

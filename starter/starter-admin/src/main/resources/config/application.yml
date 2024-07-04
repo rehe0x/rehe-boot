@@ -1,7 +1,9 @@
 spring:
   profiles:
     active: dev
-
+  threads:
+    virtual:
+      enabled: true # 启用虚拟线程
 application:
   security:
     jwt:

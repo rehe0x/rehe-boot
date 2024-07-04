@@ -3,11 +3,14 @@ package com.rehe.modules.admin.system.entity;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Data;
 
 /**
- * 系统用户
+ * @description
  * @author rehe
+ * @date 2024/6/26
  */
 @Data
 public class User implements Serializable {
@@ -79,6 +82,9 @@ public class User implements Serializable {
     */
     private Boolean deleted;
 
+    /**
+     * 微信id
+     */
     private String openId;
 
 }

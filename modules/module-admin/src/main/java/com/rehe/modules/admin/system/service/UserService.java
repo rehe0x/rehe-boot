@@ -1,5 +1,8 @@
 package com.rehe.modules.admin.system.service;
 
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.rehe.modules.admin.system.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,7 +51,9 @@ public class UserService{
     }
 
     public List<User> selectAll(){
-        return userMapper.selectByItem();
+        PageHelper.startPage(1,1);
+        List<User> list = userMapper.selectByItem();
+        return list;
     }
 
 }

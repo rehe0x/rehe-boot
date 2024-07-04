@@ -4,9 +4,6 @@ import com.rehe.modules.admin.system.entity.User;
 
 import java.util.List;
 
-/**
- * @author rehe
- */
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
