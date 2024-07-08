@@ -65,7 +65,7 @@ public class User implements Serializable {
     /**
     * 1启用、0禁用
     */
-    private Boolean enabled;
+    private Integer enabled;
 
     /**
     * 创建日期

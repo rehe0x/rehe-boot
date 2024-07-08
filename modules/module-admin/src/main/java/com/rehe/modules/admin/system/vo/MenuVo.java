@@ -12,8 +12,8 @@ import lombok.Data;
  * @author rehe
  * @date 2024/6/26
  */
-@Data
 @Schema(description="系统菜单")
+@Data
 public class MenuVo implements Serializable {
     /**
      * ID

@@ -1,9 +1,16 @@
 package com.rehe.modules.admin.system.mapper;
 
 import com.rehe.modules.admin.system.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+/**
+ * @author rehe
+ * @description
+ * @date 2024/7/4
+ */
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -17,5 +24,7 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    List<User> selectByItem();
+    List<User> selectAll();
+
+    User selectByUsername(String username);
 }

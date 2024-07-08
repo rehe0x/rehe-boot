@@ -8,20 +8,20 @@ import lombok.Data;
 /**
  * @author rehe
  */
-@Data
 @Schema(description="系统用户")
+@Data
 public class UserVo {
-//    /**
-//     * ID
-//     */
-//    @Schema(description = "ID")
-//    private Long id;
-//
-//    /**
-//     * 部门id
-//     */
-//    @Schema(description = "部门id")
-//    private Long deptId;
+    /**
+     * ID
+     */
+    @Schema(description = "ID")
+    private Long id;
+
+    /**
+     * 部门id
+     */
+    @Schema(description = "部门id")
+    private Long deptId;
 
     /**
      * 用户名
@@ -69,7 +69,7 @@ public class UserVo {
      * 1启用、0禁用
      */
     @Schema(description = "1启用、0禁用")
-    private Boolean enabled;
+    private Integer enabled;
 
     /**
      * 创建日期

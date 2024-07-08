@@ -190,10 +190,18 @@
   </update>
 
 
-  <select id="selectByItem" resultType="com.rehe.modules.admin.system.entity.User">
+  <select id="selectAll" resultType="com.rehe.modules.admin.system.entity.User">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
     from "system_user"
+  </select>
+
+  <select id="selectByUsername" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where username = #{username}
   </select>
 </mapper>
