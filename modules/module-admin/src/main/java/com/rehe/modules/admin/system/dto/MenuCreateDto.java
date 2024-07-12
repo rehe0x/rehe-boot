@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "菜单新增")
 @Data
-public class MenuAddDto {
+public class MenuCreateDto {
     /**
      * 上级ID 默认0
      */

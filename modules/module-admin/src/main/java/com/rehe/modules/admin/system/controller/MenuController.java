@@ -5,7 +5,7 @@ import com.rehe.common.result.Page;
 import com.rehe.common.result.ResultPage;
 import com.rehe.common.result.Result;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.MenuAddDto;
+import com.rehe.modules.admin.system.dto.MenuCreateDto;
 import com.rehe.modules.admin.system.dto.MenuQueryDto;
 import com.rehe.modules.admin.system.dto.MenuUpdateDto;
 import com.rehe.modules.admin.system.service.MenuService;
@@ -32,9 +32,9 @@ public class MenuController {
     private final MenuService menuService;
 
     @Operation(summary = "添加菜单",operationId = "1")
-    @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Valid MenuAddDto menuAddDto){
-        menuService.addMenu(menuAddDto);
+    @PostMapping("/create")
+    public Result<Void> create(@RequestBody @Valid MenuCreateDto menuCreateDto){
+        menuService.createMenu(menuCreateDto);
         return Result.ok();
     }
 

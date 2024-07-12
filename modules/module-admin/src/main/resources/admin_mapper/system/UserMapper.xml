@@ -28,7 +28,7 @@
     select 
     <include refid="Base_Column_List" />
     from "system_user"
-    where id = #{id}
+    where deleted = false and id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--@mbg.generated-->
@@ -73,7 +73,7 @@
       <if test="avatarPath != null and avatarPath != ''">
         avatar_path,
       </if>
-      <if test="enabled != null and enabled != ''">
+      <if test="enabled != null">
         enabled,
       </if>
       <if test="createTime != null">
@@ -114,7 +114,7 @@
       <if test="avatarPath != null and avatarPath != ''">
         #{avatarPath},
       </if>
-      <if test="enabled != null and enabled != ''">
+      <if test="enabled != null">
         #{enabled},
       </if>
       <if test="createTime != null">
@@ -156,7 +156,7 @@
       <if test="avatarPath != null and avatarPath != ''">
         avatar_path = #{avatarPath},
       </if>
-      <if test="enabled != null and enabled != ''">
+      <if test="enabled != null">
         enabled = #{enabled},
       </if>
       <if test="createTime != null">
@@ -195,6 +195,18 @@
     select
     <include refid="Base_Column_List" />
     from "system_user"
+    <where>
+      and deleted = false
+      <if test="keyword != null and keyword != ''">
+        and concat(id,username,nickname,phone,email) ilike '%' || #{keyword} || '%'
+      </if>
+      <if test="deptIds != null and deptIds.length > 0">
+        AND dept_id IN
+        <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+          #{deptId}
+        </foreach>
+      </if>
+    </where>
   </select>
 
   <select id="selectByUsername" resultMap="BaseResultMap">
@@ -202,6 +214,6 @@
     select
     <include refid="Base_Column_List" />
     from "system_user"
-    where username = #{username}
+    where  deleted = false and username = #{username}
   </select>
 </mapper>

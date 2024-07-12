@@ -5,22 +5,13 @@ import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.util.StringUtils;
-
-import java.time.LocalDateTime;
 
 /**
  * @author rehe
  */
 @Schema(description="新增用户")
 @Data
-public class UserAddDto {
-//    /**
-//     * ID
-//     */
-//    @Schema(description = "ID")
-//    private Long id;
-//
+public class UserCreateDto {
     /**
      * 部门id
      */

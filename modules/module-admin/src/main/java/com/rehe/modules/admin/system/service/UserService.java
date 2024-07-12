@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.UserAddDto;
+import com.rehe.modules.admin.system.dto.UserCreateDto;
 import com.rehe.modules.admin.system.dto.UserQueryDto;
 import com.rehe.modules.admin.system.dto.UserUpdateDto;
 import com.rehe.modules.admin.system.entity.User;
@@ -22,7 +22,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
+ * @description
  * @author rehe
+ * @date 2024/7/8
  */
 @Service
 @RequiredArgsConstructor
@@ -30,8 +32,8 @@ public class UserService{
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     
-    public void addUser(UserAddDto userAddDto) {
-        User entity = UserMapstruct.INSTANCE.toEntity(userAddDto);
+    public void createUser(UserCreateDto userCreateDto) {
+        User entity = UserMapstruct.INSTANCE.toEntity(userCreateDto);
         validateUser(entity, null);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         entity.setCreateTime(LocalDateTime.now());
@@ -41,8 +43,11 @@ public class UserService{
     public void updateUser(UserUpdateDto userUpdateDto) {
         User user = getById(userUpdateDto.getId());
         User entity = UserMapstruct.INSTANCE.toEntity(userUpdateDto);
+
         validateUser(entity, user);
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        if(!user.getPassword().equals(entity.getPassword())){
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+        }
         entity.setUpdateTime(LocalDateTime.now());
         userMapper.updateByPrimaryKeySelective(entity);
     }
@@ -58,7 +63,7 @@ public class UserService{
 
     public Page<UserVo> queryUsers(UserQueryDto userQueryDto, PageParamDto pageParamDto){
         PageHelper.startPage(pageParamDto.getPageNum(), pageParamDto.getPageSize());
-        List<User> userList = userMapper.selectAll();
+        List<User> userList = userMapper.selectAll(userQueryDto);
         return Page.of(new PageInfo<>(userList), UserMapstruct.INSTANCE.toVo(userList));
     }
 

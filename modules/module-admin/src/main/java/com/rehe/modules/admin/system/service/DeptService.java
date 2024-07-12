@@ -12,6 +12,11 @@ import com.rehe.modules.admin.system.entity.Dept;
 
 import java.util.List;
 
+/**
+ * @description
+ * @author rehe
+ * @date 2024/7/8
+ */
 @Service
 @RequiredArgsConstructor
 public class DeptService{

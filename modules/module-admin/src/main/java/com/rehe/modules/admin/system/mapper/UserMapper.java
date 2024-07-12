@@ -1,5 +1,6 @@
 package com.rehe.modules.admin.system.mapper;
 
+import com.rehe.modules.admin.system.dto.UserQueryDto;
 import com.rehe.modules.admin.system.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,7 +25,7 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    List<User> selectAll();
+    List<User> selectAll(UserQueryDto userQueryDto);
 
     User selectByUsername(String username);
 }

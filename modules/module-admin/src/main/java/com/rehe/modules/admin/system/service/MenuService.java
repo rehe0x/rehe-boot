@@ -6,7 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.MenuAddDto;
+import com.rehe.modules.admin.system.dto.MenuCreateDto;
 import com.rehe.modules.admin.system.dto.MenuQueryDto;
 import com.rehe.modules.admin.system.dto.MenuUpdateDto;
 import com.rehe.modules.admin.system.mapstruct.MenuMapstruct;
@@ -35,24 +35,24 @@ public class MenuService{
     /**
      * 新增菜单
      */
-    public void addMenu(MenuAddDto menuAddDto){
-        Menu entity = MenuMapstruct.INSTANCE.toEntity(menuAddDto);
+    public void createMenu(MenuCreateDto menuCreateDto){
+        Menu entity = MenuMapstruct.INSTANCE.toEntity(menuCreateDto);
         entity.setCreateTime(LocalDateTime.now());
 
         Menu parentMenu = validateParentMenu(entity.getParentId());
 
         // 默认路由特殊处理
-        if (menuAddDto.getRouteDefault()) {
+        if (menuCreateDto.getRouteDefault()) {
             handleRouteDefault(parentMenu, entity);
         }
 
         // 菜单和权限需要验证权限标识唯一性
-        if(!menuAddDto.getMenuType().equals(0)){
+        if(!menuCreateDto.getMenuType().equals(0)){
             validateUniquePermission(entity.getPermission(),null);
         }
 
         // 目录和菜单需要验证路由路径唯一性
-        if(!menuAddDto.getMenuType().equals(2)){
+        if(!menuCreateDto.getMenuType().equals(2)){
             validateUniqueRoute(entity.getParentId(),entity.getRoutePath(),null);
         }
         menuMapper.insert(entity);

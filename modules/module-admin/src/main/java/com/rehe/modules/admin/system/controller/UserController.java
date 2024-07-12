@@ -1,34 +1,28 @@
 package com.rehe.modules.admin.system.controller;
-import com.github.pagehelper.PageInfo;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.rehe.common.result.Page;
 import com.rehe.common.result.Result;
 import com.rehe.common.result.ResultPage;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.UserAddDto;
+import com.rehe.modules.admin.system.dto.UserCreateDto;
 import com.rehe.modules.admin.system.dto.UserQueryDto;
 import com.rehe.modules.admin.system.dto.UserUpdateDto;
-import com.rehe.modules.admin.system.entity.User;
-import com.rehe.modules.admin.system.mapstruct.UserMapstruct;
 import com.rehe.modules.admin.system.service.UserService;
 import com.rehe.modules.admin.system.vo.UserVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 /**
-* 系统用户(rehe_admin_master.`system_user`)表控制层
-*
-* @author rehe
-*/
+ * @description
+ * @author rehe
+ * @date 2024/7/8
+ */
 @Tag(name = "用户管理")
 @ApiSupport(order = 10)
 @RequiredArgsConstructor
@@ -38,9 +32,9 @@ public class UserController {
     private final UserService userService;
 
     @Operation(summary = "添加用户",operationId = "1")
-    @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Valid UserAddDto userAddDto) {
-        userService.addUser(userAddDto);
+    @PostMapping("/create")
+    public Result<Void> create(@RequestBody @Valid UserCreateDto userCreateDto) {
+        userService.createUser(userCreateDto);
         return Result.ok();
     }
 

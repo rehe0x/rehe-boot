@@ -1,12 +1,8 @@
 package com.rehe.modules.admin.system.mapstruct;
 
 import com.rehe.common.mapstruct.MapstructVoBaseMapper;
-import com.rehe.modules.admin.system.dto.UserAddDto;
-import com.rehe.modules.admin.system.dto.UserUpdateDto;
 import com.rehe.modules.admin.system.entity.Dept;
-import com.rehe.modules.admin.system.entity.User;
 import com.rehe.modules.admin.system.vo.DeptVo;
-import com.rehe.modules.admin.system.vo.UserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;

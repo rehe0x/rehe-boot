@@ -4,7 +4,11 @@ import com.rehe.modules.admin.system.entity.Dept;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-
+/**
+ * @description
+ * @author rehe
+ * @date 2024/7/8
+ */
 @Mapper
 public interface DeptMapper {
     int deleteByPrimaryKey(Long id);
