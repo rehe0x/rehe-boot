@@ -19,15 +19,16 @@
     <result column="permission" property="permission" />
     <result column="create_time" property="createTime" />
     <result column="update_time" property="updateTime" />
+    <result column="platform_id" property="platformId"/>
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link, 
-    "cache", hidden, permission, create_time, update_time
+    id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link,
+    "cache", hidden, permission, create_time, update_time,platform_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--@mbg.generated-->
-    select 
+    select
     <include refid="Base_Column_List" />
     from system_menu
     where id = #{id}
@@ -40,11 +41,11 @@
   <insert id="insert" parameterType="com.rehe.modules.admin.system.entity.Menu">
     <!--@mbg.generated-->
     insert into system_menu (parent_id, menu_type, title, "name", component, route_path,
-      sort, icon, link, "cache", hidden, permission, create_time, update_time
+      sort, icon, link, "cache", hidden, permission, create_time, update_time,platform_id
       )
     values (#{parentId}, #{menuType}, #{title}, #{name}, #{component}, #{routePath},
       #{sort}, #{icon}, #{link}, #{cache}, #{hidden}, #{permission}, #{createTime}, #{updateTime}
-      )
+      ,#{platformId})
   </insert>
   <insert id="insertSelective" parameterType="com.rehe.modules.admin.system.entity.Menu">
     <!--@mbg.generated-->
@@ -95,6 +96,9 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="platformId != null">
+        platform_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -141,6 +145,9 @@
       </if>
       <if test="updateTime != null">
         #{updateTime},
+      </if>
+      <if test="platformId != null">
+        #{platformId}
       </if>
     </trim>
   </insert>
@@ -190,6 +197,9 @@
       <if test="updateTime != null">
         update_time = #{updateTime},
       </if>
+      <if test="platformId != null">
+        platform_id = #{platformId}
+      </if>
     </set>
     where id = #{id}
   </update>
@@ -209,29 +219,50 @@
       hidden = #{hidden},
       permission = #{permission},
       create_time = #{createTime},
-      update_time = #{updateTime}
+      update_time = #{updateTime},
+      platform_id = #{platformId}
     where id = #{id}
   </update>
 
-
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    delete from system_menu
+    where id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
 
   <select id="selectAll"  resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
     from "system_menu"
+    <where>
+      and platform_id = #{platformId}
+      <if test="keyword != null and keyword != ''">
+        and concat(id,title,route_path,component,permission) ilike '%' || #{keyword} || '%'
+      </if>
+    </where>
   </select>
 
   <select id="selectByPidRoute" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from system_menu where parent_id = #{parentId} and route_path = #{routePath}
+    from system_menu
+    <where>
+      and platform_id = #{platformId}
+      and route_path = #{routePath}
+      <if test="parentId != null">
+        and parent_id = #{parentId}
+      </if>
+    </where>
   </select>
 
   <select id="selectByPermission" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from system_menu where  permission = #{permission}
+    from system_menu where   platform_id = #{platformId} and permission = #{permission}
   </select>
 
 </mapper>

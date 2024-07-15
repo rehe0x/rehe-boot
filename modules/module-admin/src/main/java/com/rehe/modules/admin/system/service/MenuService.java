@@ -3,6 +3,7 @@ import java.time.LocalDateTime;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mysql.cj.log.Log;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
@@ -19,7 +20,10 @@ import com.rehe.modules.admin.system.entity.Menu;
 import com.rehe.modules.admin.system.mapper.MenuMapper;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @description
@@ -48,14 +52,14 @@ public class MenuService{
 
         // 菜单和权限需要验证权限标识唯一性
         if(!menuCreateDto.getMenuType().equals(0)){
-            validateUniquePermission(entity.getPermission(),null);
+            validateUniquePermission(entity.getPlatformId(),entity.getPermission(),null);
         }
 
         // 目录和菜单需要验证路由路径唯一性
         if(!menuCreateDto.getMenuType().equals(2)){
-            validateUniqueRoute(entity.getParentId(),entity.getRoutePath(),null);
+            validateUniqueRoute(entity.getPlatformId(),entity.getParentId(),entity.getRoutePath(),null);
         }
-        menuMapper.insert(entity);
+        menuMapper.insertSelective(entity);
     }
 
 
@@ -69,7 +73,7 @@ public class MenuService{
         entity.setParentId(menu.getParentId());
         entity.setMenuType(menu.getMenuType());
         entity.setUpdateTime(LocalDateTime.now());
-
+        entity.setPlatformId(menu.getPlatformId());
         Menu parentMenu = validateParentMenu(entity.getParentId());
 
         if (menuUpdateDto.getRouteDefault()) {
@@ -77,11 +81,11 @@ public class MenuService{
         }
 
         if(!entity.getMenuType().equals(0)){
-            validateUniquePermission(entity.getPermission(),menu.getPermission());
+            validateUniquePermission(entity.getPlatformId(), entity.getPermission(),menu.getPermission());
         }
 
         if(!entity.getMenuType().equals(2)){
-            validateUniqueRoute(entity.getParentId(),entity.getRoutePath(),menu.getRoutePath());
+            validateUniqueRoute(entity.getPlatformId(), entity.getParentId(),entity.getRoutePath(),menu.getRoutePath());
         }
         menuMapper.updateByPrimaryKeySelective(entity);
     }
@@ -90,16 +94,21 @@ public class MenuService{
      * 删除菜单
      */
     public void deleteMenu(Long id){
-        menuMapper.deleteByPrimaryKey(id);
+        List<Menu> menuList = getAll();
+        Map<Long, List<Menu>> parentToChildrenMap = menuList.stream()
+                .collect(Collectors.groupingBy(Menu::getParentId));
+        List<Long> childIds = getMenuChildIds(parentToChildrenMap, id, new ArrayList<>());
+        childIds.add(id);
+        menuMapper.deleteByPrimaryKeys(childIds);
     }
 
+
     /**
-     * 分页条件查询菜单列表
+     * 菜单列表
      */
-    public Page<MenuVo> queryMenus(MenuQueryDto menuQueryDto, PageParamDto pageParamDto){
-        PageHelper.startPage(pageParamDto.getPageNum(),pageParamDto.getPageSize());
-        List<Menu> menuList = menuMapper.selectAll();
-        return Page.of(new PageInfo<>(menuList), MenuMapstruct.INSTANCE.toVo(menuList));
+    public List<MenuVo> queryMenus(MenuQueryDto menuQueryDto){
+        List<Menu> menuList = menuMapper.selectAll(menuQueryDto);
+        return MenuMapstruct.INSTANCE.toVo(menuList);
     }
 
     /**
@@ -113,13 +122,27 @@ public class MenuService{
     /**
      * 按ID查询菜单 不存在返回空
      */
-    private MenuVo findMenuById(Long id){
+    public MenuVo findMenuById(Long id){
         Menu menu = findById(id);
         return MenuMapstruct.INSTANCE.toVo(menu);
     }
 
 
     /** -----------------------私有方法------------------------ */
+
+    // 递归方法
+    private List<Long> getMenuChildIds(Map<Long, List<Menu>> parentToChildrenMap, Long parentId, List<Long> childIds) {
+        List<Menu> childList = parentToChildrenMap.get(parentId);
+        if(childList == null){
+            return childIds;
+        }
+        for (Menu menu : childList) {
+            childIds.add(menu.getId());
+            getMenuChildIds(parentToChildrenMap, menu.getId(), childIds);
+        }
+        return childIds;
+    }
+
 
     private Menu getById(Long id){
         Menu menu = menuMapper.selectByPrimaryKey(id);
@@ -133,11 +156,14 @@ public class MenuService{
         return menuMapper.selectByPrimaryKey(id);
     }
 
+    private List<Menu> getAll(){
+        return menuMapper.selectAll(null);
+    }
     /**
      * 验证上级路由
      */
     private Menu validateParentMenu(Long parentId) {
-        if(parentId.equals(0L)){
+        if(parentId == null || parentId.equals(0L)){
             return null;
         }
         Menu menu = findById(parentId);
@@ -168,11 +194,11 @@ public class MenuService{
     /**
      * 验证路由唯一性
      */
-    private void validateUniqueRoute(Long parentId, String routePath,String oldRoutePath) {
+    private void validateUniqueRoute(Integer platformId,Long parentId, String routePath,String oldRoutePath) {
         if (routePath == null) {
             return;
         }
-        Menu menu = menuMapper.selectByPidRoute(parentId, routePath);
+        Menu menu = menuMapper.selectByPidRoute(platformId, parentId, routePath);
         if (menu != null) {
             if (oldRoutePath != null && oldRoutePath.equals(menu.getRoutePath())) {
                 return;
@@ -184,11 +210,11 @@ public class MenuService{
     /**
      * 验证权限唯一性
      */
-    private void validateUniquePermission(String permission, String oldPermission) {
+    private void validateUniquePermission(Integer platformId, String permission, String oldPermission) {
         if (!StringUtils.hasText(permission)) {
             return;
         }
-        Menu menu = menuMapper.selectByPermission(permission);
+        Menu menu = menuMapper.selectByPermission(platformId,permission);
         if (menu != null) {
             if (oldPermission != null && oldPermission.equals(menu.getPermission())) {
                 return;

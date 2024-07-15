@@ -91,5 +91,7 @@ public class Menu implements Serializable {
      */
     private LocalDateTime updateTime;
 
+    private Integer platformId;
+
 
 }

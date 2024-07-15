@@ -49,7 +49,7 @@ public class MenuUpdateDto {
      * 是否默认路由
      */
     @Schema(description = "是否默认路由 每一个菜单下可设置一个默认路由")
-    private Boolean routeDefault;
+    private Boolean routeDefault = false;
 
 
     /**

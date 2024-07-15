@@ -1,5 +1,6 @@
 package com.rehe.modules.admin.system.mapper;
 
+import com.rehe.modules.admin.system.dto.MenuQueryDto;
 import com.rehe.modules.admin.system.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,9 +26,11 @@ import java.util.List;
 
     int updateByPrimaryKey(Menu record);
 
-    List<Menu> selectAll();
+    int deleteByPrimaryKeys(List<Long> ids);
 
-    Menu selectByPidRoute(@Param("parentId") Long parentId, @Param("routePath") String routePath);
+    List<Menu> selectAll(MenuQueryDto menuQueryDto);
 
-    Menu selectByPermission(@Param("permission") String permission);
+    Menu selectByPidRoute(@Param("platformId") Integer platformId,@Param("parentId") Long parentId, @Param("routePath") String routePath);
+
+    Menu selectByPermission(@Param("platformId") Integer platformId,@Param("permission") String permission);
 }

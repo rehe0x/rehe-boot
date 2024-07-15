@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author xiech
  * @description
@@ -54,10 +56,9 @@ public class MenuController {
 
     @Operation(summary = "菜单列表",operationId = "10")
     @GetMapping("/query")
-    public ResultPage<MenuVo> query(@ParameterObject @Valid MenuQueryDto queryDto,
-                                    @ParameterObject PageParamDto pageParamDto){
-        Page<MenuVo> pageInfo = menuService.queryMenus(queryDto,pageParamDto);
-        return ResultPage.ok(pageInfo);
+    public Result<List<MenuVo>> query(@ParameterObject @Valid MenuQueryDto queryDto){
+        List<MenuVo> menuVoList = menuService.queryMenus(queryDto);
+        return Result.ok(menuVoList);
     }
 
 

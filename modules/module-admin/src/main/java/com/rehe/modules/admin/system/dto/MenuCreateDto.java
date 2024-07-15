@@ -33,8 +33,9 @@ public class MenuCreateDto {
     /**
      * 菜单标题
      */
-    @NotBlank(message = "菜单标题不能为空")
-    @Schema(description = "菜单标题")
+    @Schema(description = "菜单名称")
+    @NotBlank(message = "菜单名称不能为空")
+    @Size(max = 20, min = 2,message = "菜单名称2-20字符")
     private String title;
 
     /**
@@ -65,7 +66,7 @@ public class MenuCreateDto {
      * 是否默认路由
      */
     @Schema(description = "是否默认路由 菜单才可以设置默认路由")
-    private Boolean routeDefault;
+    private Boolean routeDefault = false;
 
 
     @AssertTrue(message = "非权限菜单必填路由")
@@ -94,7 +95,7 @@ public class MenuCreateDto {
 
     @AssertTrue(message = "外链必须是菜单")
     private boolean isLinkTrue() {
-      return !link || menuType == 1;
+      return (link == null || !link) || menuType == 1;
     }
 
     /**
@@ -119,4 +120,7 @@ public class MenuCreateDto {
     private boolean isPermissionNotBlank() {
         return menuType == 0 || StringUtils.hasText(permission);
     }
+    @Schema(description = "系统ID")
+    @NotNull(message = "系统ID不能为空")
+    private Integer platformId;
 }
