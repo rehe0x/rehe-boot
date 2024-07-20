@@ -55,6 +55,6 @@
         id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link,
     "cache", hidden, permission,platform_id
     from system_menu
-    where platform_id = #{platformId}
+    where platform_id = #{platformId} order by id
   </select>
 </mapper>
