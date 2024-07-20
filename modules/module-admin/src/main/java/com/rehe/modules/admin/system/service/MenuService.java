@@ -180,14 +180,8 @@ public class MenuService{
         if (!entity.getMenuType().equals(1)) {
             return;
         }
-        // 一级菜单默认路由 默认 = "/"
-        if(parentMenu == null){
-            // 验证是否有重复默认路由
-            entity.setRoutePath("/");
-        } else {
-            if (parentMenu.getMenuType().equals(1)) {
-                entity.setRoutePath("");
-            }
+        if (parentMenu == null || parentMenu.getMenuType().equals(1)) {
+            entity.setRoutePath("");
         }
     }
 

@@ -3,9 +3,11 @@ package com.rehe.auth.admin.service;
 import com.alibaba.fastjson2.JSON;
 import com.rehe.auth.admin.dto.AdminLoginDto;
 import com.rehe.auth.admin.mapper.AuthUserMapper;
+import com.rehe.auth.admin.mapstruct.AuthUserMapstruct;
 import com.rehe.auth.admin.provider.mobile.MobileAuthenticationToken;
 import com.rehe.auth.admin.provider.openid.OpenIdAuthenticationToken;
 import com.rehe.auth.admin.entity.AuthUser;
+import com.rehe.auth.admin.vo.AuthMenuVo;
 import com.rehe.auth.admin.vo.AuthUserInfoVo;
 import com.rehe.common.exception.BusinessException;
 import io.jsonwebtoken.Claims;
@@ -19,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -79,18 +82,25 @@ public class AuthenticationService {
     /**
      * 获取用户信息
      */
-    public AuthUserInfoVo userInfo() {
+    public AuthUserInfoVo userInfo(int platformId) {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new BusinessException("当前登录状态过期");
         }
-        if (authentication.getPrincipal() instanceof AuthUser) {
-            AuthUser userDetails = (AuthUser) authentication.getPrincipal();
-            AuthUserInfoVo authUser  = JSON.parseObject(JSON.toJSONString(userDetails), AuthUserInfoVo.class);
-            return authUser;
-        }{
-            return null;
-        }
+
+        //临时
+//        AuthUserInfoVo authUser  = AuthUserMapstruct.INSTANCE.toVo(userDetails);
+        AuthUserInfoVo authUser= AuthUserInfoVo.builder().username("潘西").build();
+        List<AuthMenuVo> menuVoList =  authUserService.getUserMenus(platformId, null);
+        authUser.setMenuList(menuVoList);
+        return authUser;
+//        if (authentication.getPrincipal() instanceof AuthUser userDetails) {
+//            AuthUserInfoVo authUser  = AuthUserMapstruct.INSTANCE.toVo(userDetails);
+//            List<AuthMenuVo> menuVoList =  authUserService.getUserMenus(1, null);
+//            authUser.setMenuList(menuVoList);
+//            return authUser;
+//        }
+//        return null;
     }
 
 //    @DBSource(value = DynamicDataSourceEnum.SLAVE)

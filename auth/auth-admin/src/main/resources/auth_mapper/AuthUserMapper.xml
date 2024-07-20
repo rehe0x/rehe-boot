@@ -25,7 +25,7 @@
     create_time, update_time, deleted, open_id
   </sql>
 
-  <select id="findByUsername" resultMap="BaseResultMap">
+  <select id="selectByUsername" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
@@ -33,7 +33,7 @@
     where deleted=false and username = #{username}
   </select>
 
-  <select id="findByPhone" resultMap="BaseResultMap">
+  <select id="selectByPhone" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
@@ -41,7 +41,7 @@
     where deleted=false and phone = #{phone}
   </select>
 
-  <select id="findByOpenId" resultMap="BaseResultMap">
+  <select id="selectByOpenId" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
@@ -49,4 +49,12 @@
     where deleted=false and open_id = #{openId}
   </select>
 
+  <select id="selectMenuByUser"  resultType="com.rehe.auth.admin.vo.AuthMenuVo">
+    <!--@mbg.generated-->
+    select
+        id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link,
+    "cache", hidden, permission,platform_id
+    from system_menu
+    where platform_id = #{platformId}
+  </select>
 </mapper>

@@ -69,7 +69,7 @@
       <if test="component != null and component != ''">
         component,
       </if>
-      <if test="routePath != null and routePath != ''">
+      <if test="routePath != null">
         route_path,
       </if>
       <if test="sort != null">
@@ -119,7 +119,7 @@
       <if test="component != null and component != ''">
         #{component},
       </if>
-      <if test="routePath != null and routePath != ''">
+      <if test="routePath != null">
         #{routePath},
       </if>
       <if test="sort != null">
@@ -239,12 +239,16 @@
     <include refid="Base_Column_List" />
     from "system_menu"
     <where>
-      and platform_id = #{platformId}
+      <if test="platformId != null">
+        and platform_id = #{platformId}
+      </if>
       <if test="keyword != null and keyword != ''">
         and concat(id,title,route_path,component,permission) ilike '%' || #{keyword} || '%'
       </if>
     </where>
   </select>
+
+
 
   <select id="selectByPidRoute" resultMap="BaseResultMap">
     select

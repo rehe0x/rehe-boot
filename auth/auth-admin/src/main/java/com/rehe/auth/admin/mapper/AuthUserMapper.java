@@ -1,7 +1,11 @@
 package com.rehe.auth.admin.mapper;
 
 import com.rehe.auth.admin.entity.User;
+import com.rehe.auth.admin.vo.AuthMenuVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -12,9 +16,11 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface AuthUserMapper {
 
-    User findByUsername(String username);
+    User selectByUsername(String username);
 
-    User findByPhone(String phone);
+    User selectByPhone(String phone);
 
-    User findByOpenId(String openId);
+    User selectByOpenId(String openId);
+
+    List<AuthMenuVo> selectMenuByUser(@Param("platformId") Integer platformId, Long userId);
 }

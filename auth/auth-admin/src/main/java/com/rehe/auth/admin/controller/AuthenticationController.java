@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+/***
+ * @description
+ * @author rehe
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -49,7 +52,7 @@ public class AuthenticationController {
 
     @Operation(summary = "获取登录信息",operationId = "4")
     @GetMapping("/info")
-    public Result<AuthUserInfoVo> loginInfo() {
-        return Result.ok(service.userInfo());
+    public Result<AuthUserInfoVo> loginInfo(Integer platformId) {
+        return Result.ok(service.userInfo(platformId));
     }
 }
