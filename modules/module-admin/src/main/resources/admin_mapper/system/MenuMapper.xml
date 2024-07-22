@@ -246,6 +246,7 @@
         and concat(id,title,route_path,component,permission) ilike '%' || #{keyword} || '%'
       </if>
     </where>
+    order by sort
   </select>
 
 
