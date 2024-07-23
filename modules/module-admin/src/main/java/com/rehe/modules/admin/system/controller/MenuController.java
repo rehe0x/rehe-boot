@@ -57,7 +57,7 @@ public class MenuController {
     @Operation(summary = "菜单列表",operationId = "10")
     @GetMapping("/query")
     public Result<List<MenuVo>> query(@ParameterObject @Valid MenuQueryDto queryDto){
-        List<MenuVo> menuVoList = menuService.queryMenus(queryDto);
+        List<MenuVo> menuVoList = menuService.queryMenu(queryDto);
         return Result.ok(menuVoList);
     }
 

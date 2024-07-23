@@ -114,6 +114,15 @@
     where id = #{id}
   </update>
 
+  <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    delete from system_dept
+    where id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+
   <select id="selectAll" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select

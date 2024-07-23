@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +69,6 @@ public class MenuService{
      */
     public void updateMenu(MenuUpdateDto menuUpdateDto){
         Menu menu = getById(menuUpdateDto.getId());
-
         Menu entity = MenuMapstruct.INSTANCE.toEntity(menuUpdateDto);
         entity.setParentId(menu.getParentId());
         entity.setMenuType(menu.getMenuType());
@@ -106,7 +106,7 @@ public class MenuService{
     /**
      * 菜单列表
      */
-    public List<MenuVo> queryMenus(MenuQueryDto menuQueryDto){
+    public List<MenuVo> queryMenu(MenuQueryDto menuQueryDto){
         List<Menu> menuList = menuMapper.selectAll(menuQueryDto);
         return MenuMapstruct.INSTANCE.toVo(menuList);
     }
@@ -119,13 +119,6 @@ public class MenuService{
         return MenuMapstruct.INSTANCE.toVo(menu);
     }
 
-    /**
-     * 按ID查询菜单 不存在返回空
-     */
-    public MenuVo findMenuById(Long id){
-        Menu menu = findById(id);
-        return MenuMapstruct.INSTANCE.toVo(menu);
-    }
 
 
     /** -----------------------私有方法------------------------ */
@@ -145,15 +138,12 @@ public class MenuService{
 
 
     private Menu getById(Long id){
-        Menu menu = menuMapper.selectByPrimaryKey(id);
-        if (menu == null) {
-            throw new BusinessException(String.format("该菜单不存在 %s",id));
-        }
-        return menu;
+        return Optional.ofNullable(menuMapper.selectByPrimaryKey(id))
+                .orElseThrow(() -> new BusinessException(String.format("该菜单不存在 %s",id)));
     }
 
-    private Menu findById(Long id){
-        return menuMapper.selectByPrimaryKey(id);
+    private Optional<Menu> findById(Long id){
+        return Optional.ofNullable(menuMapper.selectByPrimaryKey(id));
     }
 
     private List<Menu> getAll(){
@@ -166,11 +156,8 @@ public class MenuService{
         if(parentId == null || parentId.equals(0L)){
             return null;
         }
-        Menu menu = findById(parentId);
-        if (menu == null) {
-            throw new BusinessException(String.format("上级不存在 %s", parentId));
-        }
-        return menu;
+        return findById(parentId)
+                .orElseThrow(() -> new BusinessException(String.format("上级不存在 %s", parentId)));
     }
 
     /**

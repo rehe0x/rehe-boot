@@ -23,5 +23,7 @@ public interface DeptMapper {
 
     int updateByPrimaryKey(Dept record);
 
+    int deleteByPrimaryKeys(List<Long> ids);
+
     List<Dept> selectAll();
 }

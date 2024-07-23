@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/query")
     public ResultPage<UserVo> query(@ParameterObject @Valid UserQueryDto userQueryDto,
                                     @ParameterObject PageParamDto pageParamDto) {
-        Page<UserVo> pageInfo = userService.queryUsers(userQueryDto, pageParamDto);
+        Page<UserVo> pageInfo = userService.queryUser(userQueryDto, pageParamDto);
         return ResultPage.ok(pageInfo);
     }
 

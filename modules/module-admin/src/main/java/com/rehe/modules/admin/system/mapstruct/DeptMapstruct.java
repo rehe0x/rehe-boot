@@ -1,6 +1,8 @@
 package com.rehe.modules.admin.system.mapstruct;
 
 import com.rehe.common.mapstruct.MapstructVoBaseMapper;
+import com.rehe.modules.admin.system.dto.DeptCreateDto;
+import com.rehe.modules.admin.system.dto.DeptUpdateDto;
 import com.rehe.modules.admin.system.entity.Dept;
 import com.rehe.modules.admin.system.vo.DeptVo;
 import org.mapstruct.Mapper;
@@ -15,4 +17,9 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DeptMapstruct extends MapstructVoBaseMapper<DeptVo, Dept> {
     DeptMapstruct INSTANCE = Mappers.getMapper(DeptMapstruct.class);
+
+    Dept toEntity(DeptCreateDto dto);
+
+    Dept toEntity(DeptUpdateDto dto);
+
 }

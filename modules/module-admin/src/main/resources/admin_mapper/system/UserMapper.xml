@@ -216,4 +216,15 @@
     from "system_user"
     where  deleted = false and username = #{username}
   </select>
+
+  <select id="selectByDeptIds" resultType="com.rehe.modules.admin.system.entity.User">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user" where deleted = false
+    and dept_id IN
+    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+      #{deptId}
+    </foreach>
+  </select>
 </mapper>

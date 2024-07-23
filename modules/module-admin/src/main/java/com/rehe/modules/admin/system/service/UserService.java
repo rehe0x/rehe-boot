@@ -20,6 +20,7 @@ import com.rehe.modules.admin.system.mapper.UserMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @description
@@ -61,7 +62,7 @@ public class UserService{
         userMapper.updateByPrimaryKeySelective(entity);
     }
 
-    public Page<UserVo> queryUsers(UserQueryDto userQueryDto, PageParamDto pageParamDto){
+    public Page<UserVo> queryUser(UserQueryDto userQueryDto, PageParamDto pageParamDto){
         PageHelper.startPage(pageParamDto.getPageNum(), pageParamDto.getPageSize());
         List<User> userList = userMapper.selectAll(userQueryDto);
         return Page.of(new PageInfo<>(userList), UserMapstruct.INSTANCE.toVo(userList));
@@ -72,15 +73,16 @@ public class UserService{
         return UserMapstruct.INSTANCE.toVo(user);
     }
 
+    public List<UserVo> findUserByDeptIds(List<Long> deptIds) {
+        List<User> userList = userMapper.selectByDeptIds(deptIds);
+        return UserMapstruct.INSTANCE.toVo(userList);
+    }
 
     /** -----------------------私有方法------------------------ */
 
     private User getById(Long id) {
-        User user = userMapper.selectByPrimaryKey(id);
-        if (user == null) {
-            throw new BusinessException("用户不存在");
-        }
-        return user;
+        return Optional.ofNullable(userMapper.selectByPrimaryKey(id))
+                .orElseThrow(() -> new BusinessException("用户不存在"));
     }
 
     private User findById(Long id) {
