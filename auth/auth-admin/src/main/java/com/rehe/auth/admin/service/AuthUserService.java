@@ -23,17 +23,17 @@ public class AuthUserService {
     private final AuthUserMapstruct authUserMapstruct;
     public Optional<AuthUser> findByUsername(String username){
         User user = authUserMapper.selectByUsername(username);
-        return Optional.ofNullable(authUserMapstruct.toVo(user));
+        return Optional.ofNullable(authUserMapstruct.toDto(user));
     }
 
     public AuthUser findByPhone(String phone){
         User user = authUserMapper.selectByPhone(phone);
-        return authUserMapstruct.toVo(user);
+        return authUserMapstruct.toDto(user);
     }
 
     public AuthUser findByOpenId(String openId){
         User user = authUserMapper.selectByOpenId(openId);
-        return authUserMapstruct.toVo(user);
+        return authUserMapstruct.toDto(user);
     }
 
     public List<AuthMenuVo> getUserMenus(Integer platformId, Long userId){

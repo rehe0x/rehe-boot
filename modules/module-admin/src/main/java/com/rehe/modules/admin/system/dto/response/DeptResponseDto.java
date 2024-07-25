@@ -1,9 +1,7 @@
-package com.rehe.modules.admin.system.dto;
+package com.rehe.modules.admin.system.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,9 +11,15 @@ import java.time.LocalDateTime;
  * @author rehe
  * @date 2024/7/8
  */
-@Schema(description="部门新增")
+@Schema(description="部门")
 @Data
-public class DeptCreateDto {
+public class DeptResponseDto {
+    /**
+     * ID
+     */
+    @Schema(description = "ID")
+    private Long id;
+
     /**
      * 上级部门
      */
@@ -25,9 +29,7 @@ public class DeptCreateDto {
     /**
      * 名称
      */
-    @Schema(description = "部门名称")
-    @NotBlank(message = "部门名称不能为空")
-    @Size(max = 20, min = 2,message = "部门名称2-20字符")
+    @Schema(description = "名称")
     private String name;
 
     /**
@@ -42,4 +44,15 @@ public class DeptCreateDto {
     @Schema(description = "状态")
     private Boolean enabled;
 
+    /**
+     * 创建日期
+     */
+    @Schema(description = "创建日期")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    private LocalDateTime updateTime;
 }

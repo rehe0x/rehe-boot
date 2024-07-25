@@ -1,6 +1,6 @@
 package com.rehe.modules.admin.system.mapper;
 
-import com.rehe.modules.admin.system.dto.MenuQueryDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuQueryDto;
 import com.rehe.modules.admin.system.entity.Menu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

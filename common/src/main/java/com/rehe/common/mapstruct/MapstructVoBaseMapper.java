@@ -1,7 +1,5 @@
 package com.rehe.common.mapstruct;
 
-import org.mapstruct.factory.Mappers;
-
 import java.util.List;
 
 /**
@@ -11,11 +9,11 @@ import java.util.List;
  */
 public interface MapstructVoBaseMapper<V, E> {
 
-    V toVo(E entity);
+    V toDto(E entity);
 
     E toEntity(V vo);
 
-    List<V> toVo(List<E> entityList);
+    List<V> toDto(List<E> entityList);
 
     List<E> toEntity(List<V> voList);
 

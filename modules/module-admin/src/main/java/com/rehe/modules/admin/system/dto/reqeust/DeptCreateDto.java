@@ -1,25 +1,19 @@
-package com.rehe.modules.admin.system.vo;
+package com.rehe.modules.admin.system.dto.reqeust;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 /**
  * @description
  * @author rehe
  * @date 2024/7/8
  */
-@Schema(description="部门")
+@Schema(description="部门新增")
 @Data
-public class DeptVo {
-    /**
-     * ID
-     */
-    @Schema(description = "ID")
-    private Long id;
-
+public class DeptCreateDto {
     /**
      * 上级部门
      */
@@ -29,7 +23,9 @@ public class DeptVo {
     /**
      * 名称
      */
-    @Schema(description = "名称")
+    @Schema(description = "部门名称")
+    @NotBlank(message = "部门名称不能为空")
+    @Size(max = 20, min = 2,message = "部门名称2-20字符")
     private String name;
 
     /**
@@ -44,15 +40,4 @@ public class DeptVo {
     @Schema(description = "状态")
     private Boolean enabled;
 
-    /**
-     * 创建日期
-     */
-    @Schema(description = "创建日期")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
 }

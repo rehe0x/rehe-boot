@@ -6,12 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.UserCreateDto;
-import com.rehe.modules.admin.system.dto.UserQueryDto;
-import com.rehe.modules.admin.system.dto.UserUpdateDto;
+import com.rehe.modules.admin.system.dto.UserDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserQueryDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserUpdateDto;
+import com.rehe.modules.admin.system.dto.response.UserResponseDto;
 import com.rehe.modules.admin.system.entity.User;
 import com.rehe.modules.admin.system.mapstruct.UserMapstruct;
-import com.rehe.modules.admin.system.vo.UserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,20 +63,20 @@ public class UserService{
         userMapper.updateByPrimaryKeySelective(entity);
     }
 
-    public Page<UserVo> queryUser(UserQueryDto userQueryDto, PageParamDto pageParamDto){
+    public Page<UserDto> queryUser(UserQueryDto userQueryDto, PageParamDto pageParamDto){
         PageHelper.startPage(pageParamDto.getPageNum(), pageParamDto.getPageSize());
         List<User> userList = userMapper.selectAll(userQueryDto);
-        return Page.of(new PageInfo<>(userList), UserMapstruct.INSTANCE.toVo(userList));
+        return Page.of(new PageInfo<>(userList), UserMapstruct.INSTANCE.toDto(userList));
     }
 
-    public UserVo getUserById(Long id) {
+    public UserDto getUserById(Long id) {
         User user = getById(id);
-        return UserMapstruct.INSTANCE.toVo(user);
+        return UserMapstruct.INSTANCE.toDto(user);
     }
 
-    public List<UserVo> findUserByDeptIds(List<Long> deptIds) {
+    public List<UserDto> findUserByDeptIds(List<Long> deptIds) {
         List<User> userList = userMapper.selectByDeptIds(deptIds);
-        return UserMapstruct.INSTANCE.toVo(userList);
+        return UserMapstruct.INSTANCE.toDto(userList);
     }
 
     /** -----------------------私有方法------------------------ */

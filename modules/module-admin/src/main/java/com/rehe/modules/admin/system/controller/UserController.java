@@ -4,11 +4,13 @@ import com.rehe.common.result.Page;
 import com.rehe.common.result.Result;
 import com.rehe.common.result.ResultPage;
 import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.UserCreateDto;
-import com.rehe.modules.admin.system.dto.UserQueryDto;
-import com.rehe.modules.admin.system.dto.UserUpdateDto;
+import com.rehe.modules.admin.system.dto.UserDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserQueryDto;
+import com.rehe.modules.admin.system.dto.reqeust.UserUpdateDto;
+import com.rehe.modules.admin.system.dto.response.UserResponseDto;
+import com.rehe.modules.admin.system.mapstruct.UserMapstruct;
 import com.rehe.modules.admin.system.service.UserService;
-import com.rehe.modules.admin.system.vo.UserVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,16 +56,16 @@ public class UserController {
 
     @Operation(summary = "用户列表", operationId = "10")
     @GetMapping("/query")
-    public ResultPage<UserVo> query(@ParameterObject @Valid UserQueryDto userQueryDto,
-                                    @ParameterObject PageParamDto pageParamDto) {
-        Page<UserVo> pageInfo = userService.queryUser(userQueryDto, pageParamDto);
-        return ResultPage.ok(pageInfo);
+    public ResultPage<UserResponseDto> query(@ParameterObject @Valid UserQueryDto userQueryDto,
+                                             @ParameterObject PageParamDto pageParamDto) {
+        Page<UserDto> pageInfo = userService.queryUser(userQueryDto, pageParamDto);
+        return ResultPage.ok(UserMapstruct.INSTANCE.toUserResponseDto(pageInfo));
     }
 
     @Operation(summary = "用户详情", operationId = "12")
     @GetMapping("/get/{id}")
-    public Result<UserVo> getById(@Parameter(description = "用户ID") @PathVariable Long id) {
-        UserVo userVo = userService.getUserById(id);
+    public Result<UserResponseDto> getById(@Parameter(description = "用户ID") @PathVariable Long id) {
+        UserResponseDto userVo = UserMapstruct.INSTANCE.toUserResponseDto(userService.getUserById(id));
         return Result.ok(userVo);
     }
 }

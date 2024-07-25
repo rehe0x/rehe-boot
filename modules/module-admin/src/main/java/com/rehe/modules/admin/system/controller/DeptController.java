@@ -2,13 +2,13 @@ package com.rehe.modules.admin.system.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import com.rehe.common.result.Result;
-import com.rehe.modules.admin.system.dto.DeptCreateDto;
-import com.rehe.modules.admin.system.dto.DeptUpdateDto;
+import com.rehe.modules.admin.system.dto.reqeust.DeptCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.DeptUpdateDto;
+import com.rehe.modules.admin.system.dto.response.DeptResponseDto;
+import com.rehe.modules.admin.system.mapstruct.DeptMapstruct;
 import com.rehe.modules.admin.system.service.DeptService;
-import com.rehe.modules.admin.system.vo.DeptVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -52,15 +52,15 @@ public class DeptController {
 
     @Operation(summary = "部门详情", operationId = "6")
     @GetMapping("/get/{id}")
-    public Result<DeptVo> getById(@Parameter(description = "部门ID") @PathVariable Long id) {
-        DeptVo deptVo = deptService.getDeptById(id);
+    public Result<DeptResponseDto> getById(@Parameter(description = "部门ID") @PathVariable Long id) {
+        DeptResponseDto deptVo = DeptMapstruct.INSTANCE.toDeptResponseDto(deptService.getDeptById(id));
         return Result.ok(deptVo);
     }
 
     @Operation(summary = "部门列表", operationId = "10")
     @GetMapping("/query")
-    public Result<List<DeptVo>> query(){
-        List<DeptVo> deptVoList = deptService.queryDept();
+    public Result<List<DeptResponseDto>> query(){
+        List<DeptResponseDto> deptVoList = DeptMapstruct.INSTANCE.toDeptResponseDto(deptService.queryDept());
         return Result.ok(deptVoList);
     }
 }

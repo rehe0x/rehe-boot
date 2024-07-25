@@ -1,16 +1,8 @@
-package com.rehe.modules.admin.system.dto;
+package com.rehe.modules.admin.system.dto.reqeust;
 
-import com.rehe.modules.admin.common.dto.PageParamDto;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * @author xiech

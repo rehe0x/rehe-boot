@@ -1,15 +1,13 @@
 package com.rehe.modules.admin.system.service;
 
 import com.rehe.common.exception.BusinessException;
-import com.rehe.modules.admin.system.dto.DeptCreateDto;
-import com.rehe.modules.admin.system.dto.DeptUpdateDto;
-import com.rehe.modules.admin.system.entity.Menu;
+import com.rehe.modules.admin.system.dto.DeptDto;
+import com.rehe.modules.admin.system.dto.reqeust.DeptCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.DeptUpdateDto;
+import com.rehe.modules.admin.system.dto.response.DeptResponseDto;
 import com.rehe.modules.admin.system.mapstruct.DeptMapstruct;
-import com.rehe.modules.admin.system.vo.DeptVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rehe.modules.admin.system.mapper.DeptMapper;
 import com.rehe.modules.admin.system.entity.Dept;
@@ -52,7 +50,7 @@ public class DeptService{
 
     public void deleteDept(Long id) {
         Dept dept = getById(id);
-        List<Dept> deptList = getAll();
+        List<Dept> deptList = deptMapper.selectAll();
         Map<Long, List<Dept>> parentToChildrenMap = deptList.stream()
                 .collect(Collectors.groupingBy(Dept::getParentId));
         List<Long> childIds = getDeptChildIds(parentToChildrenMap, dept.getId(), new ArrayList<>());
@@ -62,18 +60,16 @@ public class DeptService{
     }
 
 
-    public List<DeptVo> queryDept() {
+    public List<DeptDto> queryDept() {
        List<Dept> deptList = deptMapper.selectAll();
-       return DeptMapstruct.INSTANCE.toVo(deptList);
+       return DeptMapstruct.INSTANCE.toDto(deptList);
     }
 
-    public DeptVo getDeptById(Long id) {
-        return DeptMapstruct.INSTANCE.toVo(getById(id));
+    public DeptDto getDeptById(Long id) {
+        return DeptMapstruct.INSTANCE.toDto(getById(id));
     }
 
-    private List<Dept> getAll(){
-        return deptMapper.selectAll();
-    }
+
     private Dept getById(Long id) {
         return Optional.ofNullable(deptMapper.selectByPrimaryKey(id))
                 .orElseThrow(() ->

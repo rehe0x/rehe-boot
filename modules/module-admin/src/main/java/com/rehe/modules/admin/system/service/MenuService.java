@@ -1,17 +1,14 @@
 package com.rehe.modules.admin.system.service;
 import java.time.LocalDateTime;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.mysql.cj.log.Log;
 import com.rehe.common.exception.BusinessException;
-import com.rehe.common.result.Page;
-import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.MenuCreateDto;
-import com.rehe.modules.admin.system.dto.MenuQueryDto;
-import com.rehe.modules.admin.system.dto.MenuUpdateDto;
+import com.rehe.modules.admin.system.dto.MenuDto;
+import com.rehe.modules.admin.system.dto.UserDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuQueryDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuUpdateDto;
+import com.rehe.modules.admin.system.dto.response.MenuResponseDto;
 import com.rehe.modules.admin.system.mapstruct.MenuMapstruct;
-import com.rehe.modules.admin.system.vo.MenuVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -106,19 +103,23 @@ public class MenuService{
     /**
      * 菜单列表
      */
-    public List<MenuVo> queryMenu(MenuQueryDto menuQueryDto){
+    public List<MenuDto> queryMenu(MenuQueryDto menuQueryDto){
         List<Menu> menuList = menuMapper.selectAll(menuQueryDto);
-        return MenuMapstruct.INSTANCE.toVo(menuList);
+        return MenuMapstruct.INSTANCE.toDto(menuList);
     }
 
     /**
      * 按ID获取菜单详情 不存在返回异常
      */
-    public MenuVo getMenuById(Long id){
+    public MenuDto getMenuById(Long id){
         Menu menu = getById(id);
-        return MenuMapstruct.INSTANCE.toVo(menu);
+        return MenuMapstruct.INSTANCE.toDto(menu);
     }
 
+
+    public Optional<List<MenuDto>> getMenuAll(){
+        return Optional.of(MenuMapstruct.INSTANCE.toDto(menuMapper.selectAll(null)));
+    }
 
 
     /** -----------------------私有方法------------------------ */

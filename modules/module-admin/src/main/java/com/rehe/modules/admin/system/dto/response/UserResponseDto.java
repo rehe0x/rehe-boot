@@ -1,4 +1,4 @@
-package com.rehe.modules.admin.system.vo;
+package com.rehe.modules.admin.system.dto.response;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Schema(description="系统用户")
 @Data
-public class UserVo {
+public class UserResponseDto {
     /**
      * ID
      */

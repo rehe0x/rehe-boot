@@ -1,15 +1,13 @@
 package com.rehe.modules.admin.system.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.rehe.common.result.Page;
-import com.rehe.common.result.ResultPage;
 import com.rehe.common.result.Result;
-import com.rehe.modules.admin.common.dto.PageParamDto;
-import com.rehe.modules.admin.system.dto.MenuCreateDto;
-import com.rehe.modules.admin.system.dto.MenuQueryDto;
-import com.rehe.modules.admin.system.dto.MenuUpdateDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuCreateDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuQueryDto;
+import com.rehe.modules.admin.system.dto.reqeust.MenuUpdateDto;
+import com.rehe.modules.admin.system.dto.response.MenuResponseDto;
+import com.rehe.modules.admin.system.mapstruct.MenuMapstruct;
 import com.rehe.modules.admin.system.service.MenuService;
-import com.rehe.modules.admin.system.vo.MenuVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -56,16 +54,16 @@ public class MenuController {
 
     @Operation(summary = "菜单列表",operationId = "10")
     @GetMapping("/query")
-    public Result<List<MenuVo>> query(@ParameterObject @Valid MenuQueryDto queryDto){
-        List<MenuVo> menuVoList = menuService.queryMenu(queryDto);
+    public Result<List<MenuResponseDto>> query(@ParameterObject @Valid MenuQueryDto queryDto){
+        List<MenuResponseDto> menuVoList = MenuMapstruct.INSTANCE.toMenuResponseDto(menuService.queryMenu(queryDto));
         return Result.ok(menuVoList);
     }
 
 
     @Operation(summary = "菜单详情",operationId = "13")
     @GetMapping("/get/{id}")
-    public Result<MenuVo> getById(@Parameter(description = "菜单ID") @PathVariable Long id){
-        MenuVo menuVo = menuService.getMenuById(id);
+    public Result<MenuResponseDto> getById(@Parameter(description = "菜单ID") @PathVariable Long id){
+        MenuResponseDto menuVo = MenuMapstruct.INSTANCE.toMenuResponseDto(menuService.getMenuById(id));
         return Result.ok(menuVo);
     }
 

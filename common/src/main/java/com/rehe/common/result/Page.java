@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.pagehelper.PageInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @date 2024/6/26
  */
 @Data
+@NoArgsConstructor
 public class Page<T> {
     private int pageNum;
     private int pageSize;
@@ -31,4 +33,13 @@ public class Page<T> {
     public static <T> Page<T> of(PageInfo<?> pageInfo,List<T> list) {
       return new Page<>(pageInfo,list);
     }
+
+    private Page(Page<T> page, List<T> list) {
+        this.pageNum = page.getPageNum();
+        this.pageSize = page.getPageSize();
+        this.total = page.getTotal();
+        this.list = page.getList();
+    }
+
+
 }

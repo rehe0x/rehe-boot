@@ -1,4 +1,4 @@
-package com.rehe.modules.admin.system.dto;
+package com.rehe.modules.admin.system.dto.reqeust;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
