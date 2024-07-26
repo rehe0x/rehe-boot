@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @description
  * @author rehe
@@ -27,7 +30,15 @@ public class RoleCreateDto {
     @Schema(description = "描述")
     private String description;
 
-    @Schema(description = "角色范围默认=0")
+    @Schema(description = "角色范围默认=0全部 1本级 2自定义")
     private Integer scope;
+
+    @Schema(description = "部门ID数组")
+    private Set<Long> deptIds;
+
+    @AssertTrue(message = "如自定义范围，请选择部门")
+    private boolean isDeptIds() {
+        return scope != 2 || (deptIds != null && !deptIds.isEmpty());
+    }
 
 }

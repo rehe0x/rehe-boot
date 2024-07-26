@@ -2,11 +2,10 @@ package com.rehe.modules.admin.system.dto.reqeust;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+
+import java.util.Set;
 
 /**
  * @description
@@ -36,5 +35,13 @@ public class RoleUpdateDto {
 
     @Schema(description = "角色范围默认=0")
     private Integer scope;
+
+    @Schema(description = "部门ID数组")
+    private Set<Long> deptIds;
+
+    @AssertTrue(message = "如自定义范围，请选择部门")
+    private boolean isDeptIds() {
+        return scope != 2 || (deptIds != null && !deptIds.isEmpty());
+    }
 
 }

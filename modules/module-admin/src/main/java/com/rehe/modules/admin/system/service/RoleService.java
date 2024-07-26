@@ -5,11 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
+import com.rehe.modules.admin.system.dto.DeptDto;
 import com.rehe.modules.admin.system.dto.MenuDto;
 import com.rehe.modules.admin.system.dto.RoleDto;
-import com.rehe.modules.admin.system.dto.reqeust.RoleCreateDto;
-import com.rehe.modules.admin.system.dto.reqeust.RoleMenuBindDto;
-import com.rehe.modules.admin.system.dto.reqeust.RoleUpdateDto;
+import com.rehe.modules.admin.system.dto.reqeust.*;
 import com.rehe.modules.admin.system.mapstruct.RoleMapstruct;
 import com.rehe.modules.admin.system.dto.response.MenuResponseDto;
 import com.rehe.modules.admin.system.dto.response.RoleResponseDto;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.rehe.modules.admin.system.entity.Role;
 import com.rehe.modules.admin.system.mapper.RoleMapper;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -42,19 +42,34 @@ public class RoleService{
 
     private final MenuService menuService;
 
+    private final DeptService deptService;
+
+    @Transactional(rollbackFor = Exception.class)
     public void createRole(RoleCreateDto roleCreateDto) {
         Role entity = RoleMapstruct.INSTANCE.toEntity(roleCreateDto);
-        validateUniqueRole(entity.getName() ,null);
         entity.setCreateTime(LocalDateTime.now());
+        validateUniqueRole(entity.getName() ,null);
         roleMapper.insertSelective(entity);
+        if(roleCreateDto.getScope() == 2 && validateRoleDept(roleCreateDto.getDeptIds())){
+            roleMapper.insertRoleDept(entity.getId(), roleCreateDto.getDeptIds());
+        };
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateRole(RoleUpdateDto roleUpdateDto) {
         Role role = getById(roleUpdateDto.getId());
         Role entity = RoleMapstruct.INSTANCE.toEntity(roleUpdateDto);
         entity.setId(role.getId());
         entity.setUpdateTime(LocalDateTime.now());
         validateUniqueRole(entity.getName() ,role.getName());
+
+        if(role.getScope() == 2 && entity.getScope() != 2){
+            roleMapper.deleteRoleDeptByRoleId(entity.getId());
+        } else if(entity.getScope() == 2 && validateRoleDept(roleUpdateDto.getDeptIds())){
+            roleMapper.deleteRoleDeptByRoleId(entity.getId());
+            roleMapper.insertRoleDept(entity.getId(), roleUpdateDto.getDeptIds());
+        }
+
         roleMapper.updateByPrimaryKeySelective(entity);
     }
 
@@ -66,23 +81,31 @@ public class RoleService{
         }
         roleMapper.deleteByPrimaryKey(role.getId());
         roleMapper.deleteRoleMenuByRoleId(role.getId());
+        roleMapper.deleteRoleDeptByRoleId(role.getId());
     }
 
     public void bindRoleMenu(RoleMenuBindDto roleMenuBindDto) {
         if(!validateRoleMenuBind(roleMenuBindDto)){
             return;
         };
+        roleMapper.deleteRoleMenuByRoleId(roleMenuBindDto.getId());
         roleMapper.insertRoleMenu(roleMenuBindDto.getId(), roleMenuBindDto.getMenuIds());
     }
 
 
-    public List<RoleDto> queryRole() {
-        List<Role> roleList = roleMapper.selectList();
-        return RoleMapstruct.INSTANCE.toDto(roleList);
+    public Page<RoleDto> queryRole(RoleQueryDto roleQueryDto, PageParamDto pageParamDto) {
+        PageHelper.startPage(pageParamDto.getPageNum(), pageParamDto.getPageSize());
+        List<Role> roleList = roleMapper.selectList(roleQueryDto);
+        return Page.of(new PageInfo<>(roleList),RoleMapstruct.INSTANCE.toDto(roleList));
     }
 
     public RoleDto getRoleById(Long roleId) {
-        return RoleMapstruct.INSTANCE.toDto(roleMapper.selectByPrimaryKey(roleId));
+        RoleDto roleDto = RoleMapstruct.INSTANCE.toDto(getById(roleId));
+        if(roleDto.getScope() == 2){
+            roleDto.setDeptIds(roleMapper.selectRoleDeptIdsByRoleId(roleId));
+        }
+        roleDto.setMenuIds(roleMapper.selectRoleMenuIdsByRoleId(roleId));
+        return roleDto;
     }
 
     private Role getById(Long roleId) {
@@ -99,6 +122,19 @@ public class RoleService{
             return;
         }
         throw new BusinessException("角色名称已存在");
+    }
+
+    private boolean validateRoleDept(Set<Long> deptIds) {
+        if(CollectionUtils.isEmpty(deptIds)) {
+            throw new BusinessException("请选择部门");
+        }
+        List<DeptDto> deptDtoList = deptService.getDeptAll().orElseThrow(() -> new BusinessException("部门数据异常"));
+        Set<Long> ids = deptDtoList
+                .stream().map(DeptDto::getId).collect(Collectors.toSet());
+        if(!ids.containsAll(deptIds)){
+            throw new BusinessException("有部门不存在");
+        }
+        return true;
     }
 
     private boolean validateRoleMenuBind(RoleMenuBindDto roleMenuBindDto) {

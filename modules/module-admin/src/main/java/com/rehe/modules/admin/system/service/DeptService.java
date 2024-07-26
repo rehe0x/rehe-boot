@@ -69,6 +69,10 @@ public class DeptService{
         return DeptMapstruct.INSTANCE.toDto(getById(id));
     }
 
+    public Optional<List<DeptDto>> getDeptAll(){
+        List<Dept> deptList = deptMapper.selectAll();
+        return Optional.of(DeptMapstruct.INSTANCE.toDto(deptList));
+    }
 
     private Dept getById(Long id) {
         return Optional.ofNullable(deptMapper.selectByPrimaryKey(id))

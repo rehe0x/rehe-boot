@@ -5,6 +5,8 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /***
  * @description
@@ -38,6 +40,10 @@ public class RoleDto implements Serializable {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
+
+    private Set<Long> deptIds;
+    private Set<Long> menuIds;
+
 
     @Serial
     private static final long serialVersionUID = 1L;

@@ -35,7 +35,7 @@
     values (#{id}, #{name}, #{level}, #{description}, #{scope}, #{createTime}, #{updateTime}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.rehe.modules.admin.system.entity.Role">
+  <insert id="insertSelective" parameterType="com.rehe.modules.admin.system.entity.Role" keyProperty="id" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into system_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -122,11 +122,16 @@
     where id = #{id}
   </update>
 
-  <select id="selectList" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectList"  resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select
     <include refid="Base_Column_List" />
     from system_role
+    <where>
+      <if test="keyword != null and keyword != ''">
+        and concat(id,name,description) ilike '%' || #{keyword} || '%'
+      </if>
+    </where>
   </select>
 
   <select id="selectByName" resultMap="BaseResultMap">
@@ -148,7 +153,27 @@
     delete from system_role_menu where role_id = #{roleId}
   </delete>
 
+  <select id="selectRoleMenuIdsByRoleId" resultType="java.lang.Long">
+    select menu_id from system_role_menu where role_id = #{roleId}
+  </select>
+
   <select id="selectRoleUserCount" resultType="java.lang.Integer">
     select count(1) from system_user_role where role_id = #{roleId}
+  </select>
+
+  <insert id="insertRoleDept">
+    INSERT INTO system_role_dept (role_id, dept_id)
+    VALUES
+    <foreach collection="deptIds" item="deptId" separator=",">
+      (#{roleId}, #{deptId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteRoleDeptByRoleId">
+    delete from system_role_dept where role_id = #{roleId}
+  </delete>
+
+  <select id="selectRoleDeptIdsByRoleId" resultType="java.lang.Long">
+    select dept_id from system_role_dept where role_id = #{roleId}
   </select>
 </mapper>

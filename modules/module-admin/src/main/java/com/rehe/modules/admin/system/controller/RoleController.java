@@ -1,7 +1,10 @@
 package com.rehe.modules.admin.system.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.rehe.common.result.Page;
 import com.rehe.common.result.Result;
+import com.rehe.common.result.ResultPage;
+import com.rehe.modules.admin.common.dto.PageParamDto;
 import com.rehe.modules.admin.system.dto.reqeust.*;
 import com.rehe.modules.admin.system.dto.response.DeptResponseDto;
 import com.rehe.modules.admin.system.dto.response.RoleResponseDto;
@@ -14,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,8 +72,10 @@ public class RoleController {
 
     @Operation(summary = "角色列表", operationId = "10")
     @GetMapping("/query")
-    public Result<List<RoleResponseDto>> query(){
-        List<RoleResponseDto> deptVoList = RoleMapstruct.INSTANCE.toRoleResponseDto(roleService.queryRole());
-        return Result.ok(deptVoList);
+    public ResultPage<RoleResponseDto> query(@ParameterObject @Valid RoleQueryDto roleQueryDto,
+                                                   @ParameterObject PageParamDto pageParamDto){
+        Page<RoleResponseDto> roleResponseDtoPage =
+                RoleMapstruct.INSTANCE.toRoleResponseDto(roleService.queryRole(roleQueryDto, pageParamDto));
+        return ResultPage.ok(roleResponseDtoPage);
     }
 }

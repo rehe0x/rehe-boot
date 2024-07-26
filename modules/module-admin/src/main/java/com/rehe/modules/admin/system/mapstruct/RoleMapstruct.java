@@ -1,7 +1,9 @@
 package com.rehe.modules.admin.system.mapstruct;
 
 import com.rehe.common.mapstruct.MapstructVoBaseMapper;
+import com.rehe.common.result.Page;
 import com.rehe.modules.admin.system.dto.RoleDto;
+import com.rehe.modules.admin.system.dto.UserDto;
 import com.rehe.modules.admin.system.dto.reqeust.RoleCreateDto;
 import com.rehe.modules.admin.system.dto.reqeust.RoleUpdateDto;
 import com.rehe.modules.admin.system.dto.response.UserResponseDto;
@@ -22,6 +24,8 @@ import java.util.List;
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface RoleMapstruct extends MapstructVoBaseMapper<RoleDto, Role> {
     RoleMapstruct INSTANCE = Mappers.getMapper(RoleMapstruct.class);
+
+    Page<RoleResponseDto> toRoleResponseDto(Page<RoleDto> page);
 
     RoleResponseDto toRoleResponseDto(RoleDto roleDto);
 

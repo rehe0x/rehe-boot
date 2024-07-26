@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -142,6 +143,7 @@ public class PgsqlSourceConfig {
     }
 
     @Bean(name = "pgsqlDataSourceTx")
+    @Primary
     public DataSourceTransactionManager dataSourceTx(@Qualifier("pgsqlDynamicDb") DataSource dynamicDataSource) {
         return new DataSourceTransactionManager(dynamicDataSource);
     }

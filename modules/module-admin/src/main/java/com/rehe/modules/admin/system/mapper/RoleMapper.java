@@ -1,6 +1,7 @@
 package com.rehe.modules.admin.system.mapper;
 
 import com.rehe.modules.admin.system.dto.reqeust.RoleMenuBindDto;
+import com.rehe.modules.admin.system.dto.reqeust.RoleQueryDto;
 import com.rehe.modules.admin.system.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,7 +27,7 @@ public interface RoleMapper {
 
     int updateByPrimaryKey(Role record);
 
-    List<Role> selectList();
+    List<Role> selectList(RoleQueryDto roleQueryDto);
 
     Role selectByName(String name);
 
@@ -34,5 +35,13 @@ public interface RoleMapper {
 
     int deleteRoleMenuByRoleId(Long roleId);
 
+    Set<Long> selectRoleMenuIdsByRoleId(Long roleId);
+
     int selectRoleUserCount(Long roleId);
+
+    int insertRoleDept(Long roleId, Set<Long> deptIds);
+
+    int deleteRoleDeptByRoleId(Long roleId);
+
+    Set<Long> selectRoleDeptIdsByRoleId(Long roleId);
 }
