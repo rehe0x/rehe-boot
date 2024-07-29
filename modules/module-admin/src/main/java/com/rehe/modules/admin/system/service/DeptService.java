@@ -7,6 +7,7 @@ import com.rehe.modules.admin.system.dto.reqeust.DeptUpdateDto;
 import com.rehe.modules.admin.system.dto.response.DeptResponseDto;
 import com.rehe.modules.admin.system.mapstruct.DeptMapstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.rehe.modules.admin.system.mapper.DeptMapper;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
 public class DeptService{
 
     private final DeptMapper deptMapper;
-
+    @Lazy
     private final UserService userService;
 
     public void createDept(DeptCreateDto deptCreateDto) {

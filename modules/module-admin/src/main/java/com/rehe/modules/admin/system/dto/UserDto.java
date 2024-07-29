@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * @description
@@ -85,5 +86,7 @@ public class UserDto implements Serializable {
      * 微信id
      */
     private String openId;
+
+    private Set<Long> roleIds;
 
 }

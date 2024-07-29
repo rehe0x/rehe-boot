@@ -227,4 +227,20 @@
       #{deptId}
     </foreach>
   </select>
+
+  <insert id="insertUserRole">
+    INSERT INTO system_user_role (user_id, role_id)
+    VALUES
+    <foreach collection="roleIds" item="roleId" separator=",">
+      (#{userId}, #{roleId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRole">
+    delete from system_user_role where user_id = #{userId}
+  </delete>
+
+  <select id="selectUserRoleIdsByUserId" resultType="java.lang.Long">
+    select role_id from system_user_role where user_id = #{userId}
+  </select>
 </mapper>

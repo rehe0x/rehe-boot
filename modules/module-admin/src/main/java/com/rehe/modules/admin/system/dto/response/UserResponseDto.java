@@ -1,6 +1,7 @@
 package com.rehe.modules.admin.system.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -88,4 +89,7 @@ public class UserResponseDto {
      */
     @Schema(description = "软删除")
     private Boolean deleted;
+
+    @Schema(description = "关联角色ID")
+    private Set<Long> roleIds;
 }

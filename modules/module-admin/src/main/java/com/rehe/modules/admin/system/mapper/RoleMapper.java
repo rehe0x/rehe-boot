@@ -29,6 +29,8 @@ public interface RoleMapper {
 
     List<Role> selectList(RoleQueryDto roleQueryDto);
 
+    List<Role> selectAll();
+
     Role selectByName(String name);
 
     int insertRoleMenu(Long roleId, Set<Long> menuIds);
@@ -44,4 +46,5 @@ public interface RoleMapper {
     int deleteRoleDeptByRoleId(Long roleId);
 
     Set<Long> selectRoleDeptIdsByRoleId(Long roleId);
+
 }

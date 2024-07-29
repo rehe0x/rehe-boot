@@ -70,12 +70,20 @@ public class RoleController {
         return Result.ok(roleResponseDto);
     }
 
-    @Operation(summary = "角色列表", operationId = "10")
+    @Operation(summary = "角色分页列表", operationId = "10")
     @GetMapping("/query")
     public ResultPage<RoleResponseDto> query(@ParameterObject @Valid RoleQueryDto roleQueryDto,
                                                    @ParameterObject PageParamDto pageParamDto){
         Page<RoleResponseDto> roleResponseDtoPage =
                 RoleMapstruct.INSTANCE.toRoleResponseDto(roleService.queryRole(roleQueryDto, pageParamDto));
         return ResultPage.ok(roleResponseDtoPage);
+    }
+
+    @Operation(summary = "角色全部列表", operationId = "11")
+    @GetMapping("/query/all")
+    public Result<List<RoleResponseDto>> queryAll(){
+        List<RoleResponseDto> roleResponseDtoList =
+                RoleMapstruct.INSTANCE.toRoleResponseDto(roleService.queryRole());
+        return ResultPage.ok(roleResponseDtoList);
     }
 }

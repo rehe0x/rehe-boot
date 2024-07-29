@@ -5,6 +5,7 @@ import com.rehe.modules.admin.system.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author rehe
@@ -30,4 +31,10 @@ public interface UserMapper {
     User selectByUsername(String username);
 
     List<User> selectByDeptIds(List<Long> deptIds);
+
+    int insertUserRole(Long userId, Set<Long> roleIds);
+
+    int deleteUserRole(Long userId);
+
+    Set<Long> selectUserRoleIdsByUserId(Long userId);
 }

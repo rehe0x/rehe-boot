@@ -14,14 +14,17 @@ import com.rehe.modules.admin.system.dto.response.UserResponseDto;
 import com.rehe.modules.admin.system.entity.User;
 import com.rehe.modules.admin.system.mapstruct.UserMapstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.rehe.modules.admin.system.mapper.UserMapper;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @description
@@ -33,24 +36,35 @@ import java.util.Optional;
 public class UserService{
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    
+    private final RoleService roleService;
+
+    @Transactional(rollbackFor = Exception.class)
     public void createUser(UserCreateDto userCreateDto) {
         User entity = UserMapstruct.INSTANCE.toEntity(userCreateDto);
         validateUser(entity, null);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         entity.setCreateTime(LocalDateTime.now());
         userMapper.insertSelective(entity);
+        if(validateUserRole(userCreateDto.getRoleIds())){
+            userMapper.insertUserRole(entity.getId(), userCreateDto.getRoleIds());
+        }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateUser(UserUpdateDto userUpdateDto) {
         User user = getById(userUpdateDto.getId());
         User entity = UserMapstruct.INSTANCE.toEntity(userUpdateDto);
-
+        entity.setId(user.getId());
         validateUser(entity, user);
         if(!user.getPassword().equals(entity.getPassword())){
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         }
         entity.setUpdateTime(LocalDateTime.now());
+
+        userMapper.deleteUserRole(entity.getId());
+        if(validateUserRole(userUpdateDto.getRoleIds())){
+            userMapper.insertUserRole(entity.getId(), userUpdateDto.getRoleIds());
+        }
         userMapper.updateByPrimaryKeySelective(entity);
     }
 
@@ -70,8 +84,9 @@ public class UserService{
     }
 
     public UserDto getUserById(Long id) {
-        User user = getById(id);
-        return UserMapstruct.INSTANCE.toDto(user);
+        UserDto userDto = UserMapstruct.INSTANCE.toDto(getById(id));
+        userDto.setRoleIds(userMapper.selectUserRoleIdsByUserId(userDto.getId()));
+        return userDto;
     }
 
     public List<UserDto> findUserByDeptIds(List<Long> deptIds) {
@@ -101,6 +116,16 @@ public class UserService{
                 throw new BusinessException("用户名已存在！");
             }
         }
+    }
+
+    private boolean validateUserRole(Set<Long> roleIds) {
+        if (roleIds == null || roleIds.isEmpty()) {
+            return false;
+        }
+        roleIds.forEach(roleId -> {
+            roleService.findRoleById(roleId).orElseThrow(() -> new BusinessException("角色不存在"+roleId));
+        });
+        return true;
     }
 
 }

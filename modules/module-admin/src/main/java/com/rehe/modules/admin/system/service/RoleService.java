@@ -13,6 +13,7 @@ import com.rehe.modules.admin.system.mapstruct.RoleMapstruct;
 import com.rehe.modules.admin.system.dto.response.MenuResponseDto;
 import com.rehe.modules.admin.system.dto.response.RoleResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.rehe.modules.admin.system.entity.Role;
@@ -34,13 +35,14 @@ import java.util.stream.Collectors;
  * @date 2024/7/23
  */
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = {@Lazy})
 @Service
 public class RoleService{
 
     private final  RoleMapper roleMapper;
 
     private final MenuService menuService;
+
 
     private final DeptService deptService;
 
@@ -99,6 +101,11 @@ public class RoleService{
         return Page.of(new PageInfo<>(roleList),RoleMapstruct.INSTANCE.toDto(roleList));
     }
 
+    public List<RoleDto> queryRole() {
+        List<Role> roleList = roleMapper.selectAll();
+        return RoleMapstruct.INSTANCE.toDto(roleList);
+    }
+
     public RoleDto getRoleById(Long roleId) {
         RoleDto roleDto = RoleMapstruct.INSTANCE.toDto(getById(roleId));
         if(roleDto.getScope() == 2){
@@ -107,6 +114,12 @@ public class RoleService{
         roleDto.setMenuIds(roleMapper.selectRoleMenuIdsByRoleId(roleId));
         return roleDto;
     }
+
+    public Optional<RoleDto> findRoleById(Long roleId) {
+        RoleDto roleDto = RoleMapstruct.INSTANCE.toDto(roleMapper.selectByPrimaryKey(roleId));
+        return Optional.ofNullable(roleDto);
+    }
+
 
     private Role getById(Long roleId) {
         return Optional.ofNullable(roleMapper.selectByPrimaryKey(roleId))

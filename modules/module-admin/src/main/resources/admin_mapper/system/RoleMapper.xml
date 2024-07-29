@@ -134,6 +134,15 @@
     </where>
   </select>
 
+
+  <select id="selectAll"  resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from system_role
+  </select>
+
+
   <select id="selectByName" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select

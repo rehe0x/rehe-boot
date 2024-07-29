@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.Set;
+
 /**
  * @author rehe
  */
@@ -83,4 +85,7 @@ public class UserUpdateDto {
      */
     @Schema(description = "1启用、0禁用 默认=1")
     private Integer enabled;
+
+    @Schema(description = "角色ID")
+    private Set<Long> roleIds;
 }
