@@ -82,10 +82,10 @@ public class AuthenticationService {
     /**
      * 获取用户信息
      */
-    public AuthUserResponseDto userInfo(Integer platformId,Long userId) {
+    public AuthUserResponseDto userInfo(Long userId) {
         AuthUserDto authUserDto = authUserService.findByUserId(userId).orElseThrow(() -> new BusinessException("当前用户异常"));
         AuthUserResponseDto authUserResponseDto = AuthUserMapstruct.INSTANCE.toResponseDto(authUserDto);
-        List<AuthMenuDto> menuDtoList =  authUserService.getUserMenus(platformId, userId);
+        List<AuthMenuDto> menuDtoList =  authUserService.getUserMenus(authUserResponseDto.getPlatformId(), userId);
         authUserResponseDto.setMenuList(AuthUserMapstruct.INSTANCE.toResponseDto(menuDtoList));
         return authUserResponseDto;
     }

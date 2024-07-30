@@ -91,4 +91,6 @@ public class User implements Serializable {
     private Boolean deleted;
 
     private String openId;
+
+    private Integer platformId;
 }

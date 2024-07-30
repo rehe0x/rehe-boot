@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @Operation(summary = "创建角色", operationId = "1")
+    @PreAuthorize("hasAuthority('role:create')")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Valid RoleCreateDto roleCreateDto){
         roleService.createRole(roleCreateDto);
@@ -43,6 +45,7 @@ public class RoleController {
     }
 
     @Operation(summary = "修改角色", operationId = "4")
+    @PreAuthorize("hasAuthority('role:update')")
     @PostMapping("update")
     public Result<Void> update(@RequestBody @Valid RoleUpdateDto roleUpdateDto){
         roleService.updateRole(roleUpdateDto);
@@ -50,13 +53,15 @@ public class RoleController {
     }
 
     @Operation(summary = "删除角色", operationId = "5")
+    @PreAuthorize("hasAuthority('role:delete')")
     @PostMapping("delete/{id}")
     public Result<Void> delete(@Parameter(description = "角色ID") @PathVariable Long id){
         roleService.deleteRole(id);
         return Result.ok();
     }
 
-    @Operation(summary = "角色绑定菜单权限", operationId = "5")
+    @Operation(summary = "角色绑定菜单", operationId = "5")
+    @PreAuthorize("hasAnyAuthority('role:bind_menu')")
     @PostMapping("bind/menu")
     public Result<Void> bindRoleMenu(@RequestBody @Valid RoleMenuBindDto roleMenuBindDto){
         roleService.bindRoleMenu(roleMenuBindDto);
@@ -64,6 +69,7 @@ public class RoleController {
     }
 
     @Operation(summary = "角色详情", operationId = "8")
+    @PreAuthorize("hasAuthority('role')")
     @GetMapping("/get/{id}")
     public Result<RoleResponseDto> getById(@Parameter(description = "部门ID") @PathVariable Long id) {
         RoleResponseDto roleResponseDto = RoleMapstruct.INSTANCE.toRoleResponseDto(roleService.getRoleById(id));
@@ -71,6 +77,7 @@ public class RoleController {
     }
 
     @Operation(summary = "角色分页列表", operationId = "10")
+    @PreAuthorize("hasAuthority('role')")
     @GetMapping("/query")
     public ResultPage<RoleResponseDto> query(@ParameterObject @Valid RoleQueryDto roleQueryDto,
                                                    @ParameterObject PageParamDto pageParamDto){

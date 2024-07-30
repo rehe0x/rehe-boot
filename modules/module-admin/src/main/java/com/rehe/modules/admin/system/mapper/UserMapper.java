@@ -26,6 +26,8 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
+    int updatePlatformByUserId(Long id,Integer platformId);
+
     List<User> selectAll(UserQueryDto userQueryDto);
 
     User selectByUsername(String username);
@@ -37,4 +39,5 @@ public interface UserMapper {
     int deleteUserRole(Long userId);
 
     Set<Long> selectUserRoleIdsByUserId(Long userId);
+
 }

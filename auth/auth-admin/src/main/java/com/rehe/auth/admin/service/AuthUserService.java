@@ -47,15 +47,28 @@ public class AuthUserService {
     }
 
     public List<AuthMenuDto> getUserMenus(Integer platformId, Long userId){
+
+        Integer superRoleCount = authUserMapper.selectSuperRoleCountByUser(userId);
+
         if(platformId == null){
-            List<Integer> platformList = authUserMapper.selectPlatformByUser(userId);
+            List<Integer> platformList;
+            if(superRoleCount > 0){
+                platformList = authUserMapper.selectPlatform();
+            } else {
+                platformList = authUserMapper.selectPlatformByUser(userId);
+            }
             if(CollectionUtils.isEmpty(platformList)){
                 return Collections.emptyList();
             }
             platformId = platformList.get(0);
         }
 
-        List<AuthMenuDto> menuDtoList = authUserMapper.selectMenuByUser(platformId, userId);
+        List<AuthMenuDto> menuDtoList;
+        if(superRoleCount > 0){
+            menuDtoList = authUserMapper.selectMenuByPlatformId(platformId);
+        } else {
+            menuDtoList = authUserMapper.selectMenuByUser(platformId, userId);
+        }
         if(CollectionUtils.isEmpty(menuDtoList)){
             return Collections.emptyList();
         }
@@ -69,12 +82,28 @@ public class AuthUserService {
     }
 
     public Set<AuthorityDto> getUserAuthorities(Integer platformId, Long userId){
-        List<AuthMenuDto> menuDtoList = this.getUserMenus(platformId, userId);
-
-        return menuDtoList.stream()
+        // platformId暂时不用 登录默认查询所有系统权限
+        Integer superRoleCount = authUserMapper.selectSuperRoleCountByUser(userId);
+        List<AuthMenuDto> menuDtoList;
+        if(superRoleCount > 0){
+            menuDtoList = authUserMapper.selectMenuByPlatformId(null);
+        } else {
+            menuDtoList = authUserMapper.selectMenuByUser(null, userId);
+        }
+        if(CollectionUtils.isEmpty(menuDtoList)){
+            return Collections.emptySet();
+        }
+        return new HashSet<>(menuDtoList.stream()
                 .filter(menuDto -> menuDto.getMenuType() != 0 && StringUtils.hasText(menuDto.getPermission()))
-                .map(menuDto -> new AuthorityDto(menuDto.getPermission()))
-                .collect(Collectors.toSet());
+                .collect(
+                    Collectors.toMap(
+                    AuthMenuDto::getPermission, dto -> new AuthorityDto(dto.getPermission()),
+                    (existing, replacement) -> existing
+                    )).values());
+//        return menuDtoList.stream()
+//                .filter(menuDto -> menuDto.getMenuType() != 0 && StringUtils.hasText(menuDto.getPermission()))
+//                .map(menuDto -> new AuthorityDto(menuDto.getPermission()))
+//                .collect(Collectors.toSet());
     }
 
 

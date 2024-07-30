@@ -18,11 +18,12 @@
     <result column="update_time" property="updateTime" />
     <result column="deleted" property="deleted" />
     <result column="open_id" property="openId" />
+    <result column="platform_id" property="platformId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, dept_id, username, "password", nickname, gender, phone, email, avatar_path, enabled,
-    create_time, update_time, deleted, open_id
+    create_time, update_time, deleted, open_id,platform_id
   </sql>
 
   <select id="selectByUserId" resultMap="BaseResultMap">
@@ -71,6 +72,20 @@
     where rur.user_id = #{userId} order by sm.sort
   </select>
 
+  <select id="selectMenuByPlatformId"  resultType="com.rehe.auth.admin.dto.AuthMenuDto">
+    <!--@mbg.generated-->
+    select  id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link,
+    "cache", hidden, permission,platform_id
+    from system_menu
+    <where>
+      <if test="platformId != null">
+        and platform_id = #{platformId}
+      </if>
+    </where>
+     order by sort
+  </select>
+
+
   <select id="selectPlatformByUser" resultType="java.lang.Integer">
     <!--@mbg.generated-->
     select DISTINCT sm.platform_id from system_user_role rur
@@ -79,6 +94,19 @@
     where rur.user_id = #{userId} order by sm.platform_id
   </select>
 
+
+  <select id="selectSuperRoleCountByUser"  resultType="java.lang.Integer">
+    <!--@mbg.generated-->
+    select count(1) from system_user_role rur
+    inner join system_role sr on rur.role_id = sr.id and level = 0
+    where rur.user_id = #{userId}
+  </select>
+
+  <select id="selectPlatform" resultType="java.lang.Integer">
+    <!--@mbg.generated-->
+    select DISTINCT platform_id from system_menu
+    order by platform_id
+  </select>
 
 
 </mapper>

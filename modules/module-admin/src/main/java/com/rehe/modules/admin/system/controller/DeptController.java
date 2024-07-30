@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class DeptController {
     private final DeptService deptService;
 
     @Operation(summary = "创建部门", operationId = "1")
+    @PreAuthorize("hasAuthority('dept:create')")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Valid DeptCreateDto deptCreateDto){
         deptService.createDept(deptCreateDto);
@@ -37,6 +39,7 @@ public class DeptController {
     }
 
     @Operation(summary = "修改部门", operationId = "4")
+    @PreAuthorize("hasAuthority('dept:update')")
     @PostMapping("update")
     public Result<Void> update(@RequestBody @Valid DeptUpdateDto deptUpdateDto){
         deptService.updateDept(deptUpdateDto);
@@ -44,6 +47,7 @@ public class DeptController {
     }
 
     @Operation(summary = "删除部门", operationId = "5")
+    @PreAuthorize("hasAuthority('dept:delete')")
     @PostMapping("delete/{id}")
     public Result<Void> delete(@Parameter(description = "部门ID") @PathVariable Long id){
         deptService.deleteDept(id);
@@ -51,6 +55,7 @@ public class DeptController {
     }
 
     @Operation(summary = "部门详情", operationId = "6")
+    @PreAuthorize("hasAuthority('dept')")
     @GetMapping("/get/{id}")
     public Result<DeptResponseDto> getById(@Parameter(description = "部门ID") @PathVariable Long id) {
         DeptResponseDto deptVo = DeptMapstruct.INSTANCE.toDeptResponseDto(deptService.getDeptById(id));
@@ -58,6 +63,7 @@ public class DeptController {
     }
 
     @Operation(summary = "部门列表", operationId = "10")
+    @PreAuthorize("hasAuthority('dept')")
     @GetMapping("/query")
     public Result<List<DeptResponseDto>> query(){
         List<DeptResponseDto> deptVoList = DeptMapstruct.INSTANCE.toDeptResponseDto(deptService.queryDept());

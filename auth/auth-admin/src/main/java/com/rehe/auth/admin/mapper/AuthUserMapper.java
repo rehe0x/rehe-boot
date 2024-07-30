@@ -27,5 +27,13 @@ public interface AuthUserMapper {
 
     List<AuthMenuDto> selectMenuByUser(Integer platformId, Long userId);
 
+    List<AuthMenuDto> selectMenuByPlatformId(Integer platformId);
+
     List<Integer> selectPlatformByUser(Long userId);
+
+    Integer selectSuperRoleCountByUser(Long userId);
+
+    List<Integer> selectPlatform();
+
+
 }

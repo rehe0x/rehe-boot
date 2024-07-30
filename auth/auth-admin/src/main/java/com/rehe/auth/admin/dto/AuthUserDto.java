@@ -81,4 +81,6 @@ public class AuthUserDto  {
 
     private String openId;
 
+    private Integer platformId;
+
 }

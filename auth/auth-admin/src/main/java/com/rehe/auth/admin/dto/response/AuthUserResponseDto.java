@@ -28,6 +28,8 @@ public class AuthUserResponseDto {
     private String phone;
     @Schema(description = "邮箱")
     private String email;
+    @Schema(description = "系统ID")
+    private Integer platformId;
 
     private List<AuthMenuResponseDto> menuList;
 }

@@ -22,7 +22,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService{
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AuthUserDto authUserDto =  authUserService.findByUsername(username).orElseThrow(() -> new BadCredentialsException(""));
         JwtUserDto jwtUserDto = AuthUserMapstruct.INSTANCE.toDto(authUserDto);
-        jwtUserDto.setAuthorities(authUserService.getUserAuthorities(null, jwtUserDto.getUserId()));
+        jwtUserDto.setAuthorities(authUserService.getUserAuthorities(authUserDto.getPlatformId(), jwtUserDto.getUserId()));
         return jwtUserDto;
     }
     @Override

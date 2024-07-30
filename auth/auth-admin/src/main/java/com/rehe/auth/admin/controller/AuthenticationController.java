@@ -52,8 +52,8 @@ public class AuthenticationController {
 
     @Operation(summary = "获取登录信息",operationId = "4")
     @GetMapping("/info")
-    public Result<AuthUserResponseDto> loginInfo(Integer platformId) {
+    public Result<AuthUserResponseDto> loginInfo() {
         Long userId = SecurityUtils.getLoginUserId();
-        return Result.ok(service.userInfo(platformId, userId));
+        return Result.ok(service.userInfo(userId));
     }
 }

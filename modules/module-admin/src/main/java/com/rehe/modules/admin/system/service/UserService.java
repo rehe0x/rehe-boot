@@ -68,6 +68,9 @@ public class UserService{
         userMapper.updateByPrimaryKeySelective(entity);
     }
 
+    public void updateUserPlatform(Long id,Integer platformId){
+        userMapper.updatePlatformByUserId(id, platformId);
+    }
     public void deleteUser(Long id) {
         User user = getById(id);
         User entity = new User();

@@ -87,6 +87,8 @@ public class UserDto implements Serializable {
      */
     private String openId;
 
+    private Integer platformId;
+
     private Set<Long> roleIds;
 
 }

@@ -20,13 +20,12 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.rehe.auth.admin.entity.Permission.*;
-import static com.rehe.auth.admin.entity.Role.ADMIN;
-import static com.rehe.auth.admin.entity.Role.MANAGER;
-import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-
+/**
+ * @description
+ * @author rehe
+ * @date 2024/7/30
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,9 +34,7 @@ public class SecurityConfiguration {
 
     private static final String[] WHITE_LIST_URL = {
             "/api/v1/auth/login/passwd",
-            "/api/v1/system/**",
             "/doc.html",
-            "/ceshi123",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -87,10 +84,8 @@ public class SecurityConfiguration {
             .formLogin(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(req ->
-                req.requestMatchers(WHITE_LIST_URL)
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
+                req.requestMatchers(WHITE_LIST_URL).permitAll()
+                        .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
             .logout(logout ->

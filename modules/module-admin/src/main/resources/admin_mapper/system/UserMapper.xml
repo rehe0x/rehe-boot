@@ -189,6 +189,9 @@
     where id = #{id}
   </update>
 
+  <update id="updatePlatformByUserId">
+    update "system_user" set platform_id = #{platformId} where id = #{id}
+  </update>
 
   <select id="selectAll" resultType="com.rehe.modules.admin.system.entity.User">
     <!--@mbg.generated-->

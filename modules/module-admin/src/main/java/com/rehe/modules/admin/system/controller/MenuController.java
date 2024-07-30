@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,7 +32,8 @@ import java.util.List;
 public class MenuController {
     private final MenuService menuService;
 
-    @Operation(summary = "添加菜单",operationId = "1")
+    @Operation(summary = "创建菜单",operationId = "1")
+    @PreAuthorize("hasAuthority('menu:create')")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Valid MenuCreateDto menuCreateDto){
         menuService.createMenu(menuCreateDto);
@@ -39,6 +41,7 @@ public class MenuController {
     }
 
     @Operation(summary = "修改菜单",operationId = "3")
+    @PreAuthorize("hasAuthority('menu:update')")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Valid MenuUpdateDto menuUpdateDto){
         menuService.updateMenu(menuUpdateDto);
@@ -46,6 +49,7 @@ public class MenuController {
     }
 
     @Operation(summary = "删除菜单",operationId = "5")
+    @PreAuthorize("hasAuthority('menu:delete')")
     @PostMapping("/delete/{id}")
     public Result<Void> delete(@Parameter(description = "菜单ID") @PathVariable Long id){
         menuService.deleteMenu(id);
@@ -53,6 +57,7 @@ public class MenuController {
     }
 
     @Operation(summary = "菜单列表",operationId = "10")
+    @PreAuthorize("hasAuthority('menu')")
     @GetMapping("/query")
     public Result<List<MenuResponseDto>> query(@ParameterObject @Valid MenuQueryDto queryDto){
         List<MenuResponseDto> menuVoList = MenuMapstruct.INSTANCE.toMenuResponseDto(menuService.queryMenu(queryDto));
@@ -61,6 +66,7 @@ public class MenuController {
 
 
     @Operation(summary = "菜单详情",operationId = "13")
+    @PreAuthorize("hasAuthority('menu')")
     @GetMapping("/get/{id}")
     public Result<MenuResponseDto> getById(@Parameter(description = "菜单ID") @PathVariable Long id){
         MenuResponseDto menuVo = MenuMapstruct.INSTANCE.toMenuResponseDto(menuService.getMenuById(id));

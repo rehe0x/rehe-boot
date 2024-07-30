@@ -60,6 +60,7 @@ public class RoleService{
     @Transactional(rollbackFor = Exception.class)
     public void updateRole(RoleUpdateDto roleUpdateDto) {
         Role role = getById(roleUpdateDto.getId());
+        validateSuperRole(role);
         Role entity = RoleMapstruct.INSTANCE.toEntity(roleUpdateDto);
         entity.setId(role.getId());
         entity.setUpdateTime(LocalDateTime.now());
@@ -77,6 +78,7 @@ public class RoleService{
 
     public void deleteRole(Long roleId) {
         Role role = getById(roleId);
+        validateSuperRole(role);
         int roleUserCount = roleMapper.selectRoleUserCount(role.getId());
         if(roleUserCount > 0) {
             throw new BusinessException("当前角色有用户绑定，请先取消");
@@ -111,7 +113,15 @@ public class RoleService{
         if(roleDto.getScope() == 2){
             roleDto.setDeptIds(roleMapper.selectRoleDeptIdsByRoleId(roleId));
         }
-        roleDto.setMenuIds(roleMapper.selectRoleMenuIdsByRoleId(roleId));
+        if(roleDto.getLevel() == 0){
+            List<MenuDto> menuDtoList = menuService.getMenuAll().orElseThrow(() -> new BusinessException("菜单数据异常"));
+            Set<Long> idSet = menuDtoList.stream()
+                    .map(MenuDto::getId)
+                    .collect(Collectors.toSet());
+            roleDto.setMenuIds(idSet);
+        } else{
+            roleDto.setMenuIds(roleMapper.selectRoleMenuIdsByRoleId(roleId));
+        }
         return roleDto;
     }
 
@@ -124,6 +134,12 @@ public class RoleService{
     private Role getById(Long roleId) {
         return Optional.ofNullable(roleMapper.selectByPrimaryKey(roleId))
                 .orElseThrow(()-> new BusinessException("角色不存在"));
+    }
+
+    private void validateSuperRole(Role role){
+        if(role.getLevel() == 0){
+            throw new BusinessException("超级管理员无法修改/删除");
+        }
     }
 
     private void validateUniqueRole(String roleName,String oldRoleName){
@@ -155,6 +171,7 @@ public class RoleService{
             return false;
         }
         Role role = getById(roleMenuBindDto.getId());
+        validateSuperRole(role);
         List<MenuDto> menuDtoList = menuService.getMenuAll().orElseThrow(() -> new BusinessException("菜单数据异常"));
         Set<Long> menuIds = menuDtoList
                 .stream().map(MenuDto::getId).collect(Collectors.toSet());
