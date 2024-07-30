@@ -1,29 +1,29 @@
 package com.rehe.auth.admin.service;
 
 import com.alibaba.fastjson2.JSON;
-import com.rehe.auth.admin.dto.AdminLoginDto;
-import com.rehe.auth.admin.mapper.AuthUserMapper;
+import com.rehe.auth.admin.dto.AuthMenuDto;
+import com.rehe.auth.admin.dto.AuthUserDto;
+import com.rehe.auth.admin.dto.JwtUserDto;
+import com.rehe.auth.admin.dto.request.AdminLoginDto;
 import com.rehe.auth.admin.mapstruct.AuthUserMapstruct;
 import com.rehe.auth.admin.provider.mobile.MobileAuthenticationToken;
 import com.rehe.auth.admin.provider.openid.OpenIdAuthenticationToken;
-import com.rehe.auth.admin.entity.AuthUser;
-import com.rehe.auth.admin.vo.AuthMenuVo;
-import com.rehe.auth.admin.vo.AuthUserInfoVo;
+import com.rehe.auth.admin.dto.response.AuthUserResponseDto;
 import com.rehe.common.exception.BusinessException;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @description
+ * @author rehe
+ * @date 2024/7/29
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -38,9 +38,8 @@ public class AuthenticationService {
                 adminLoginDto.getUsername(),
                 adminLoginDto.getPassword()
         );
-        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        AuthUser authUser = authUserService.findByUsername(adminLoginDto.getUsername()).orElseThrow();
-        authUser.setPassword(null);
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        JwtUserDto authUser = (JwtUserDto) authentication.getPrincipal();
         // 用户基本信息存入token
         Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
         return jwtService.generateToken(extraClaims, authUser);
@@ -54,7 +53,7 @@ public class AuthenticationService {
         );
 //        var user = repository.findByEmail(request.getEmail())
 //                .orElseThrow();
-        String jwtToken = jwtService.generateToken(new AuthUser());
+        String jwtToken = jwtService.generateToken(new JwtUserDto());
 //        var refreshToken = jwtService.generateRefreshToken(user);
 //        revokeAllUserTokens(user);
 //        saveUserToken(user, jwtToken);
@@ -71,7 +70,8 @@ public class AuthenticationService {
         authenticationManager.authenticate(
                 new OpenIdAuthenticationToken(openId)
         );
-        AuthUser authUser = authUserService.findByOpenId(openId);
+        AuthUserDto authUserDto = authUserService.findByOpenId(openId).orElseThrow();
+        JwtUserDto authUser = AuthUserMapstruct.INSTANCE.toDto(authUserDto);
         authUser.setPassword(null);
         // 用户基本信息存入token
         Map<String,Object> extraClaims = JSON.parseObject(JSON.toJSONString(authUser));
@@ -82,25 +82,12 @@ public class AuthenticationService {
     /**
      * 获取用户信息
      */
-    public AuthUserInfoVo userInfo(int platformId) {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            throw new BusinessException("当前登录状态过期");
-        }
-
-        //临时
-//        AuthUserInfoVo authUser  = AuthUserMapstruct.INSTANCE.toVo(userDetails);
-        AuthUserInfoVo authUser= AuthUserInfoVo.builder().username("潘西").build();
-        List<AuthMenuVo> menuVoList =  authUserService.getUserMenus(platformId, null);
-        authUser.setMenuList(menuVoList);
-        return authUser;
-//        if (authentication.getPrincipal() instanceof AuthUser userDetails) {
-//            AuthUserInfoVo authUser  = AuthUserMapstruct.INSTANCE.toVo(userDetails);
-//            List<AuthMenuVo> menuVoList =  authUserService.getUserMenus(1, null);
-//            authUser.setMenuList(menuVoList);
-//            return authUser;
-//        }
-//        return null;
+    public AuthUserResponseDto userInfo(Integer platformId,Long userId) {
+        AuthUserDto authUserDto = authUserService.findByUserId(userId).orElseThrow(() -> new BusinessException("当前用户异常"));
+        AuthUserResponseDto authUserResponseDto = AuthUserMapstruct.INSTANCE.toResponseDto(authUserDto);
+        List<AuthMenuDto> menuDtoList =  authUserService.getUserMenus(platformId, userId);
+        authUserResponseDto.setMenuList(AuthUserMapstruct.INSTANCE.toResponseDto(menuDtoList));
+        return authUserResponseDto;
     }
 
 //    @DBSource(value = DynamicDataSourceEnum.SLAVE)

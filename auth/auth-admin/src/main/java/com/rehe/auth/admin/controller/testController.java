@@ -1,12 +1,8 @@
 package com.rehe.auth.admin.controller;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.rehe.auth.admin.dto.AdminLoginDto;
-import com.rehe.auth.admin.dto.AdminWxLoginDto;
-import com.rehe.auth.admin.dto.ApiDemo2Dto;
-import com.rehe.auth.admin.dto.ApiDemoDto;
-import com.rehe.auth.admin.service.AuthenticationService;
-import com.rehe.common.exception.BusinessException;
+import com.rehe.auth.admin.dto.request.ApiDemo2Dto;
+import com.rehe.auth.admin.dto.request.ApiDemoDto;
 import com.rehe.common.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,8 +12,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,13 +1,9 @@
-package com.rehe.auth.admin.dto;
+package com.rehe.auth.admin.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * @author xiech
@@ -16,8 +12,8 @@ import org.springframework.validation.annotation.Validated;
  */
 @Data
 @Builder
-@Schema(description = "登录DTO")
-public class AdminLoginDto {
+@Schema(description = "示例参数对象")
+public class ApiDemoDto {
     @Schema(description = "用户名")
     @NotBlank(message = "用户名不能为空")
     private String username;

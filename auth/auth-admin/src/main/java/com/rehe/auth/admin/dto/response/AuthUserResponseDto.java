@@ -1,4 +1,4 @@
-package com.rehe.auth.admin.vo;
+package com.rehe.auth.admin.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -15,9 +15,9 @@ import java.util.List;
 @Data
 @Builder
 @Schema(description = "用户信息Vo")
-public class AuthUserInfoVo {
+public class AuthUserResponseDto {
     @Schema(description = "user id")
-    private Long id;
+    private Long userId;
     @Schema(description = "头像")
     private String avatar;
     @Schema(description = "昵称")
@@ -29,5 +29,5 @@ public class AuthUserInfoVo {
     @Schema(description = "邮箱")
     private String email;
 
-    private List<AuthMenuVo> menuList;
+    private List<AuthMenuResponseDto> menuList;
 }

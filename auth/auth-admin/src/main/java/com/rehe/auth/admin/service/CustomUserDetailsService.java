@@ -1,7 +1,6 @@
 package com.rehe.auth.admin.service;
 
 
-import com.rehe.auth.admin.entity.AuthUser;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
  * @date 2024/1/9
  */
 public interface CustomUserDetailsService extends UserDetailsService {
-    UserDetails findByPhone(String phone)throws UsernameNotFoundException;
-
-    UserDetails findByOpenId(String openId)throws UsernameNotFoundException;
+    UserDetails loadUserByPhone(String phone)throws UsernameNotFoundException;
+    UserDetails loadUserByOpenId(String openId)throws UsernameNotFoundException;
 }

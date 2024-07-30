@@ -60,7 +60,6 @@ public class JwtService {
             UserDetails userDetails,
             long expiration
     ) {
-        System.out.println();
         return Jwts
                 .builder()
                 .claims(extraClaims)
@@ -95,5 +94,14 @@ public class JwtService {
 
     private SecretKey getSignInKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private boolean isTokenExpired(Date date) {
+        return date.before(new Date());
+    }
+
+    public boolean isTokenValid(Claims claims,UserDetails userDetails){
+        final String username = claims.getSubject();
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(claims.getExpiration());
     }
 }

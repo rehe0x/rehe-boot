@@ -1,20 +1,19 @@
-package com.rehe.modules.admin.system.dto.response;
-
-import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+package com.rehe.auth.admin.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * @description
  * @author rehe
  * @date 2024/6/26
  */
-@Schema(description="系统菜单")
+@Schema(description="登录用户菜单")
 @Data
-public class MenuResponseDto implements Serializable {
+public class AuthMenuResponseDto implements Serializable {
     /**
      * ID
      */
@@ -93,20 +92,9 @@ public class MenuResponseDto implements Serializable {
     @Schema(description = "权限")
     private String permission;
 
-    /**
-     * 创建日期
-     */
-    @Schema(description = "创建日期")
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    @Schema(description = "更新时间")
-    private LocalDateTime updateTime;
-
     @Schema(description = "系统ID")
     private Integer platformId;
+
 
     @Serial
     private static final long serialVersionUID = 1L;

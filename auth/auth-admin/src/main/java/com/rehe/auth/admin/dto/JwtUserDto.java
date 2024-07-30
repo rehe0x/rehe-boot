@@ -1,38 +1,46 @@
-package com.rehe.auth.admin.entity;
+package com.rehe.auth.admin.dto;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 
 import java.io.Serial;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.stream.Collectors;
+import java.util.Set;
 
-public class AuthUser extends User implements UserDetails {
+/**
+ * @description
+ * @author rehe
+ * @date 2024/7/29
+ */
+@Setter
+@Getter
+public class JwtUserDto implements UserDetails {
 
     @Serial
     private static final long serialVersionUID = 6676357003482048951L;
 
+    private Long userId;
+
+    private String username;
+
+    private String password;
+
+    private Set<AuthorityDto> authorities;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new HashSet<>();
-        collection.add(new SimpleGrantedAuthority("ROLE_123"));
-        return collection;
+    public Set<AuthorityDto> getAuthorities() {
+        return authorities;
     }
 
     @Override
+    @JSONField(serialize = false)
     public String getPassword() {
-        return super.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return super.getUsername();
+        return username;
     }
 
     @Override

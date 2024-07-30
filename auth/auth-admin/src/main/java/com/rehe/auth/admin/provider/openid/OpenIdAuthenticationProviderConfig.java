@@ -1,16 +1,10 @@
 package com.rehe.auth.admin.provider.openid;
 
-import com.rehe.auth.admin.entity.AuthUser;
-import com.rehe.auth.admin.service.AuthUserService;
 import com.rehe.auth.admin.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.Optional;
 
 /**
  * @author xiech

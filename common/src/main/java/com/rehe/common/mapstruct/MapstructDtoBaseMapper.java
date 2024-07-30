@@ -7,7 +7,7 @@ import java.util.List;
  * @description
  * @date 2024/1/8
  */
-public interface MapstructVoBaseMapper<V, E> {
+public interface MapstructDtoBaseMapper<V, E> {
 
     V toDto(E entity);
 

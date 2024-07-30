@@ -25,6 +25,14 @@
     create_time, update_time, deleted, open_id
   </sql>
 
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where deleted=false and id = #{userId}
+  </select>
+
   <select id="selectByUsername" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
@@ -49,12 +57,28 @@
     where deleted=false and open_id = #{openId}
   </select>
 
-  <select id="selectMenuByUser"  resultType="com.rehe.auth.admin.vo.AuthMenuVo">
+  <select id="selectMenuByUser"  resultType="com.rehe.auth.admin.dto.AuthMenuDto">
     <!--@mbg.generated-->
     select
         id, parent_id, menu_type, title, "name", component, route_path, sort, icon, link,
-    "cache", hidden, permission,platform_id
-    from system_menu
-    where platform_id = #{platformId} order by sort
+        "cache", hidden, permission,platform_id
+    from system_user_role rur
+    inner join system_role_menu srm on rur.role_id = srm.role_id
+    inner join system_menu  sm on srm.menu_id = sm.id
+    <if test="platformId != null">
+      and sm.platform_id = #{platformId}
+    </if>
+    where rur.user_id = #{userId} order by sm.sort
   </select>
+
+  <select id="selectPlatformByUser" resultType="java.lang.Integer">
+    <!--@mbg.generated-->
+    select DISTINCT sm.platform_id from system_user_role rur
+    inner join system_role_menu srm on rur.role_id = srm.role_id
+    inner join system_menu  sm on srm.menu_id = sm.id
+    where rur.user_id = #{userId} order by sm.platform_id
+  </select>
+
+
+
 </mapper>

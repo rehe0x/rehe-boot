@@ -1,7 +1,8 @@
 package com.rehe.auth.admin.mapper;
 
+import com.rehe.auth.admin.dto.AuthMenuDto;
 import com.rehe.auth.admin.entity.User;
-import com.rehe.auth.admin.vo.AuthMenuVo;
+import com.rehe.auth.admin.dto.response.AuthMenuResponseDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,11 +17,15 @@ import java.util.List;
 @Mapper
 public interface AuthUserMapper {
 
+    User selectByUserId(Long userId);
+
     User selectByUsername(String username);
 
     User selectByPhone(String phone);
 
     User selectByOpenId(String openId);
 
-    List<AuthMenuVo> selectMenuByUser(@Param("platformId") Integer platformId, Long userId);
+    List<AuthMenuDto> selectMenuByUser(Integer platformId, Long userId);
+
+    List<Integer> selectPlatformByUser(Long userId);
 }

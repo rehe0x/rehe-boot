@@ -1,6 +1,6 @@
 package com.rehe.auth.admin.provider.mobile;
 
-import com.rehe.auth.admin.entity.AuthUser;
+import com.rehe.auth.admin.dto.JwtUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +27,8 @@ public class MobileAuthenticationProviderConfig {
     }
 
 
-    public Optional<AuthUser> sg(String sdf){
-        return Optional.of(new AuthUser());
+    public Optional<JwtUserDto> sg(String sdf){
+        return Optional.of(new JwtUserDto());
     }
 
     @Bean
