@@ -56,7 +56,10 @@ public class DeptService{
                 .collect(Collectors.groupingBy(Dept::getParentId));
         List<Long> childIds = getDeptChildIds(parentToChildrenMap, dept.getId(), new ArrayList<>());
         childIds.add(dept.getId());
-        Optional.ofNullable(userService.findUserByDeptIds(childIds)).orElseThrow(() -> new BusinessException("该部门下存在有效用户，无法删除")) ;
+
+        if(!userService.findUserByDeptIds(childIds).get().isEmpty()){
+            throw new BusinessException("该部门下存在有效用户，无法删除");
+        }
         deptMapper.deleteByPrimaryKeys(childIds);
     }
 

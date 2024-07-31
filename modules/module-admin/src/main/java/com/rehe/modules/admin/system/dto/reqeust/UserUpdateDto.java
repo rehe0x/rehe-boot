@@ -26,7 +26,7 @@ public class UserUpdateDto {
      * 部门id
      */
     @Schema(description = "部门id 默认=0")
-    private Long deptId;
+    private Long deptId = 0L;
 
     /**
      * 用户名

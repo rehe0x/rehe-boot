@@ -62,6 +62,13 @@ public class UserService{
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         }
         entity.setUpdateTime(LocalDateTime.now());
+
+        Integer roleLevel = userMapper.selectUserRoleMaxLevel(entity.getId());
+        if(roleLevel != null && roleLevel == 0){
+            userMapper.updateByPrimaryKeySelective(entity);
+            return;
+        }
+
         if(validateUserRole(loginUserId, userUpdateDto.getRoleIds(),userMapper.selectUserRoleIds(entity.getId()))){
             userMapper.deleteUserRole(entity.getId());
             userMapper.insertUserRole(entity.getId(), userUpdateDto.getRoleIds());
@@ -95,9 +102,9 @@ public class UserService{
         return userDto;
     }
 
-    public List<UserDto> findUserByDeptIds(List<Long> deptIds) {
+    public Optional<List<UserDto>> findUserByDeptIds(List<Long> deptIds) {
         List<User> userList = userMapper.selectByDeptIds(deptIds);
-        return UserMapstruct.INSTANCE.toDto(userList);
+        return Optional.ofNullable(UserMapstruct.INSTANCE.toDto(userList));
     }
 
     /** -----------------------私有方法------------------------ */
@@ -129,6 +136,9 @@ public class UserService{
             return false;
         }
         Integer roleLevel = userMapper.selectUserRoleMaxLevel(loginUserId);
+        if(roleLevel == null){
+            throw new BusinessException("登录角色异常,请退出");
+        }
         roleIds.forEach(roleId -> {
             RoleDto roleDto = roleService.findRoleById(roleId).orElseThrow(() -> new BusinessException("角色不存在"+roleId));
             if(!CollectionUtils.isEmpty(oldRoleIds) && oldRoleIds.contains(roleId)){

@@ -59,7 +59,7 @@ public class AuthUserService {
         }
         if(platformId == null){
             List<Integer> platformList;
-            if(roleMaxLevel > 0){
+            if(roleMaxLevel == 0){
                 platformList = authUserMapper.selectPlatform();
             } else {
                 platformList = authUserMapper.selectPlatformByUser(userId);
@@ -71,7 +71,7 @@ public class AuthUserService {
         }
 
         List<AuthMenuDto> menuDtoList;
-        if(roleMaxLevel > 0){
+        if(roleMaxLevel == 0){
             menuDtoList = authUserMapper.selectMenuByPlatformId(platformId);
         } else {
             menuDtoList = authUserMapper.selectMenuByUser(platformId, userId);
@@ -95,7 +95,7 @@ public class AuthUserService {
             return Collections.emptySet();
         }
         List<AuthMenuDto> menuDtoList;
-        if(roleMaxLevel > 0){
+        if(roleMaxLevel == 0){
             menuDtoList = authUserMapper.selectMenuByPlatformId(null);
         } else {
             menuDtoList = authUserMapper.selectMenuByUser(null, userId);
