@@ -21,6 +21,9 @@ public class SecurityUtils {
         }
         if (authentication.getPrincipal() instanceof UserDetails) {
             Long userId = JSONObject.parseObject(JSONObject.toJSONString(authentication.getPrincipal())).getLong("userId");
+            if (userId == null) {
+                throw new BusinessException("当前登录状态过期");
+            }
             return userId;
         }
         throw new BusinessException("当前登录状态过期");

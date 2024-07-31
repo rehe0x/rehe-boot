@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
 import com.rehe.modules.admin.common.dto.PageParamDto;
+import com.rehe.modules.admin.system.dto.RoleDto;
 import com.rehe.modules.admin.system.dto.UserDto;
 import com.rehe.modules.admin.system.dto.reqeust.UserCreateDto;
 import com.rehe.modules.admin.system.dto.reqeust.UserQueryDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.rehe.modules.admin.system.mapper.UserMapper;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,19 +41,19 @@ public class UserService{
     private final RoleService roleService;
 
     @Transactional(rollbackFor = Exception.class)
-    public void createUser(UserCreateDto userCreateDto) {
+    public void createUser(UserCreateDto userCreateDto,Long loginUserId) {
         User entity = UserMapstruct.INSTANCE.toEntity(userCreateDto);
         validateUser(entity, null);
         entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         entity.setCreateTime(LocalDateTime.now());
         userMapper.insertSelective(entity);
-        if(validateUserRole(userCreateDto.getRoleIds())){
+        if(validateUserRole(loginUserId,userCreateDto.getRoleIds() ,null)){
             userMapper.insertUserRole(entity.getId(), userCreateDto.getRoleIds());
         }
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void updateUser(UserUpdateDto userUpdateDto) {
+    public void updateUser(UserUpdateDto userUpdateDto,Long loginUserId) {
         User user = getById(userUpdateDto.getId());
         User entity = UserMapstruct.INSTANCE.toEntity(userUpdateDto);
         entity.setId(user.getId());
@@ -60,10 +62,11 @@ public class UserService{
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         }
         entity.setUpdateTime(LocalDateTime.now());
-
-        userMapper.deleteUserRole(entity.getId());
-        if(validateUserRole(userUpdateDto.getRoleIds())){
+        if(validateUserRole(loginUserId, userUpdateDto.getRoleIds(),userMapper.selectUserRoleIds(entity.getId()))){
+            userMapper.deleteUserRole(entity.getId());
             userMapper.insertUserRole(entity.getId(), userUpdateDto.getRoleIds());
+        } else {
+            userMapper.deleteUserRole(entity.getId());
         }
         userMapper.updateByPrimaryKeySelective(entity);
     }
@@ -88,7 +91,7 @@ public class UserService{
 
     public UserDto getUserById(Long id) {
         UserDto userDto = UserMapstruct.INSTANCE.toDto(getById(id));
-        userDto.setRoleIds(userMapper.selectUserRoleIdsByUserId(userDto.getId()));
+        userDto.setRoleIds(userMapper.selectUserRoleIds(userDto.getId()));
         return userDto;
     }
 
@@ -121,12 +124,19 @@ public class UserService{
         }
     }
 
-    private boolean validateUserRole(Set<Long> roleIds) {
+    public boolean validateUserRole(Long loginUserId,Set<Long> roleIds,Set<Long> oldRoleIds) {
         if (roleIds == null || roleIds.isEmpty()) {
             return false;
         }
+        Integer roleLevel = userMapper.selectUserRoleMaxLevel(loginUserId);
         roleIds.forEach(roleId -> {
-            roleService.findRoleById(roleId).orElseThrow(() -> new BusinessException("角色不存在"+roleId));
+            RoleDto roleDto = roleService.findRoleById(roleId).orElseThrow(() -> new BusinessException("角色不存在"+roleId));
+            if(!CollectionUtils.isEmpty(oldRoleIds) && oldRoleIds.contains(roleId)){
+                return;
+            }
+            if(roleDto.getLevel() <= roleLevel){
+                throw new BusinessException("没有该角色权限"+roleId);
+            }
         });
         return true;
     }

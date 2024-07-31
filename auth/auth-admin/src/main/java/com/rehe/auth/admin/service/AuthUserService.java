@@ -2,7 +2,6 @@ package com.rehe.auth.admin.service;
 
 import com.rehe.auth.admin.dto.AuthMenuDto;
 import com.rehe.auth.admin.dto.AuthUserDto;
-import com.rehe.auth.admin.dto.JwtUserDto;
 import com.rehe.auth.admin.dto.AuthorityDto;
 import com.rehe.auth.admin.entity.User;
 import com.rehe.auth.admin.mapper.AuthUserMapper;
@@ -46,13 +45,21 @@ public class AuthUserService {
         return Optional.ofNullable(AuthUserMapstruct.INSTANCE.toDto(user));
     }
 
-    public List<AuthMenuDto> getUserMenus(Integer platformId, Long userId){
+    public Integer getUserRoleMaxLevel(Long userId){
+        return authUserMapper.selectRoleMaxLevelByUser(userId);
+    }
 
-        Integer superRoleCount = authUserMapper.selectSuperRoleCountByUser(userId);
 
+    public List<AuthMenuDto> getUserMenus(Integer platformId, Long userId,Integer roleMaxLevel){
+        if(roleMaxLevel == null){
+             roleMaxLevel = authUserMapper.selectRoleMaxLevelByUser(userId);
+        }
+        if(roleMaxLevel == null){
+            return Collections.emptyList();
+        }
         if(platformId == null){
             List<Integer> platformList;
-            if(superRoleCount > 0){
+            if(roleMaxLevel > 0){
                 platformList = authUserMapper.selectPlatform();
             } else {
                 platformList = authUserMapper.selectPlatformByUser(userId);
@@ -64,7 +71,7 @@ public class AuthUserService {
         }
 
         List<AuthMenuDto> menuDtoList;
-        if(superRoleCount > 0){
+        if(roleMaxLevel > 0){
             menuDtoList = authUserMapper.selectMenuByPlatformId(platformId);
         } else {
             menuDtoList = authUserMapper.selectMenuByUser(platformId, userId);
@@ -83,9 +90,12 @@ public class AuthUserService {
 
     public Set<AuthorityDto> getUserAuthorities(Integer platformId, Long userId){
         // platformId暂时不用 登录默认查询所有系统权限
-        Integer superRoleCount = authUserMapper.selectSuperRoleCountByUser(userId);
+        Integer roleMaxLevel = authUserMapper.selectRoleMaxLevelByUser(userId);
+        if(roleMaxLevel == null){
+            return Collections.emptySet();
+        }
         List<AuthMenuDto> menuDtoList;
-        if(superRoleCount > 0){
+        if(roleMaxLevel > 0){
             menuDtoList = authUserMapper.selectMenuByPlatformId(null);
         } else {
             menuDtoList = authUserMapper.selectMenuByUser(null, userId);

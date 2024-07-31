@@ -27,6 +27,7 @@ logging:
   level:
     org.springframework.security: TRACE
     com.rehe.auth.*: TRACE
+    com.rehe.modules.admin.*: TRACE
 
 
 mybatis:

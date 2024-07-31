@@ -31,7 +31,7 @@ public interface AuthUserMapper {
 
     List<Integer> selectPlatformByUser(Long userId);
 
-    Integer selectSuperRoleCountByUser(Long userId);
+    Integer selectRoleMaxLevelByUser(Long userId);
 
     List<Integer> selectPlatform();
 

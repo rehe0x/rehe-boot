@@ -176,7 +176,7 @@
       <if test="sort != null">
         sort = #{sort},
       </if>
-      <if test="icon != null and icon != ''">
+      <if test="icon != null">
         icon = #{icon},
       </if>
       <if test="link != null">

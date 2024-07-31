@@ -30,6 +30,8 @@ public class AuthUserResponseDto {
     private String email;
     @Schema(description = "系统ID")
     private Integer platformId;
+    @Schema(description = "用户角色级别")
+    private Integer roleLevel;
 
     private List<AuthMenuResponseDto> menuList;
 }

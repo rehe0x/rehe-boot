@@ -40,7 +40,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:create')")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Valid UserCreateDto userCreateDto) {
-        userService.createUser(userCreateDto);
+        userService.createUser(userCreateDto,SecurityUtils.getLoginUserId());
         return Result.ok();
     }
 
@@ -48,18 +48,18 @@ public class UserController {
     @PreAuthorize("hasAuthority('user:update')")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Valid UserUpdateDto userUpdateDto) {
-        userService.updateUser(userUpdateDto);
+        userService.updateUser(userUpdateDto,SecurityUtils.getLoginUserId());
         return Result.ok();
     }
 
-    @Operation(summary = "更新系统ID", operationId = "20")
+    @Operation(summary = "更新系统ID", operationId = "4")
     @PostMapping("/update/platform/{platformId}")
     public Result<Void> updateUserPlatform(@Parameter(description = "系统ID") @PathVariable Integer platformId) {
         userService.updateUserPlatform(SecurityUtils.getLoginUserId(), platformId);
         return Result.ok();
     }
 
-    @Operation(summary = "删除用户", operationId = "4")
+    @Operation(summary = "删除用户", operationId = "6")
     @PreAuthorize("hasAuthority('user:delete')")
     @PostMapping("/delete/{id}")
     public Result<Void> delete(@Parameter(description = "用户ID") @PathVariable Long id) {

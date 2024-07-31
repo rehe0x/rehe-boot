@@ -95,10 +95,10 @@
   </select>
 
 
-  <select id="selectSuperRoleCountByUser"  resultType="java.lang.Integer">
+  <select id="selectRoleMaxLevelByUser"  resultType="java.lang.Integer">
     <!--@mbg.generated-->
-    select count(1) from system_user_role rur
-    inner join system_role sr on rur.role_id = sr.id and level = 0
+    select min(sr."level") from system_user_role rur
+    inner join system_role sr on rur.role_id = sr.id
     where rur.user_id = #{userId}
   </select>
 
@@ -107,6 +107,7 @@
     select DISTINCT platform_id from system_menu
     order by platform_id
   </select>
+
 
 
 </mapper>

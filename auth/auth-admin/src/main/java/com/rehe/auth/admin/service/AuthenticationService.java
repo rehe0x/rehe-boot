@@ -85,7 +85,11 @@ public class AuthenticationService {
     public AuthUserResponseDto userInfo(Long userId) {
         AuthUserDto authUserDto = authUserService.findByUserId(userId).orElseThrow(() -> new BusinessException("当前用户异常"));
         AuthUserResponseDto authUserResponseDto = AuthUserMapstruct.INSTANCE.toResponseDto(authUserDto);
-        List<AuthMenuDto> menuDtoList =  authUserService.getUserMenus(authUserResponseDto.getPlatformId(), userId);
+
+        Integer roleLevel = authUserService.getUserRoleMaxLevel(userId);
+        authUserResponseDto.setRoleLevel(roleLevel);
+
+        List<AuthMenuDto> menuDtoList =  authUserService.getUserMenus(authUserResponseDto.getPlatformId(), userId,roleLevel);
         authUserResponseDto.setMenuList(AuthUserMapstruct.INSTANCE.toResponseDto(menuDtoList));
         return authUserResponseDto;
     }
