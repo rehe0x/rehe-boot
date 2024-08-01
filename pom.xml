@@ -10,12 +10,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rehe</groupId>
-    <artifactId>rehe-project</artifactId>
+    <artifactId>rehe-boot</artifactId>
     <packaging>pom</packaging>
     <version>1.0</version>
 
-    <name>rehe-project</name>
-    <description>rehe-project</description>
+    <name>rehe-boot</name>
+    <description>rehe-boot</description>
 
     <modules>
         <module>dependencies</module>
