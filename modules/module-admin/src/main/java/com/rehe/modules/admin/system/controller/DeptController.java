@@ -40,7 +40,7 @@ public class DeptController {
 
     @Operation(summary = "修改部门", operationId = "4")
     @PreAuthorize("hasAuthority('dept:update')")
-    @PostMapping("update")
+    @PostMapping("/update")
     public Result<Void> update(@RequestBody @Valid DeptUpdateDto deptUpdateDto){
         deptService.updateDept(deptUpdateDto);
         return Result.ok();
@@ -48,7 +48,7 @@ public class DeptController {
 
     @Operation(summary = "删除部门", operationId = "5")
     @PreAuthorize("hasAuthority('dept:delete')")
-    @PostMapping("delete/{id}")
+    @PostMapping("/delete/{id}")
     public Result<Void> delete(@Parameter(description = "部门ID") @PathVariable Long id){
         deptService.deleteDept(id);
         return Result.ok();

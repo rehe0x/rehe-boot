@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.modules.admin.system.mapper.DictDetailMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.modules.admin.system.entity.DictDetail">
+    <!--@mbg.generated-->
+    <!--@Table system_dict_detail-->
+    <id column="id" property="id" />
+    <result column="dict_id" property="dictId" />
+    <result column="label" property="label" />
+    <result column="value" property="value" />
+    <result column="sort" property="sort" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, dict_id, "label", "value", sort, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from system_dict_detail
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from system_dict_detail
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.rehe.modules.admin.system.entity.DictDetail">
+    <!--@mbg.generated-->
+    insert into system_dict_detail (id, dict_id, "label", "value", sort, create_time, update_time
+      )
+    values (#{id}, #{dictId}, #{label}, #{value}, #{sort}, #{createTime}, #{updateTime}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rehe.modules.admin.system.entity.DictDetail">
+    <!--@mbg.generated-->
+    insert into system_dict_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="dictId != null">
+        dict_id,
+      </if>
+      <if test="label != null and label != ''">
+        "label",
+      </if>
+      <if test="value != null and value != ''">
+        "value",
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="dictId != null">
+        #{dictId},
+      </if>
+      <if test="label != null and label != ''">
+        #{label},
+      </if>
+      <if test="value != null and value != ''">
+        #{value},
+      </if>
+      <if test="sort != null">
+        #{sort},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rehe.modules.admin.system.entity.DictDetail">
+    <!--@mbg.generated-->
+    update system_dict_detail
+    <set>
+      <if test="dictId != null">
+        dict_id = #{dictId},
+      </if>
+      <if test="label != null and label != ''">
+        "label" = #{label},
+      </if>
+      <if test="value != null and value != ''">
+        "value" = #{value},
+      </if>
+      <if test="sort != null">
+        sort = #{sort},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rehe.modules.admin.system.entity.DictDetail">
+    <!--@mbg.generated-->
+    update system_dict_detail
+    set dict_id = #{dictId},
+      "label" = #{label},
+      "value" = #{value},
+      sort = #{sort},
+      create_time = #{createTime},
+      update_time = #{updateTime}
+    where id = #{id}
+  </update>
+
+  <select id="selectAll"  resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from system_dict_detail where dict_id = #{dictId}
+  </select>
+
+
+  <select id="selectByDictId"  resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from system_dict_detail where dict_id = #{dictId}
+  </select>
+
+  <delete id="deleteByDictId" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from system_dict_detail
+    where dict_id = #{dictId}
+  </delete>
+</mapper>

@@ -46,7 +46,7 @@ public class RoleController {
 
     @Operation(summary = "修改角色", operationId = "4")
     @PreAuthorize("hasAuthority('role:update')")
-    @PostMapping("update")
+    @PostMapping("/update")
     public Result<Void> update(@RequestBody @Valid RoleUpdateDto roleUpdateDto){
         roleService.updateRole(roleUpdateDto);
         return Result.ok();
@@ -54,7 +54,7 @@ public class RoleController {
 
     @Operation(summary = "删除角色", operationId = "5")
     @PreAuthorize("hasAuthority('role:delete')")
-    @PostMapping("delete/{id}")
+    @PostMapping("/delete/{id}")
     public Result<Void> delete(@Parameter(description = "角色ID") @PathVariable Long id){
         roleService.deleteRole(id);
         return Result.ok();
@@ -62,7 +62,7 @@ public class RoleController {
 
     @Operation(summary = "角色绑定菜单", operationId = "5")
     @PreAuthorize("hasAnyAuthority('role:bind_menu')")
-    @PostMapping("bind/menu")
+    @PostMapping("/bind/menu")
     public Result<Void> bindRoleMenu(@RequestBody @Valid RoleMenuBindDto roleMenuBindDto){
         roleService.bindRoleMenu(roleMenuBindDto);
         return Result.ok();
