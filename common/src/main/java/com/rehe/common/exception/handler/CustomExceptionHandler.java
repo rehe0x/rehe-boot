@@ -4,15 +4,18 @@ import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.HttpError;
 import com.rehe.common.result.Result;
 import com.rehe.common.result.ResultCodeEnum;
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Objects;
@@ -50,7 +53,15 @@ public class CustomExceptionHandler {
         return Result.fail(Objects.requireNonNull(e.getAllErrors().get(0).getDefaultMessage()));
     }
 
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public Result<String> missingServletRequestPartException(MissingServletRequestPartException e){
+        return Result.fail(Objects.requireNonNull(e.getMessage()));
+    }
 
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public Result<String> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
+        return Result.fail(Objects.requireNonNull(e.getMessage()));
+    }
 
     @ExceptionHandler(BusinessException.class)
     public Result<String> businessException(BusinessException e){

@@ -25,14 +25,15 @@
 		<io.jsonwebtoken.version>0.12.3</io.jsonwebtoken.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<com.github.pagehelper.version>2.1.0</com.github.pagehelper.version>
-
+		<software.amazon.awssdk.version>2.26.31</software.amazon.awssdk.version>
+		<org.redisson.version>3.34.1</org.redisson.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
+				<groupId>com.mysql</groupId>
+				<artifactId>mysql-connector-j</artifactId>
 				<version>${mysql.connector.java.version}</version>
 			</dependency>
 
@@ -119,6 +120,19 @@
 				<artifactId>jakarta.persistence-api</artifactId>
 				<version>${jakarta.persistence.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>software.amazon.awssdk</groupId>
+				<artifactId>s3</artifactId>
+				<version>${software.amazon.awssdk.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.redisson</groupId>
+				<artifactId>redisson-spring-boot-starter</artifactId>
+				<version>${org.redisson.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 </project>

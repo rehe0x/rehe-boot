@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @SpringBootApplication
 @ComponentScan({"com.rehe"})
 public class ReheStarterAdminApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(ReheStarterAdminApplication.class, args);
     }

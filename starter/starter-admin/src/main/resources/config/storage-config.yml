@@ -1,0 +1,39 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+storage:
+  s3:
+    admin:
+      endpoint: http://10.211.55.7:8333
+      region: us-east-1
+      accessKeyId: tMSlfEn9gKw4rNemYzuop07Rhb2QBIG1
+      secretKey: Q8cS1sXYWmBMevg7lFwjnDqbaTtPuoVA
+    app:
+      endpoint: http://10.211.55.7:8333
+      region: us-east-1
+      accessKeyId: tMSlfEn9gKw4rNemYzuop07Rhb2QBIG1
+      secretKey: Q8cS1sXYWmBMevg7lFwjnDqbaTtPuoVA
+
+  weed:
+    filer:
+      url: http://10.211.55.7:8888
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+storage:
+  s3:
+    admin:
+      endpoint: http://192.168.1.4:8333
+      region: us-east-1
+      accessKeyId: tMSlfEn9gKw4rNemYzuop07Rhb2QBIG1
+      secretKey: Q8cS1sXYWmBMevg7lFwjnDqbaTtPuoVA
+
+  weed:
+    filer:
+      url: http://10.211.55.7:8888

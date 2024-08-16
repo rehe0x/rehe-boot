@@ -24,6 +24,7 @@
         <module>auth</module>
         <module>starter</module>
         <module>database</module>
+        <module>storage</module>
     </modules>
 
     <dependencyManagement>

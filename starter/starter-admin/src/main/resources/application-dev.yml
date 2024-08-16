@@ -1,9 +1,26 @@
+server:
+  port: 8081
+
 spring:
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
   threads:
     virtual:
       enabled: true # 启用虚拟线程
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+  data:
+    redis:
+      host: 10.211.55.7
+      port: 6379
+#      password: yourpassword # 如果 Redis 没有密码，则可以省略此行
+      database: 0  # 使用的数据库编号，默认为0
+      timeout: 60000  # 连接超时时间（毫秒）
+
+
 application:
   security:
     jwt:
