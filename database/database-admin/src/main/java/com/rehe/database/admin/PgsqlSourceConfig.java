@@ -35,7 +35,7 @@ import java.util.*;
  * @date 2024/1/4
  */
 @Configuration
-@MapperScan(basePackages = {"com.rehe.auth.admin.mapper","com.rehe.modules.admin.**.mapper"}, sqlSessionTemplateRef  = "pgsqlSqlTemplate")
+@MapperScan(basePackages = {"com.rehe.auth.admin.mapper","com.rehe.admin.modules.**.mapper","com.rehe.biz.core.mapper"}, sqlSessionTemplateRef  = "pgsqlSqlTemplate")
 @PropertySource(value = "classpath:config/database-admin-${spring.profiles.active}.yaml",factory = YamlPropertySourceFactory.class)
 public class PgsqlSourceConfig {
 

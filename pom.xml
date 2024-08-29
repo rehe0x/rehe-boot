@@ -19,10 +19,10 @@
 
     <modules>
         <module>dependencies</module>
-        <module>modules</module>
+        <module>biz</module>
         <module>common</module>
         <module>auth</module>
-        <module>starter</module>
+        <module>services</module>
         <module>database</module>
         <module>storage</module>
     </modules>

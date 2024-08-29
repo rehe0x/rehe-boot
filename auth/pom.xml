@@ -9,7 +9,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.rehe.auth</groupId>
     <artifactId>auth</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
@@ -27,7 +26,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.rehe.common</groupId>
+            <groupId>com.rehe</groupId>
             <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>

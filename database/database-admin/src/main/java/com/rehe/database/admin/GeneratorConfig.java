@@ -43,7 +43,7 @@ package com.rehe.database.admin;//package com.rehe.modules.admin;
 //        /*Model生成器配置*/
 //        JavaModelGeneratorConfiguration javaModelGeneratorConfig = new JavaModelGeneratorConfiguration();
 //        javaModelGeneratorConfig.setTargetProject("rehe-modules/rehe-module-admin/src/main/java/");//目标项目(源码主路径)
-//        javaModelGeneratorConfig.setTargetPackage("com.rehe.modules.admin.system1");//目标包(Model类文件存放包)
+//        javaModelGeneratorConfig.setTargetPackage("com.rehe.admin.modules.system1");//目标包(Model类文件存放包)
 //        context.setJavaModelGeneratorConfiguration(javaModelGeneratorConfig);
 //
 //        /*SqlMapper生成器配置(*Mapper.xml类文件)，要javaClient生成器类型配合*/
@@ -56,7 +56,7 @@ package com.rehe.database.admin;//package com.rehe.modules.admin;
 //        JavaClientGeneratorConfiguration javaClientGeneratorConfig = new JavaClientGeneratorConfiguration();
 //        javaClientGeneratorConfig.setConfigurationType("XMLMAPPER");//JavaClient生成器类型(主要有ANNOTATEDMAPPER、MIXEDMAPPER、XMLMAPPER，要Context的TargetRuntime配合)
 //        javaClientGeneratorConfig.setTargetProject("rehe-modules/rehe-module-admin/src/main/java/");//目标项目(源码主路径)
-//        javaClientGeneratorConfig.setTargetPackage("com.rehe.modules.admin.system1");//目标包(*Mapper.java类文件存放包)
+//        javaClientGeneratorConfig.setTargetPackage("com.rehe.admin.modules.system1");//目标包(*Mapper.java类文件存放包)
 //        context.setJavaClientGeneratorConfiguration(javaClientGeneratorConfig);
 //
 //        /*表生成配置*/

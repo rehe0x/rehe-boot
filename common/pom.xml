@@ -9,7 +9,6 @@
         <version>1.0</version>
     </parent>
 
-    <groupId>com.rehe.common</groupId>
     <artifactId>common</artifactId>
     <version>1.0</version>
     <name>rehe-common</name>

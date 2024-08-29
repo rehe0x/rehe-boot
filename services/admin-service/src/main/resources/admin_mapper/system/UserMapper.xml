@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.admin.modules.system.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    <!--@Table "system_user"-->
+    <id column="id" property="id" />
+    <result column="dept_id" property="deptId" />
+    <result column="username" property="username" />
+    <result column="password" property="password" />
+    <result column="nickname" property="nickname" />
+    <result column="gender" property="gender" />
+    <result column="phone" property="phone" />
+    <result column="email" property="email" />
+    <result column="avatar_path" property="avatarPath" />
+    <result column="enabled" property="enabled" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, dept_id, username, "password", nickname, gender, phone, email, avatar_path, enabled, 
+    create_time, update_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where deleted = false and id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from "system_user"
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    insert into "system_user" (id, dept_id, username, "password", nickname, gender, phone, 
+      email, avatar_path, enabled, create_time, update_time, deleted)
+    values (#{id}, #{deptId}, #{username}, #{password}, #{nickname}, #{gender}, #{phone}, 
+      #{email}, #{avatarPath}, #{enabled}, #{createTime}, #{updateTime}, #{deleted})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    insert into "system_user"
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="deptId != null">
+        dept_id,
+      </if>
+      <if test="username != null and username != ''">
+        username,
+      </if>
+      <if test="password != null and password != ''">
+        "password",
+      </if>
+      <if test="nickname != null and nickname != ''">
+        nickname,
+      </if>
+      <if test="gender != null and gender != ''">
+        gender,
+      </if>
+      <if test="phone != null and phone != ''">
+        phone,
+      </if>
+      <if test="email != null and email != ''">
+        email,
+      </if>
+      <if test="avatarPath != null and avatarPath != ''">
+        avatar_path,
+      </if>
+      <if test="enabled != null">
+        enabled,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="deleted != null and deleted != ''">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="deptId != null">
+        #{deptId},
+      </if>
+      <if test="username != null and username != ''">
+        #{username},
+      </if>
+      <if test="password != null and password != ''">
+        #{password},
+      </if>
+      <if test="nickname != null and nickname != ''">
+        #{nickname},
+      </if>
+      <if test="gender != null and gender != ''">
+        #{gender},
+      </if>
+      <if test="phone != null and phone != ''">
+        #{phone},
+      </if>
+      <if test="email != null and email != ''">
+        #{email},
+      </if>
+      <if test="avatarPath != null and avatarPath != ''">
+        #{avatarPath},
+      </if>
+      <if test="enabled != null">
+        #{enabled},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+      <if test="deleted != null and deleted != ''">
+        #{deleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    update "system_user"
+    <set>
+      <if test="deptId != null">
+        dept_id = #{deptId},
+      </if>
+      <if test="username != null and username != ''">
+        username = #{username},
+      </if>
+      <if test="password != null and password != ''">
+        "password" = #{password},
+      </if>
+      <if test="nickname != null and nickname != ''">
+        nickname = #{nickname},
+      </if>
+      <if test="gender != null and gender != ''">
+        gender = #{gender},
+      </if>
+      <if test="phone != null and phone != ''">
+        phone = #{phone},
+      </if>
+      <if test="email != null and email != ''">
+        email = #{email},
+      </if>
+      <if test="avatarPath != null and avatarPath != ''">
+        avatar_path = #{avatarPath},
+      </if>
+      <if test="enabled != null">
+        enabled = #{enabled},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="deleted != null and deleted != ''">
+        deleted = #{deleted},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    update "system_user"
+    set dept_id = #{deptId},
+      username = #{username},
+      "password" = #{password},
+      nickname = #{nickname},
+      gender = #{gender},
+      phone = #{phone},
+      email = #{email},
+      avatar_path = #{avatarPath},
+      enabled = #{enabled},
+      create_time = #{createTime},
+      update_time = #{updateTime},
+      deleted = #{deleted}
+    where id = #{id}
+  </update>
+
+  <update id="updatePlatformByUserId">
+    update "system_user" set platform_id = #{platformId} where id = #{id}
+  </update>
+
+  <select id="selectAll" resultType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    <where>
+      and deleted = false
+      <if test="keyword != null and keyword != ''">
+        and concat(id,username,nickname,phone,email) ilike '%' || #{keyword} || '%'
+      </if>
+      <if test="deptIds != null and deptIds.length > 0">
+        AND dept_id IN
+        <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+          #{deptId}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByUsername" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user"
+    where  deleted = false and username = #{username}
+  </select>
+
+  <select id="selectByDeptIds" resultType="com.rehe.admin.modules.system.entity.User">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from "system_user" where deleted = false
+    and dept_id IN
+    <foreach item="deptId" collection="deptIds" open="(" separator="," close=")">
+      #{deptId}
+    </foreach>
+  </select>
+
+  <insert id="insertUserRole">
+    INSERT INTO system_user_role (user_id, role_id)
+    VALUES
+    <foreach collection="roleIds" item="roleId" separator=",">
+      (#{userId}, #{roleId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRole">
+    delete from system_user_role where user_id = #{userId}
+  </delete>
+
+  <select id="selectUserRoleIds" resultType="java.lang.Long">
+    select role_id from system_user_role where user_id = #{userId}
+  </select>
+
+  <select id="selectUserRoleMaxLevel"  resultType="java.lang.Integer">
+    <!--@mbg.generated-->
+    select min(sr."level") from system_user_role rur
+    inner join system_role sr on rur.role_id = sr.id
+    where rur.user_id = #{userId}
+  </select>
+
+</mapper>
