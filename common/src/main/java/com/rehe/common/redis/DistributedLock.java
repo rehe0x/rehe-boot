@@ -98,10 +98,12 @@ public class DistributedLock {
                 }
                 throw new BusinessException("try lock failed");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException e) {
             throw new BusinessException("try lock failed");
-        } finally {
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e.getMessage());
+        }finally {
             // 释放锁
             if (isLocked && lock.isHeldByCurrentThread()) {
                 lock.unlock();

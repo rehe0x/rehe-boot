@@ -2,9 +2,7 @@ package com.rehe.storage.s3;
 
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.util.MD5Utils;
-import com.rehe.storage.model.PartCheckRequest;
-import com.rehe.storage.model.PartCheckResponse;
-import com.rehe.storage.model.PutObjectPartRequest;
+import com.rehe.storage.model.*;
 import com.rehe.storage.model.PutObjectRequest;
 import com.rehe.storage.service.BaseStorageService;
 import org.springframework.util.StringUtils;
@@ -12,6 +10,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
+import java.net.URLConnection;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -134,6 +133,7 @@ public class S3Service implements BaseStorageService {
                 throw new BusinessException("part上传异常");
             }
         }catch (S3Exception e){
+            e.printStackTrace();
             throw new BusinessException(e.awsErrorDetails().errorCode());
         }
     }
@@ -286,7 +286,64 @@ public class S3Service implements BaseStorageService {
 
     }
 
+    @Override
+    public List<ListObjectResponse> listObjects(ListObjectRequest request) {
+        ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder()
+                .bucket(request.getBucket())
+                .prefix(request.getPath())
+                .delimiter("/")
+                .build();
+
+        try{
+            ListObjectsV2Response response = s3Client.listObjectsV2(listObjectsV2Request);
+            if (response.sdkHttpResponse().isSuccessful()) {
+
+
+                List<ListObjectResponse> objects = response.contents().stream()
+                        .map(s3Object -> ListObjectResponse.builder()
+                                .name(keyReplace(s3Object.key()))
+                                .md5Hex(eTagReplace(s3Object.eTag()))
+                                .size(s3Object.size())
+                                .mimeType(URLConnection.guessContentTypeFromName(s3Object.key()))
+                                .folder(false)
+                                .build())
+                        .toList();
+
+                List<ListObjectResponse> folders = response.commonPrefixes().stream()
+                        .map(commonPrefix -> ListObjectResponse.builder()
+                                .name(prefixeReplace(commonPrefix.prefix()))
+                                .mimeType("Folder")
+                                .folder(true)
+                                .build())
+                        .toList();
+
+
+                List<ListObjectResponse> responseList = new ArrayList<>(folders);
+                responseList.addAll(objects);
+                return responseList;
+            } else {
+                throw new BusinessException("获取list object失败");
+            }
+        }catch (S3Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e.awsErrorDetails().errorCode());
+        }
+
+    }
+
+
     private String eTagReplace(String eTag) {
         return eTag.replaceAll("^\"|\"$", "");
+    }
+
+    private String keyReplace(String key) {
+        return key.substring(key.lastIndexOf("/") + 1);
+    }
+
+    private String prefixeReplace(String prefix) {
+        if (prefix.endsWith("/")) {
+            prefix = prefix.substring(0, prefix.length() - 1);
+        }
+        return prefix.substring(prefix.lastIndexOf("/") + 1);
     }
 }

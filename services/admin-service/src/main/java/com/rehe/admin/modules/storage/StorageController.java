@@ -1,23 +1,25 @@
 package com.rehe.admin.modules.storage;
 
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.rehe.admin.modules.storage.dto.response.StorageObjectResponseDto;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.redis.DistributedLock;
 import com.rehe.common.result.Result;
 import com.rehe.admin.modules.storage.dto.request.*;
 import com.rehe.admin.modules.storage.dto.response.PartCheckResponseDto;
-import com.rehe.storage.model.PartCheckRequest;
-import com.rehe.storage.model.PartCheckResponse;
-import com.rehe.storage.model.PutObjectPartRequest;
-import com.rehe.storage.model.PutObjectRequest;
+import com.rehe.storage.model.*;
 import com.rehe.storage.service.BaseStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.model.Bucket;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.InputStream;
 import java.util.List;
@@ -169,6 +171,29 @@ public class StorageController {
         List<PartCheckResponseDto> list = responses.stream().map(p ->
                         new PartCheckResponseDto(p.getPartNumber(), p.getETag(), p.getSize(), p.isCompletion()))
                 .toList();
+        return Result.ok(list);
+    }
+
+    @Operation(summary = "对象存储列表", operationId = "20")
+    @GetMapping("/list")
+    public Result<List<StorageObjectResponseDto>> list(@ParameterObject @Valid StorageObjectQueryDto dto) {
+        String bucketName = "s3";
+        ListObjectRequest listObjectRequest = ListObjectRequest.builder()
+                .bucket(bucketName)
+                .path(dto.getPath())
+                .build();
+        List<ListObjectResponse> responses = baseStorageService.listObjects(listObjectRequest);
+
+        List<StorageObjectResponseDto> list = responses.stream().map(p ->
+                        StorageObjectResponseDto.builder()
+                                .name(p.getName())
+                                .md5Hex(p.getMd5Hex())
+                                .size(p.getSize())
+                                .mimeType(p.getMimeType())
+                                .folder(p.isFolder())
+                                .build())
+                .toList();
+
         return Result.ok(list);
     }
 
