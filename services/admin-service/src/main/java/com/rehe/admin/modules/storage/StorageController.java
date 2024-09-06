@@ -10,6 +10,7 @@ import com.rehe.admin.modules.storage.dto.response.PartCheckResponseDto;
 import com.rehe.storage.model.*;
 import com.rehe.storage.service.BaseStorageService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,43 @@ public class StorageController {
         this.baseStorageService = baseStorageService;
     }
 
+
+    @Operation(summary = "新建文件夹", operationId = "1")
+    @PostMapping("/folder/create")
+    public Result<String> newFolder(@RequestBody @Valid FolderCrudDto dto) {
+        try {
+            String bucketName = "s3";
+            PutObjectRequest request = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key("storage/"+dto.getPath()+"/")
+                    .fileByte(new byte[0])
+                    .contentType(null)
+                    .build();
+
+            String eTag = baseStorageService.putObject(request);
+            return Result.ok(eTag);
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "删除对象 递归删除", operationId = "1")
+    @PostMapping("/folder/delete")
+    public Result<Void> delete(@RequestBody @Valid FolderCrudDto dto) {
+        try {
+            String bucketName = "s3";
+            ListObjectRequest listObjectRequest = ListObjectRequest.builder()
+                    .bucket(bucketName)
+                    .path("storage/"+dto.getPath())
+                    .build();
+            baseStorageService.delete(listObjectRequest);
+            return Result.ok();
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
+
     @Operation(summary = "文件上传", operationId = "1")
     @PostMapping("/upload")
     public Result<String> putObject(@RequestPart("file") MultipartFile file) {
@@ -67,7 +105,7 @@ public class StorageController {
     @PostMapping("/upload/id")
     public Result<String> createMultipartUpload(@RequestBody @Valid CreateMultipartUploadDto dto) {
         String bucketName = "s3";
-        String key = "storage/" + dto.getKey();
+        String key = "storage/" +dto.getPath()  + dto.getKey();
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -85,7 +123,7 @@ public class StorageController {
         try (InputStream fileStream = file.getInputStream()) {
             String  eTag =  DistributedLock.getINSTANCE().lock(dto.getUploadId(),()->{
                 String bucketName = "s3";
-                String key = "storage/" + file.getOriginalFilename();
+                String key = "storage/" +dto.getPath()  + file.getOriginalFilename();
 
                 PutObjectPartRequest request = PutObjectPartRequest.builder()
                         .bucket(bucketName)
@@ -110,7 +148,7 @@ public class StorageController {
     @PostMapping("/upload/complete")
     public Result<String> completeMultipartUpload(@RequestBody @Valid CompleteMultipartUpload dto) {
         String bucketName = "s3";
-        String key = "storage/" + dto.getKey();
+        String key = "storage/" +dto.getPath() + dto.getKey();
 
 
         PutObjectPartRequest request = PutObjectPartRequest.builder()
@@ -147,7 +185,7 @@ public class StorageController {
     @PostMapping("/check/upload")
     public Result<Boolean> checkMultipartUpload(@RequestBody @Valid CheckMultipartUpload dto) {
         String bucketName = "s3";
-        String key = "storage/" + dto.getKey();
+        String key = "storage/" +dto.getPath()  + dto.getKey();
         boolean b = baseStorageService.checkMultipartUpload(bucketName, key, dto.getUploadId())
                 .isPresent();
         return Result.ok(b);
@@ -158,7 +196,7 @@ public class StorageController {
     @PostMapping("/check/part")
     public Result<List<PartCheckResponseDto>> checkObjectPartList(@RequestBody @Valid PartCheckDto dto) {
         String bucketName = "s3";
-        String key = "storage/" + dto.getKey();
+        String key = "storage/" +dto.getPath()  + dto.getKey();
         List<PartCheckRequest> partCheckRequestList = dto.getDetailList().stream()
                 .map(part -> PartCheckRequest.builder()
                         .partNumber(part.getPartNumber())
@@ -180,7 +218,7 @@ public class StorageController {
         String bucketName = "s3";
         ListObjectRequest listObjectRequest = ListObjectRequest.builder()
                 .bucket(bucketName)
-                .path(dto.getPath())
+                .path("storage/"+ (dto.getPath() == null ? "" : dto.getPath()))
                 .build();
         List<ListObjectResponse> responses = baseStorageService.listObjects(listObjectRequest);
 
@@ -197,57 +235,5 @@ public class StorageController {
         return Result.ok(list);
     }
 
-
-//    @Operation(summary = "图片上传",operationId = "1")
-//    @PostMapping("/image")
-//    public Result<String> upload(@RequestPart("file") MultipartFile file) {
-//        try (InputStream fileStream = file.getInputStream()) {
-//            String bucketName = "s3";
-//            String key = file.getOriginalFilename();
-//            String eTag = s3Service.putObject(bucketName,key,fileStream,file.getSize(),file.getContentType());
-//            return Result.ok(eTag);
-//        } catch (Exception e) {
-//            throw new BusinessException(e.getMessage());
-//        }
-//    }
-//
-//
-//    @GetMapping("/s31/upload")
-//    public String uploadFile() throws Exception{
-//        String bucketName = "s3";
-//        String key = "img/test11.jpg";
-//        String filePath = "/Users/rehe/Downloads/e3204449e8c642a49c1794517198a7b6.png";
-//        s3Service.uploadFile(bucketName, key, filePath);
-//        return "File uploaded!";
-//    }
-//
-//    @GetMapping("/s3/uploads")
-//    public String uploadFiles() throws Exception{
-//        String bucketName = "s3";
-//        String key = "img/ff123.webm";
-//        String filePath = "/Users/rehe/Downloads/ff123.webm";
-//        s3Service.uploadToS3(bucketName, key, new File(filePath));
-//        return "File uploaded!";
-//    }
-//
-//
-//    @GetMapping("/s3/list")
-//    public String listMultipartUploads() throws Exception{
-//        String bucketName = "s3";
-//        String key = "img/ff123.webm";
-//        String filePath = "/Users/rehe/Downloads/ff123.webm";
-//        s3Service.listMultipartUploads(bucketName);
-//        return "File uploaded!";
-//    }
-//
-//
-//    @GetMapping("/s3/part")
-//    public String listParts() throws Exception{
-//        String bucketName = "s3";
-//        String key = "img/ff123.webm";
-//        String filePath = "/Users/rehe/Downloads/ff123.webm";
-//        s3Service.listParts(bucketName,key,"afc761db05d29f878b14f46443ba2123e17e4290_c991855a18bf42e8ad5202b360fff8f0");
-//        return "File uploaded!";
-//    }
 
 }

@@ -30,4 +30,8 @@ public class PutObjectPartDto {
     @Schema(description = "大小")
     private Long size;
 
+    @Schema(description = "文件路径")
+    @NotBlank
+    private String path;
+
 }

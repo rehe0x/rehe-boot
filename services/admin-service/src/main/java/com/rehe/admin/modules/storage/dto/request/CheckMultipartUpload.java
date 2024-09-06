@@ -20,6 +20,10 @@ public class CheckMultipartUpload {
     @NotBlank(message = "key不能为空")
     private String key;
 
+    @Schema(description = "文件路径")
+    @NotBlank
+    private String path;
+
     @Schema(description = "分段上传ID")
     @NotBlank(message = "id不能为空")
     private String uploadId;

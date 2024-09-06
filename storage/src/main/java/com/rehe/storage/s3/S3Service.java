@@ -32,14 +32,23 @@ public class S3Service implements BaseStorageService {
                 .bucket(request.getBucket())
                 .key(request.getKey())
                 .contentType(request.getContentType())
+                .contentLength((long)request.getFileByte().length)
                 .build();
 
-        RequestBody requestBody = RequestBody.fromBytes(request.getFileByte());
+        RequestBody requestBody;
+        if(request.getFileByte().length == 0){
+            requestBody = RequestBody.empty();
+        } else {
+            requestBody = RequestBody.fromBytes(request.getFileByte());
+        }
         try {
             PutObjectResponse response = s3Client.putObject(putObjectRequest, requestBody);
             if (response != null && StringUtils.hasText(response.eTag())) {
                 return response.eTag();
             } else {
+                if(request.getFileByte().length == 0){
+                    return null;
+                }
                 throw new BusinessException("s3上传失败");
             }
         }catch (S3Exception e){
@@ -286,19 +295,89 @@ public class S3Service implements BaseStorageService {
 
     }
 
+
     @Override
     public List<ListObjectResponse> listObjects(ListObjectRequest request) {
+        List<ListObjectResponse> list = findObjects(request.getBucket(), request.getPath());
+        return list;
+    }
+
+
+
+    @Override
+    public List<String> delete(ListObjectRequest request) {
+        List<ObjectIdentifier> objectIdentifiers = new ArrayList<>();
+        listObjectsRecursive(request.getBucket(), request.getPath(), objectIdentifiers);
+        Collections.reverse(objectIdentifiers);
+        for (ObjectIdentifier objectIdentifier : objectIdentifiers) {
+            System.out.println("Key: " + objectIdentifier.key());
+        }
+        try{
+            DeleteObjectsRequest deleteObjectsRequest = DeleteObjectsRequest.builder()
+                    .bucket(request.getBucket())
+                    .delete(delete -> delete.objects(objectIdentifiers))
+                    .build();
+            DeleteObjectsResponse response = s3Client.deleteObjects(deleteObjectsRequest);
+            if (response.sdkHttpResponse().isSuccessful()) {
+                return null;
+            } else {
+                throw new BusinessException("删除失败");
+            }
+        }catch (S3Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e.awsErrorDetails().errorCode());
+        }
+    }
+
+    private void listObjectsRecursive(String bucket, String prefix, List<ObjectIdentifier> objectIdentifiers) {
+        ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(prefix)
+                .delimiter("/")
+                .build();
+        ListObjectsV2Response listObjectsResponse;
+        do {
+            try{
+                listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
+
+                if (listObjectsResponse.sdkHttpResponse().isSuccessful()) {
+                    for (S3Object s3Object : listObjectsResponse.contents()) {
+                        objectIdentifiers.add(ObjectIdentifier.builder().key(s3Object.key()).build());
+                    }
+
+                    for (CommonPrefix commonPrefix : listObjectsResponse.commonPrefixes()) {
+                        objectIdentifiers.add(ObjectIdentifier.builder().key(commonPrefix.prefix()).build());
+                        listObjectsRecursive(bucket, commonPrefix.prefix(), objectIdentifiers);
+                    }
+                    // Update request to get the next set of results if they exist
+                    listObjectsRequest = ListObjectsV2Request.builder()
+                            .bucket(bucket)
+                            .prefix(prefix)
+                            .delimiter("/")
+                            .continuationToken(listObjectsResponse.nextContinuationToken())
+                            .build();
+                } else {
+                    throw new BusinessException("查询失败");
+                }
+            }catch (S3Exception e){
+                e.printStackTrace();
+                throw new BusinessException(e.awsErrorDetails().errorCode());
+            }
+
+        } while (listObjectsResponse.isTruncated());
+    }
+
+
+    private List<ListObjectResponse> findObjects(String bucketName, String path) {
         ListObjectsV2Request listObjectsV2Request = ListObjectsV2Request.builder()
-                .bucket(request.getBucket())
-                .prefix(request.getPath())
+                .bucket(bucketName)
+                .prefix(path)
                 .delimiter("/")
                 .build();
 
         try{
             ListObjectsV2Response response = s3Client.listObjectsV2(listObjectsV2Request);
             if (response.sdkHttpResponse().isSuccessful()) {
-
-
                 List<ListObjectResponse> objects = response.contents().stream()
                         .map(s3Object -> ListObjectResponse.builder()
                                 .name(keyReplace(s3Object.key()))
@@ -328,8 +407,8 @@ public class S3Service implements BaseStorageService {
             e.printStackTrace();
             throw new BusinessException(e.awsErrorDetails().errorCode());
         }
-
     }
+
 
 
     private String eTagReplace(String eTag) {

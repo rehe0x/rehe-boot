@@ -26,4 +26,8 @@ public class PartCheckDto {
     @NotEmpty(message = "分段明细不能为空")
     @Valid
     private List<PartCheckDetailDto> detailList;
+
+    @Schema(description = "文件路径")
+    @NotBlank
+    private String path;
 }
