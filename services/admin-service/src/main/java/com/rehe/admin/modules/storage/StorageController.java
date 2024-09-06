@@ -247,7 +247,7 @@ public class StorageController {
 
         List<StorageObjectResponseDto> list = responses.stream().map(p ->
                         StorageObjectResponseDto.builder()
-                                .url(p.isFolder() ? s3Properties.getEndpoint()+"/"+bucketName+"/"+p.getKey() : "")
+                                .url(!p.isFolder() ? s3Properties.getEndpoint()+"/"+bucketName+"/"+p.getKey() : "")
                                 .name(p.getName())
                                 .md5Hex(p.getMd5Hex())
                                 .size(p.getSize())
