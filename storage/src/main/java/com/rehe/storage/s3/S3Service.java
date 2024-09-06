@@ -439,6 +439,7 @@ public class S3Service implements BaseStorageService {
                 List<ListObjectResponse> objects = response.contents().stream()
                         .map(s3Object -> ListObjectResponse.builder()
                                 .name(keyReplace(s3Object.key()))
+                                .key(s3Object.key())
                                 .md5Hex(eTagReplace(s3Object.eTag()))
                                 .size(s3Object.size())
                                 .mimeType(URLConnection.guessContentTypeFromName(s3Object.key()))

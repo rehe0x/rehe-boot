@@ -8,6 +8,7 @@ import com.rehe.common.result.Result;
 import com.rehe.admin.modules.storage.dto.request.*;
 import com.rehe.admin.modules.storage.dto.response.PartCheckResponseDto;
 import com.rehe.storage.model.*;
+import com.rehe.storage.s3.S3Properties;
 import com.rehe.storage.service.BaseStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,8 +39,13 @@ public class StorageController {
 
     private final BaseStorageService baseStorageService;
 
-    public StorageController(@Qualifier("adminS3Service") BaseStorageService baseStorageService) {
+    private final S3Properties s3Properties;
+
+
+    public StorageController(@Qualifier("adminS3Service") BaseStorageService baseStorageService,
+            @Qualifier("adminS3Properties") S3Properties adminS3Properties) {
         this.baseStorageService = baseStorageService;
+        this.s3Properties = adminS3Properties;
     }
 
 
@@ -241,6 +247,7 @@ public class StorageController {
 
         List<StorageObjectResponseDto> list = responses.stream().map(p ->
                         StorageObjectResponseDto.builder()
+                                .url(p.isFolder() ? s3Properties.getEndpoint()+"/"+bucketName+"/"+p.getKey() : "")
                                 .name(p.getName())
                                 .md5Hex(p.getMd5Hex())
                                 .size(p.getSize())

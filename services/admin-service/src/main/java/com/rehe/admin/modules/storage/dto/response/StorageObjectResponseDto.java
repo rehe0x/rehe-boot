@@ -28,4 +28,6 @@ public class StorageObjectResponseDto {
     private  Long size;
     private String mimeType;
     private  boolean folder;
+
+    private String url;
 }

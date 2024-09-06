@@ -23,4 +23,6 @@ public class ListObjectResponse {
     private  Long size;
     private String mimeType;
     private  boolean folder;
+
+    private String key;
 }
