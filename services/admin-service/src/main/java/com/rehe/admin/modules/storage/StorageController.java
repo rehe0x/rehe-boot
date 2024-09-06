@@ -78,6 +78,23 @@ public class StorageController {
         }
     }
 
+    @Operation(summary = "对象重命名 递归复制", operationId = "1")
+    @PostMapping("/folder/rename")
+    public Result<Void> rename(@RequestBody @Valid FolderCopyDto dto) {
+        try {
+            String bucketName = "s3";
+            ICopyObjectRequest iCopyObjectRequest = ICopyObjectRequest.builder()
+                    .bucket(bucketName)
+                    .sourceKey("storage/"+dto.getSourceKey())
+                    .targetKey("storage/"+dto.getTargetKey())
+                    .build();
+            baseStorageService.copy(iCopyObjectRequest);
+            return Result.ok();
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+
 
     @Operation(summary = "文件上传", operationId = "1")
     @PostMapping("/upload")

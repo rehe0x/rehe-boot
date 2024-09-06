@@ -37,4 +37,8 @@ public interface BaseStorageService {
         return null;
     }
 
+    default List<String> copy(ICopyObjectRequest request) {
+        return null;
+    }
+
 }

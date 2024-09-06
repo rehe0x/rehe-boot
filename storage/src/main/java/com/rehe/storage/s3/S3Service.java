@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.net.URLConnection;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -306,9 +307,14 @@ public class S3Service implements BaseStorageService {
 
     @Override
     public List<String> delete(ListObjectRequest request) {
-        List<ObjectIdentifier> objectIdentifiers = new ArrayList<>();
-        listObjectsRecursive(request.getBucket(), request.getPath(), objectIdentifiers);
-        Collections.reverse(objectIdentifiers);
+        List<FolderList> folderLists = new ArrayList<>();
+        listObjectsRecursive(request.getBucket(), request.getPath(), folderLists);
+        Collections.reverse(folderLists);
+
+        List<ObjectIdentifier> objectIdentifiers = folderLists.stream()
+                .map(folderList -> ObjectIdentifier.builder().key(folderList.getKey()).build())
+                .collect(Collectors.toList());
+
         for (ObjectIdentifier objectIdentifier : objectIdentifiers) {
             System.out.println("Key: " + objectIdentifier.key());
         }
@@ -329,7 +335,59 @@ public class S3Service implements BaseStorageService {
         }
     }
 
-    private void listObjectsRecursive(String bucket, String prefix, List<ObjectIdentifier> objectIdentifiers) {
+    @Override
+    public List<String> copy(ICopyObjectRequest request) {
+        List<FolderList> folderLists = new ArrayList<>();
+        listObjectsRecursive(request.getBucket(), request.getSourceKey(), folderLists);
+        Collections.reverse(folderLists);
+
+        try{
+            for (FolderList folderList : folderLists) {
+                String dKey = folderList.getKey().replaceAll(Pattern.quote(request.getSourceKey()),request.getTargetKey());
+                System.out.println("Key: " + folderList.getKey()+"==="+dKey);
+                boolean r;
+                if(folderList.isFolder()){
+                    PutObjectRequest pr = PutObjectRequest.builder()
+                            .bucket(request.getBucket())
+                            .key(dKey)
+                            .fileByte(new byte[0])
+                            .contentType(null)
+                            .build();
+
+                    putObject(pr);
+                    r = true;
+                } else {
+                    CopyObjectRequest copyObjectRequest = CopyObjectRequest.builder()
+                            .sourceBucket(request.getBucket())
+                            .sourceKey(folderList.getKey())
+                            .destinationBucket(request.getBucket())
+                            .destinationKey(dKey)
+                            .build();
+                    CopyObjectResponse response = s3Client.copyObject(copyObjectRequest);
+                    r = response.sdkHttpResponse().isSuccessful();
+                }
+
+                if (r) {
+                    DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                            .bucket(request.getBucket())
+                            .key(folderList.getKey())
+                            .build();
+                    DeleteObjectResponse dr = s3Client.deleteObject(deleteObjectRequest);
+                    if (!dr.sdkHttpResponse().isSuccessful()) {
+                         throw new BusinessException("删除失败");
+                    }
+                } else {
+                    throw new BusinessException("复制失败");
+                }
+            }
+            return null;
+        }catch (S3Exception e){
+            e.printStackTrace();
+            throw new BusinessException(e.awsErrorDetails().errorCode());
+        }
+    }
+
+    private void listObjectsRecursive(String bucket, String prefix, List<FolderList> folderLists) {
         ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucket)
                 .prefix(prefix)
@@ -342,12 +400,12 @@ public class S3Service implements BaseStorageService {
 
                 if (listObjectsResponse.sdkHttpResponse().isSuccessful()) {
                     for (S3Object s3Object : listObjectsResponse.contents()) {
-                        objectIdentifiers.add(ObjectIdentifier.builder().key(s3Object.key()).build());
+                        folderLists.add(FolderList.builder().key(s3Object.key()).folder(false).build());
                     }
 
                     for (CommonPrefix commonPrefix : listObjectsResponse.commonPrefixes()) {
-                        objectIdentifiers.add(ObjectIdentifier.builder().key(commonPrefix.prefix()).build());
-                        listObjectsRecursive(bucket, commonPrefix.prefix(), objectIdentifiers);
+                        folderLists.add(FolderList.builder().key(commonPrefix.prefix()).folder(true).build());
+                        listObjectsRecursive(bucket, commonPrefix.prefix(), folderLists);
                     }
                     // Update request to get the next set of results if they exist
                     listObjectsRequest = ListObjectsV2Request.builder()
