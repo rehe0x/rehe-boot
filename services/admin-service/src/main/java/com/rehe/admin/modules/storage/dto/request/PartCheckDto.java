@@ -1,6 +1,5 @@
 package com.rehe.admin.modules.storage.dto.request;
 
-import com.rehe.admin.modules.storage.dto.request.PartCheckDetailDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;

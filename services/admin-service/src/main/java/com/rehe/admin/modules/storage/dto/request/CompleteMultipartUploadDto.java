@@ -13,9 +13,9 @@ import java.util.List;
  * @description
  * @date 2024/8/13
  */
-@Schema(description="查看上传")
+@Schema(description="分段上传完成")
 @Data
-public class CheckMultipartUpload {
+public class CompleteMultipartUploadDto {
     @Schema(description = "文件路径/名称")
     @NotBlank(message = "key不能为空")
     private String key;
@@ -28,4 +28,10 @@ public class CheckMultipartUpload {
     @NotBlank(message = "id不能为空")
     private String uploadId;
 
+    @Schema(description = "分段明细")
+    @NotEmpty(message = "分段明细不能为空")
+    @Valid
+    private List<PartCheckDetailDto> detailList;
+
+    private long size;
 }

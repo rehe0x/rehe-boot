@@ -11,17 +11,13 @@ import com.rehe.storage.model.*;
 import com.rehe.storage.s3.S3Properties;
 import com.rehe.storage.service.BaseStorageService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.services.s3.model.Bucket;
-import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 import java.io.InputStream;
 import java.util.List;
@@ -41,6 +37,9 @@ public class StorageController {
 
     private final S3Properties s3Properties;
 
+    private final String bucketName = "s3";
+
+    private final String keyPrefix = "storage";
 
     public StorageController(@Qualifier("adminS3Service") BaseStorageService baseStorageService,
             @Qualifier("adminS3Properties") S3Properties adminS3Properties) {
@@ -49,14 +48,39 @@ public class StorageController {
     }
 
 
-    @Operation(summary = "新建文件夹", operationId = "1")
+    @Operation(summary = "对象存储列表", operationId = "1")
+    @PreAuthorize("hasAuthority('storage')")
+    @GetMapping("/list")
+    public Result<List<StorageObjectResponseDto>> list(@ParameterObject @Valid StorageObjectQueryDto dto) {
+        ListObjectRequest listObjectRequest = ListObjectRequest.builder()
+                .bucket(bucketName)
+                .path(keyPrefix+"/"+ (dto.getPath() == null ? "" : dto.getPath()))
+                .build();
+        List<ListObjectResponse> responses = baseStorageService.listObjects(listObjectRequest);
+
+        List<StorageObjectResponseDto> list = responses.stream().map(p ->
+                        StorageObjectResponseDto.builder()
+                                .url(!p.isFolder() ? s3Properties.getEndpoint()+"/"+bucketName+"/"+p.getKey() : "")
+                                .name(p.getName())
+                                .md5Hex(p.getMd5Hex())
+                                .size(p.getSize())
+                                .mimeType(p.getMimeType())
+                                .folder(p.isFolder())
+                                .build())
+                .toList();
+
+        return Result.ok(list);
+    }
+
+
+    @Operation(summary = "新建文件夹", operationId = "11")
+    @PreAuthorize("hasAuthority('storage:newfolder')")
     @PostMapping("/folder/create")
     public Result<String> newFolder(@RequestBody @Valid FolderCrudDto dto) {
         try {
-            String bucketName = "s3";
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
-                    .key("storage/"+dto.getPath()+"/")
+                    .key(keyPrefix+"/"+dto.getPath()+"/")
                     .fileByte(new byte[0])
                     .contentType(null)
                     .build();
@@ -68,14 +92,14 @@ public class StorageController {
         }
     }
 
-    @Operation(summary = "删除对象 递归删除", operationId = "1")
+    @Operation(summary = "删除对象", operationId = "12")
+    @PreAuthorize("hasAuthority('storage:delete')")
     @PostMapping("/folder/delete")
     public Result<Void> delete(@RequestBody @Valid FolderCrudDto dto) {
         try {
-            String bucketName = "s3";
             ListObjectRequest listObjectRequest = ListObjectRequest.builder()
                     .bucket(bucketName)
-                    .path("storage/"+dto.getPath())
+                    .path(keyPrefix+"/"+dto.getPath())
                     .build();
             baseStorageService.delete(listObjectRequest);
             return Result.ok();
@@ -84,15 +108,15 @@ public class StorageController {
         }
     }
 
-    @Operation(summary = "对象重命名 递归复制", operationId = "1")
+    @Operation(summary = "对象重命名", operationId = "13")
+    @PreAuthorize("hasAuthority('storage:rename')")
     @PostMapping("/folder/rename")
     public Result<Void> rename(@RequestBody @Valid FolderCopyDto dto) {
         try {
-            String bucketName = "s3";
             ICopyObjectRequest iCopyObjectRequest = ICopyObjectRequest.builder()
                     .bucket(bucketName)
-                    .sourceKey("storage/"+dto.getSourceKey())
-                    .targetKey("storage/"+dto.getTargetKey())
+                    .sourceKey(keyPrefix+"/"+dto.getSourceKey())
+                    .targetKey(keyPrefix+"/"+dto.getTargetKey())
                     .build();
             baseStorageService.copy(iCopyObjectRequest);
             return Result.ok();
@@ -102,33 +126,34 @@ public class StorageController {
     }
 
 
-    @Operation(summary = "文件上传", operationId = "1")
-    @PostMapping("/upload")
-    public Result<String> putObject(@RequestPart("file") MultipartFile file) {
-        try (InputStream fileStream = file.getInputStream()) {
-            String bucketName = "s3";
-            String key = "storage/" + file.getOriginalFilename();
-
-            PutObjectRequest request = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(key)
-                    .fileByte(fileStream.readAllBytes())
-                    .contentType(file.getContentType())
-                    .build();
-
-            String eTag = baseStorageService.putObject(request);
-            return Result.ok(eTag);
-        } catch (Exception e) {
-            throw new BusinessException(e.getMessage());
-        }
-    }
 
 
-    @Operation(summary = "创建分段上传", operationId = "10")
+//    @Operation(summary = "文件上传", operationId = "1")
+//    @PostMapping("/upload")
+//    public Result<String> putObject(@RequestPart("file") MultipartFile file) {
+//        try (InputStream fileStream = file.getInputStream()) {
+//            String key = keyPrefix+"/" + file.getOriginalFilename();
+//
+//            PutObjectRequest request = PutObjectRequest.builder()
+//                    .bucket(bucketName)
+//                    .key(key)
+//                    .fileByte(fileStream.readAllBytes())
+//                    .contentType(file.getContentType())
+//                    .build();
+//
+//            String eTag = baseStorageService.putObject(request);
+//            return Result.ok(eTag);
+//        } catch (Exception e) {
+//            throw new BusinessException(e.getMessage());
+//        }
+//    }
+
+
+    @Operation(summary = "创建分段上传", operationId = "20")
+    @PreAuthorize("hasAuthority('storage:upload')")
     @PostMapping("/upload/id")
     public Result<String> createMultipartUpload(@RequestBody @Valid CreateMultipartUploadDto dto) {
-        String bucketName = "s3";
-        String key = "storage/" +dto.getPath()  + dto.getKey();
+        String key = keyPrefix+"/" +dto.getPath()  + dto.getKey();
         PutObjectRequest request = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -139,14 +164,14 @@ public class StorageController {
         return Result.ok(uploadId);
     }
 
-    @Operation(summary = "文件分段上传", operationId = "12")
+    @Operation(summary = "文件分段上传", operationId = "22")
+    @PreAuthorize("hasAuthority('storage:upload')")
     @PostMapping("/upload/part")
     public Result<String> putObjectPart(@RequestPart("file") MultipartFile file,
                                         @ModelAttribute @Valid PutObjectPartDto dto) {
         try (InputStream fileStream = file.getInputStream()) {
             String  eTag =  DistributedLock.getINSTANCE().lock(dto.getUploadId(),()->{
-                String bucketName = "s3";
-                String key = "storage/" +dto.getPath()  + file.getOriginalFilename();
+                String key = keyPrefix+"/" +dto.getPath()  + file.getOriginalFilename();
 
                 PutObjectPartRequest request = PutObjectPartRequest.builder()
                         .bucket(bucketName)
@@ -167,13 +192,11 @@ public class StorageController {
     }
 
 
-    @Operation(summary = "文件分段完成", operationId = "12")
+    @Operation(summary = "文件分段完成", operationId = "23")
+    @PreAuthorize("hasAuthority('storage:upload')")
     @PostMapping("/upload/complete")
-    public Result<String> completeMultipartUpload(@RequestBody @Valid CompleteMultipartUpload dto) {
-        String bucketName = "s3";
-        String key = "storage/" +dto.getPath() + dto.getKey();
-
-
+    public Result<String> completeMultipartUpload(@RequestBody @Valid CompleteMultipartUploadDto dto) {
+        String key = keyPrefix+"/" +dto.getPath() + dto.getKey();
         PutObjectPartRequest request = PutObjectPartRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -204,22 +227,22 @@ public class StorageController {
     }
 
 
-    @Operation(summary = "查看分段上传", operationId = "12")
+    @Operation(summary = "查看分段上传", operationId = "25")
+    @PreAuthorize("hasAuthority('storage:upload')")
     @PostMapping("/check/upload")
-    public Result<Boolean> checkMultipartUpload(@RequestBody @Valid CheckMultipartUpload dto) {
-        String bucketName = "s3";
-        String key = "storage/" +dto.getPath()  + dto.getKey();
+    public Result<Boolean> checkMultipartUpload(@RequestBody @Valid CheckMultipartUploadDto dto) {
+        String key = keyPrefix+"/" +dto.getPath()  + dto.getKey();
         boolean b = baseStorageService.checkMultipartUpload(bucketName, key, dto.getUploadId())
                 .isPresent();
         return Result.ok(b);
     }
 
 
-    @Operation(summary = "获取分段信息", operationId = "12")
+    @Operation(summary = "获取分段信息", operationId = "27")
+    @PreAuthorize("hasAuthority('storage:upload')")
     @PostMapping("/check/part")
     public Result<List<PartCheckResponseDto>> checkObjectPartList(@RequestBody @Valid PartCheckDto dto) {
-        String bucketName = "s3";
-        String key = "storage/" +dto.getPath()  + dto.getKey();
+        String key = keyPrefix+"/" +dto.getPath()  + dto.getKey();
         List<PartCheckRequest> partCheckRequestList = dto.getDetailList().stream()
                 .map(part -> PartCheckRequest.builder()
                         .partNumber(part.getPartNumber())
@@ -234,30 +257,5 @@ public class StorageController {
                 .toList();
         return Result.ok(list);
     }
-
-    @Operation(summary = "对象存储列表", operationId = "20")
-    @GetMapping("/list")
-    public Result<List<StorageObjectResponseDto>> list(@ParameterObject @Valid StorageObjectQueryDto dto) {
-        String bucketName = "s3";
-        ListObjectRequest listObjectRequest = ListObjectRequest.builder()
-                .bucket(bucketName)
-                .path("storage/"+ (dto.getPath() == null ? "" : dto.getPath()))
-                .build();
-        List<ListObjectResponse> responses = baseStorageService.listObjects(listObjectRequest);
-
-        List<StorageObjectResponseDto> list = responses.stream().map(p ->
-                        StorageObjectResponseDto.builder()
-                                .url(!p.isFolder() ? s3Properties.getEndpoint()+"/"+bucketName+"/"+p.getKey() : "")
-                                .name(p.getName())
-                                .md5Hex(p.getMd5Hex())
-                                .size(p.getSize())
-                                .mimeType(p.getMimeType())
-                                .folder(p.isFolder())
-                                .build())
-                .toList();
-
-        return Result.ok(list);
-    }
-
 
 }
