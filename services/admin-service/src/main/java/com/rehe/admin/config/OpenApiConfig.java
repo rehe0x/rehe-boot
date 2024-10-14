@@ -44,6 +44,7 @@ public class OpenApiConfig {
                 .pathsToMatch(paths)
                 .addOpenApiCustomizer(openApi -> {
 
+
                 })
                 .addOperationCustomizer((operation, handlerMethod) -> {
                     // OperationId 作为排序字段

@@ -42,12 +42,8 @@ knife4j:
 
 logging:
   level:
-    org.springframework.security: TRACE
-    com.rehe.auth.*: TRACE
-    com.rehe.admin.modules.*: TRACE
+    root: info
+    com.rehe: debug
+#  config: classpath:logback.xml 用logback-spring.xml可以使用spring环境变量
 
 
-mybatis:
-  # 打印SQL
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
