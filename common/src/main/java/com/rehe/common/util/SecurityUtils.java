@@ -28,4 +28,19 @@ public class SecurityUtils {
         }
         throw new BusinessException("当前登录状态过期");
     }
+
+    public static String getLoginUsername() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new BusinessException("当前登录状态过期");
+        }
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            String username = JSONObject.parseObject(JSONObject.toJSONString(authentication.getPrincipal())).getString("username");
+            if (username == null) {
+                throw new BusinessException("当前登录状态过期");
+            }
+            return username;
+        }
+        throw new BusinessException("当前登录状态过期");
+    }
 }

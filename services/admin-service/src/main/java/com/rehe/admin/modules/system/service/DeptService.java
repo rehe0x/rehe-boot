@@ -7,6 +7,7 @@ import com.rehe.admin.modules.system.dto.reqeust.DeptUpdateDto;
 import com.rehe.admin.modules.system.dto.response.DeptResponseDto;
 import com.rehe.admin.modules.system.mapstruct.DeptMapstruct;
 import com.rehe.admin.modules.system.service.UserService;
+import com.rehe.common.log.OperationLog;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class DeptService{
         validateParentDept(entity.getParentId());
         deptMapper.insertSelective(entity);
     }
-
+    @OperationLog(value = "修改部门")
     public void updateDept(DeptUpdateDto deptUpdateDto) {
         Dept dept = getById(deptUpdateDto.getId());
         Dept entity = DeptMapstruct.INSTANCE.toEntity(deptUpdateDto);

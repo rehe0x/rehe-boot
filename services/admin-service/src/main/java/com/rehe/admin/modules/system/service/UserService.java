@@ -4,6 +4,7 @@ package com.rehe.admin.modules.system.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
+import com.rehe.common.log.OperationLog;
 import com.rehe.common.result.Page;
 import com.rehe.admin.common.dto.PageParamDto;
 import com.rehe.admin.modules.system.dto.RoleDto;
@@ -54,6 +55,7 @@ public class UserService{
     }
 
     @Transactional(rollbackFor = Exception.class)
+    @OperationLog(value = "修改用户")
     public void updateUser(UserUpdateDto userUpdateDto,Long loginUserId) {
         User user = getById(userUpdateDto.getId());
         User entity = UserMapstruct.INSTANCE.toEntity(userUpdateDto);

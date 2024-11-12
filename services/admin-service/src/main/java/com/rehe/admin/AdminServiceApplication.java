@@ -9,6 +9,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.net.UnknownHostException;
  */
 @SpringBootApplication
 @ComponentScan({"com.rehe"})
+@EnableAsync
 public class AdminServiceApplication {
     private static final Logger log = LoggerFactory.getLogger(AdminServiceApplication.class);
     static {

@@ -3,6 +3,7 @@ package com.rehe.admin.modules.system.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
+import com.rehe.common.log.OperationLog;
 import com.rehe.common.result.Page;
 import com.rehe.admin.common.dto.PageParamDto;
 import com.rehe.admin.modules.system.dto.DictDto;
@@ -44,6 +45,7 @@ public class DictService{
         dictMapper.insertSelective(entity);
     }
 
+    @OperationLog(value = "修改字典")
     public void updateDict(DictUpdateDto dictUpdateDto){
         Dict dict = getById(dictUpdateDto.getId());
         Dict entity = DictMapstruct.INSTANCE.toEntity(dictUpdateDto);
