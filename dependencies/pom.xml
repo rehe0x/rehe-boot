@@ -13,20 +13,20 @@
 
 	<properties>
 		<java.version>17</java.version>
-		<mysql.connector.java.version>8.0.33</mysql.connector.java.version>
-		<org.postgresql.version>42.7.3</org.postgresql.version>
+		<mysql-connector-j.version>9.1.0</mysql-connector-j.version>
+		<org.postgresql.version>42.7.4</org.postgresql.version>
 		<org.mybatis.spring.boot.version>3.0.3</org.mybatis.spring.boot.version>
 		<org.mybatis.generator.version>1.4.2</org.mybatis.generator.version>
 		<fastjson2.version>2.0.44</fastjson2.version>
-		<freemarker.version>2.3.32</freemarker.version>
-		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-		<lombok.version>1.18.32</lombok.version>
+		<freemarker.version>2.3.33</freemarker.version>
+		<org.mapstruct.version>1.6.2</org.mapstruct.version>
+		<lombok.version>1.18.34</lombok.version>
 		<com.github.xiaoymin.version>4.5.0</com.github.xiaoymin.version>
-		<io.jsonwebtoken.version>0.12.3</io.jsonwebtoken.version>
+		<io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<com.github.pagehelper.version>2.1.0</com.github.pagehelper.version>
-		<software.amazon.awssdk.version>2.26.31</software.amazon.awssdk.version>
-		<org.redisson.version>3.34.1</org.redisson.version>
+		<software.amazon.awssdk.version>2.29.12</software.amazon.awssdk.version>
+		<org.redisson.version>3.38.1</org.redisson.version>
 	</properties>
 
 	<dependencyManagement>
@@ -34,7 +34,7 @@
 			<dependency>
 				<groupId>com.mysql</groupId>
 				<artifactId>mysql-connector-j</artifactId>
-				<version>${mysql.connector.java.version}</version>
+				<version>${mysql-connector-j.version}</version>
 			</dependency>
 
 			<dependency>
