@@ -5,3 +5,8 @@ spring:
     name: admin-service
   config:
     import: "classpath:/config/storage-config.yml"
+
+#server:
+#  servlet:
+#    context-path: /admin-service
+

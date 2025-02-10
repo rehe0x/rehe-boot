@@ -26,7 +26,7 @@
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<com.github.pagehelper.version>2.1.0</com.github.pagehelper.version>
 		<software.amazon.awssdk.version>2.29.12</software.amazon.awssdk.version>
-		<org.redisson.version>3.38.1</org.redisson.version>
+		<org.redisson.version>3.44.0</org.redisson.version>
 	</properties>
 
 	<dependencyManagement>
