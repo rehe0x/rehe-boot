@@ -35,7 +35,7 @@ import java.util.*;
  * @date 2024/1/4
  */
 @Configuration
-@MapperScan(basePackages = {"com.rehe.auth.admin.mapper","com.rehe.admin.modules.**.mapper","com.rehe.biz.core.mapper"}, sqlSessionTemplateRef  = "pgsqlSqlTemplate")
+@MapperScan(basePackages = {"com.rehe.scheduled.modules.**.mapper","com.rehe.auth.admin.mapper","com.rehe.admin.modules.**.mapper","com.rehe.biz.core.mapper","com.rehe.biz.core.modules.**.mapper"}, sqlSessionTemplateRef  = "pgsqlSqlTemplate")
 @PropertySource(value = "classpath:config/database-admin-${spring.profiles.active}.yaml",factory = YamlPropertySourceFactory.class)
 public class PgsqlSourceConfig {
 
@@ -127,6 +127,8 @@ public class PgsqlSourceConfig {
         List<String> mapperLocations = new ArrayList<>();
         mapperLocations.add("classpath*:admin_mapper/**/*Mapper.xml");
         mapperLocations.add("classpath*:auth_mapper/*Mapper.xml");
+        mapperLocations.add("classpath*:scheduled_mapper/*Mapper.xml");
+        mapperLocations.add("classpath*:bizcore_mapper/**/*Mapper.xml");
         List<Resource> resources = new ArrayList<>();
 
         for (String mapperLocation : mapperLocations) {

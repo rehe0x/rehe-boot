@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.biz.core.modules.logging.mapper.OperationLogMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    <!--@Table operation_log-->
+    <id column="id" property="id" />
+    <result column="username" property="username" />
+    <result column="description" property="description" />
+    <result column="log_type" property="logType" />
+    <result column="method" property="method" />
+    <result column="params" property="params" />
+    <result column="ip" property="ip" />
+    <result column="address" property="address" />
+    <result column="header" property="header" />
+    <result column="time" property="time" />
+    <result column="detail" property="detail" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, username, description, log_type, "method", params, ip, address, "header", "time", 
+    detail, create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from operation_log
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from operation_log
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    insert into operation_log (id, username, description, log_type, "method", params, ip, 
+      address, "header", "time", detail, create_time)
+    values (#{id}, #{username}, #{description}, #{logType}, #{method}, #{params}, #{ip}, 
+      #{address}, #{header}, #{time}, #{detail}, #{createTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    insert into operation_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null and username != ''">
+        username,
+      </if>
+      <if test="description != null and description != ''">
+        description,
+      </if>
+      <if test="logType != null and logType != ''">
+        log_type,
+      </if>
+      <if test="method != null and method != ''">
+        "method",
+      </if>
+      <if test="params != null and params != ''">
+        params,
+      </if>
+      <if test="ip != null and ip != ''">
+        ip,
+      </if>
+      <if test="address != null and address != ''">
+        address,
+      </if>
+      <if test="header != null and header != ''">
+        "header",
+      </if>
+      <if test="time != null">
+        "time",
+      </if>
+      <if test="detail != null and detail != ''">
+        detail,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="username != null and username != ''">
+        #{username},
+      </if>
+      <if test="description != null and description != ''">
+        #{description},
+      </if>
+      <if test="logType != null and logType != ''">
+        #{logType},
+      </if>
+      <if test="method != null and method != ''">
+        #{method},
+      </if>
+      <if test="params != null and params != ''">
+        #{params, typeHandler=com.rehe.common.mybatis.JsonbTypeHandler},
+      </if>
+      <if test="ip != null and ip != ''">
+        #{ip},
+      </if>
+      <if test="address != null and address != ''">
+        #{address},
+      </if>
+      <if test="header != null and header != ''">
+        #{header},
+      </if>
+      <if test="time != null">
+        #{time},
+      </if>
+      <if test="detail != null and detail != ''">
+        #{detail},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    update operation_log
+    <set>
+      <if test="username != null and username != ''">
+        username = #{username},
+      </if>
+      <if test="description != null and description != ''">
+        description = #{description},
+      </if>
+      <if test="logType != null and logType != ''">
+        log_type = #{logType},
+      </if>
+      <if test="method != null and method != ''">
+        "method" = #{method},
+      </if>
+      <if test="params != null and params != ''">
+        params = #{params},
+      </if>
+      <if test="ip != null and ip != ''">
+        ip = #{ip},
+      </if>
+      <if test="address != null and address != ''">
+        address = #{address},
+      </if>
+      <if test="header != null and header != ''">
+        "header" = #{header},
+      </if>
+      <if test="time != null">
+        "time" = #{time},
+      </if>
+      <if test="detail != null and detail != ''">
+        detail = #{detail},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    update operation_log
+    set username = #{username},
+      description = #{description},
+      log_type = #{logType},
+      "method" = #{method},
+      params = #{params},
+      ip = #{ip},
+      address = #{address},
+      "header" = #{header},
+      "time" = #{time},
+      detail = #{detail},
+      create_time = #{createTime}
+    where id = #{id}
+  </update>
+
+
+  <select id="selectAll" resultType="com.rehe.biz.core.modules.logging.entity.OperationLog">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from operation_log
+    <where>
+      <if test="keyword != null and keyword != ''">
+        and concat(username,description,params,ip) ilike '%' || #{keyword} || '%'
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+
+</mapper>

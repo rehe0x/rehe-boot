@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.result.Page;
-import com.rehe.admin.common.dto.PageParamDto;
+import com.rehe.biz.core.common.dto.PageParamDto;
 import com.rehe.admin.modules.system.dto.DeptDto;
 import com.rehe.admin.modules.system.dto.MenuDto;
 import com.rehe.admin.modules.system.dto.RoleDto;

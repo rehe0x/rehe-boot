@@ -1,6 +1,6 @@
 package com.rehe.admin.common.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
 import com.rehe.storage.service.BaseStorageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -22,11 +22,13 @@
 		<org.mapstruct.version>1.6.2</org.mapstruct.version>
 		<lombok.version>1.18.34</lombok.version>
 		<com.github.xiaoymin.version>4.5.0</com.github.xiaoymin.version>
+		<com.github.xingfudeshi.version>4.6.0</com.github.xingfudeshi.version>
 		<io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
 		<jakarta.persistence.version>3.2.0</jakarta.persistence.version>
 		<com.github.pagehelper.version>2.1.0</com.github.pagehelper.version>
 		<software.amazon.awssdk.version>2.29.12</software.amazon.awssdk.version>
 		<org.redisson.version>3.44.0</org.redisson.version>
+		<commons-pool2.version>2.12.1</commons-pool2.version>
 	</properties>
 
 	<dependencyManagement>
@@ -100,6 +102,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>com.github.xingfudeshi</groupId>
+				<artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+				<version>${com.github.xingfudeshi.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt-api</artifactId>
 				<version>${io.jsonwebtoken.version}</version>
@@ -133,6 +141,11 @@
 				<version>${org.redisson.version}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>${commons-pool2.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

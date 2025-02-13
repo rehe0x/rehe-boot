@@ -1,6 +1,6 @@
 package com.rehe.admin.modules.storage;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
 import com.rehe.admin.modules.storage.dto.response.StorageObjectResponseDto;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.redis.DistributedLock;
@@ -170,7 +170,7 @@ public class StorageController {
     public Result<String> putObjectPart(@RequestPart("file") MultipartFile file,
                                         @ModelAttribute @Valid PutObjectPartDto dto) {
         try (InputStream fileStream = file.getInputStream()) {
-            String  eTag =  DistributedLock.getINSTANCE().lock(dto.getUploadId(),()->{
+            String  eTag =  DistributedLock.getInstance().lock(dto.getUploadId(),()->{
                 String key = keyPrefix+"/" +dto.getPath()  + file.getOriginalFilename();
 
                 PutObjectPartRequest request = PutObjectPartRequest.builder()

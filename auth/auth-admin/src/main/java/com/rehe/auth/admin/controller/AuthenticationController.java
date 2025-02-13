@@ -1,6 +1,6 @@
 package com.rehe.auth.admin.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
 import com.rehe.auth.admin.dto.request.AdminLoginDto;
 import com.rehe.auth.admin.dto.request.AdminWxLoginDto;
 import com.rehe.auth.admin.dto.response.AuthUserResponseDto;

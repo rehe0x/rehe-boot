@@ -1,0 +1,55 @@
+server:
+  port: 8086
+
+spring:
+#  profiles:
+#    active: dev
+  threads:
+    virtual:
+      enabled: true # 启用虚拟线程
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+  data:
+    redis:
+      host: 10.211.55.7
+      port: 6379
+#      password: yourpassword # 如果 Redis 没有密码，则可以省略此行
+      database: 0  # 使用的数据库编号，默认为0
+      timeout: 60000  # 连接超时时间（毫秒）
+      lettuce:
+        pool:
+          max-active: 50   # 最大连接数（同一时间最多 50 个连接）
+          max-idle: 10      # 最大空闲连接数
+          min-idle: 5      # 最小空闲连接数
+          max-wait: 5000 # 连接等待超时
+
+
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger-ui.html
+##    tags-sorter: order
+#    operations-sorter: order
+#  api-docs:
+#    path: /v3/api-docs
+knife4j:
+  enable: true
+
+logging:
+  level:
+    root: info
+    com.rehe: debug
+#  config: classpath:logback.xml 用logback-spring.xml可以使用spring环境变量
+
+

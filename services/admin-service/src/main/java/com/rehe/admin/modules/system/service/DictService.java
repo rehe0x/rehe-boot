@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.rehe.common.exception.BusinessException;
 import com.rehe.common.log.OperationLog;
 import com.rehe.common.result.Page;
-import com.rehe.admin.common.dto.PageParamDto;
+import com.rehe.biz.core.common.dto.PageParamDto;
 import com.rehe.admin.modules.system.dto.DictDto;
 import com.rehe.admin.modules.system.dto.reqeust.DictCreateDto;
 import com.rehe.admin.modules.system.dto.reqeust.DictUpdateDto;

@@ -1,6 +1,6 @@
 package com.rehe.admin.modules.system.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
 import com.rehe.common.result.Result;
 import com.rehe.admin.modules.system.dto.reqeust.DeptCreateDto;
 import com.rehe.admin.modules.system.dto.reqeust.DeptUpdateDto;

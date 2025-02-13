@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rehe.scheduled.modules.task.mapper.ScheduledTaskMapper">
+  <resultMap id="BaseResultMap" type="com.rehe.scheduled.modules.task.entity.ScheduledTask">
+    <!--@mbg.generated-->
+    <!--@Table scheduled_task-->
+    <id column="id" property="id" />
+    <result column="task_id" property="taskId" />
+    <result column="task_name" property="taskName" />
+    <result column="bean_name" property="beanName" />
+    <result column="method_name" property="methodName" />
+    <result column="argument" property="argument" />
+    <result column="sub_task" property="subTask" />
+    <result column="task_mode" property="taskMode" />
+    <result column="expression" property="expression" />
+    <result column="description" property="description" />
+    <result column="status" property="status" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="deleted" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, task_id, task_name, bean_name, method_name, argument, sub_task, task_mode, expression, 
+    description, "status", create_time, update_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from scheduled_task
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from scheduled_task
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.rehe.scheduled.modules.task.entity.ScheduledTask">
+    <!--@mbg.generated-->
+    insert into scheduled_task (task_id, task_name, bean_name, method_name, argument, sub_task,
+      task_mode, expression, description, "status", create_time, update_time)
+    values (#{taskId}, #{taskName}, #{beanName}, #{methodName}, #{argument}, #{subTask},
+      #{taskMode}, #{expression}, #{description}, #{status}, #{createTime}, #{updateTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rehe.scheduled.modules.task.entity.ScheduledTask">
+    <!--@mbg.generated-->
+    insert into scheduled_task
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskId != null and taskId != ''">
+        task_id,
+      </if>
+      <if test="taskName != null and taskName != ''">
+        task_name,
+      </if>
+      <if test="beanName != null and beanName != ''">
+        bean_name,
+      </if>
+      <if test="methodName != null and methodName != ''">
+        method_name,
+      </if>
+      <if test="argument != null and argument != ''">
+        argument,
+      </if>
+      <if test="subTask != null and subTask != ''">
+        sub_task,
+      </if>
+      <if test="taskMode != null">
+        task_mode,
+      </if>
+      <if test="expression != null and expression != ''">
+        expression,
+      </if>
+      <if test="description != null and description != ''">
+        description,
+      </if>
+      <if test="status != null">
+        "status",
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="taskId != null and taskId != ''">
+        #{taskId},
+      </if>
+      <if test="taskName != null and taskName != ''">
+        #{taskName},
+      </if>
+      <if test="beanName != null and beanName != ''">
+        #{beanName},
+      </if>
+      <if test="methodName != null and methodName != ''">
+        #{methodName},
+      </if>
+      <if test="argument != null and argument != ''">
+        #{argument},
+      </if>
+      <if test="subTask != null and subTask != ''">
+        #{subTask},
+      </if>
+      <if test="taskMode != null">
+        #{taskMode},
+      </if>
+      <if test="expression != null and expression != ''">
+        #{expression},
+      </if>
+      <if test="description != null and description != ''">
+        #{description},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+      <if test="deleted != null">
+        #{deleted},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rehe.scheduled.modules.task.entity.ScheduledTask">
+    <!--@mbg.generated-->
+    update scheduled_task
+    <set>
+      <if test="taskId != null and taskId != ''">
+        task_id = #{taskId},
+      </if>
+      <if test="taskName != null and taskName != ''">
+        task_name = #{taskName},
+      </if>
+      <if test="beanName != null and beanName != ''">
+        bean_name = #{beanName},
+      </if>
+      <if test="methodName != null and methodName != ''">
+        method_name = #{methodName},
+      </if>
+      <if test="argument != null and argument != ''">
+        argument = #{argument},
+      </if>
+      <if test="subTask != null and subTask != ''">
+        sub_task = #{subTask},
+      </if>
+      <if test="taskMode != null">
+        task_mode = #{taskMode},
+      </if>
+      <if test="expression != null and expression != ''">
+        expression = #{expression},
+      </if>
+      <if test="description != null and description != ''">
+        description = #{description},
+      </if>
+      <if test="status != null">
+        "status" = #{status},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rehe.scheduled.modules.task.entity.ScheduledTask">
+    <!--@mbg.generated-->
+    update scheduled_task
+    set task_id = #{taskId},
+      task_name = #{taskName},
+      bean_name = #{beanName},
+      method_name = #{methodName},
+      argument = #{argument},
+      sub_task = #{subTask},
+      task_mode = #{taskMode},
+      expression = #{expression},
+      description = #{description},
+      "status" = #{status},
+      create_time = #{createTime},
+      update_time = #{updateTime},
+      deleted = #{deleted}
+    where id = #{id}
+  </update>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from scheduled_task where deleted = false
+    <if test="keyword != null and keyword != ''">
+      and concat(id,task_id,task_name,bean_name,method_name) ilike '%' || #{keyword} || '%'
+    </if>
+    order by create_time desc
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from scheduled_task where deleted = false
+  </select>
+
+  <select id="selectByStatus" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from scheduled_task
+    where deleted = false and status = #{status}
+  </select>
+
+  <select id="selectByTaskId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from scheduled_task
+    where deleted = false and task_id = #{taskId}
+  </select>
+
+  <select id="selectByTaskName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from scheduled_task
+    where deleted = false and task_name = #{taskName}
+  </select>
+</mapper>

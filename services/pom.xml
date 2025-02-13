@@ -15,6 +15,7 @@
     <modules>
         <module>admin-service</module>
         <module>app-service</module>
+        <module>scheduled-service</module>
     </modules>
 
     <properties>

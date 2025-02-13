@@ -1,19 +1,13 @@
 package com.rehe.admin.modules.logging.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import com.rehe.admin.common.dto.PageParamDto;
-import com.rehe.admin.modules.logging.dto.OperationLogDto;
-import com.rehe.admin.modules.logging.dto.reqeust.OperationLogQueryDto;
-import com.rehe.admin.modules.logging.dto.response.OperationLogResonseDto;
-import com.rehe.admin.modules.logging.mapstruct.OperationLogMapstruct;
-import com.rehe.admin.modules.logging.service.OperationLogService;
-import com.rehe.admin.modules.system.dto.UserDto;
-import com.rehe.admin.modules.system.dto.reqeust.UserCreateDto;
-import com.rehe.admin.modules.system.dto.reqeust.UserQueryDto;
-import com.rehe.admin.modules.system.dto.reqeust.UserUpdateDto;
-import com.rehe.admin.modules.system.dto.response.UserResponseDto;
-import com.rehe.admin.modules.system.mapstruct.UserMapstruct;
-import com.rehe.admin.modules.system.service.UserService;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
+import com.rehe.biz.core.common.dto.PageParamDto;
+
+import com.rehe.biz.core.modules.logging.dto.OperationLogDto;
+import com.rehe.biz.core.modules.logging.dto.reqeust.OperationLogQueryDto;
+import com.rehe.biz.core.modules.logging.dto.response.OperationLogResonseDto;
+import com.rehe.biz.core.modules.logging.mapstruct.OperationLogMapstruct;
+import com.rehe.biz.core.modules.logging.service.OperationLogService;
 import com.rehe.common.result.Page;
 import com.rehe.common.result.Result;
 import com.rehe.common.result.ResultPage;

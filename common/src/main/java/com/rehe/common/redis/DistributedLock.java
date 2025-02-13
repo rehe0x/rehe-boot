@@ -32,7 +32,7 @@ public class DistributedLock {
 
     // 获取单例实例的方法
     @Getter
-    private static DistributedLock INSTANCE;
+    private static DistributedLock instance;
 
     private RedissonClient redissonClient;
 
@@ -48,7 +48,7 @@ public class DistributedLock {
                 .setDatabase(redisDatabase);
 //                .setPassword(redisPassword);
         this.redissonClient = Redisson.create(config);
-        INSTANCE = this;
+        instance = this;
     }
 
 
@@ -108,6 +108,28 @@ public class DistributedLock {
             if (isLocked && lock.isHeldByCurrentThread()) {
                 lock.unlock();
             }
+        }
+    }
+
+    public RLock tryLock(String lockKey, long waitTime, long leaseTime) {
+        RLock lock = redissonClient.getLock(lockKey);
+        try {
+            if (lock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS)) {
+                return lock;
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return null;
+    }
+
+    /**
+     * 释放锁
+     * @param lock 锁对象
+     */
+    public void unlock(RLock lock) {
+        if (lock != null && lock.isHeldByCurrentThread()) {
+            lock.unlock();
         }
     }
 

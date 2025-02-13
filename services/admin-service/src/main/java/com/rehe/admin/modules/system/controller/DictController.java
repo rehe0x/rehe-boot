@@ -1,10 +1,10 @@
 package com.rehe.admin.modules.system.controller;
 
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
+import com.github.xingfudeshi.knife4j.annotations.ApiSupport;
 import com.rehe.common.result.Page;
 import com.rehe.common.result.Result;
 import com.rehe.common.result.ResultPage;
-import com.rehe.admin.common.dto.PageParamDto;
+import com.rehe.biz.core.common.dto.PageParamDto;
 import com.rehe.admin.modules.system.dto.DictDto;
 import com.rehe.admin.modules.system.dto.UserDto;
 import com.rehe.admin.modules.system.dto.reqeust.*;
